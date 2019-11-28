@@ -39,7 +39,7 @@ public class Initialiseur {
 			e.printStackTrace();
 		}
 		Utilisateur self = new Utilisateur();
-		ChatSystem.tableUtilisateur=demandeTableUtilisateur();
+		demandeTableUtilisateur(mac);
 		self.setPseudo(choixPseudo());
 		self.setStatus("Nouvel Utilisateur");
 		self.setAddrMAC(address.toString());
@@ -50,10 +50,9 @@ public class Initialiseur {
 	private void initListener () {
 		//TODO
 	}
-	private ListenerBroadcast initListenerBroadcast (int port){
-		ListenerBroadcast listener = new ListenerBroadcast(port);
-		//config listener TODO
-		//start listener TODO
+	private ListenerBroadcast initListenerBroadcast (int port) throws UnknownHostException{
+		ListenerBroadcast listener = new ListenerBroadcast(port, InetAddress.getByName(ChatSystem.self.getAddrIP()) ,(ChatSystem.self.getAddrMAC()).getBytes() ,ChatSystem.self.getPseudo() );
+		listener.run();
 		return listener;
 		
 	}
@@ -63,10 +62,16 @@ public class Initialiseur {
 		return null;
 	}
 
-	private ArrayList<Utilisateur> demandeTableUtilisateur () {
-		ArrayList<Utilisateur> users = UtilisateurDAO.getTable(); //table venant du serveur
+	private ListenerBroadcast demandeTableUtilisateur (byte [] mac) {
+		ChatSystem.addAllUsers(UtilisateurDAO.getTable()); //table venant du serveur
 		int port = 42069;
-		ListenerBroadcast listenerBR = initListenerBroadcast(port);
+		ListenerBroadcast listenerBR=null;
+		try {
+			listenerBR = initListenerBroadcast(port);
+		} catch (UnknownHostException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		DatagramSocket UDPsocket=null;
 		try {
 			UDPsocket = new DatagramSocket(port);
@@ -81,7 +86,7 @@ public class Initialiseur {
 			System.out.println("Impossible recuperer l'adresse de Broadcast UDP");
 			e.printStackTrace();
 		}
-		byte buffer[] = (new String("Nouvel utilisateur en cours de connexion")).getBytes();
+		byte buffer[] = (mac.toString () + new String((new Date()).toString())).getBytes();
 		DatagramPacket UDPpacket = new DatagramPacket(buffer,buffer.length,brAddr,port);
 		try {
 			UDPsocket.setBroadcast(true);
@@ -100,9 +105,8 @@ public class Initialiseur {
 		} catch (InterruptedException e) {
 			System.out.println("Impossible de sleep (dans Initialiseur.demandeTableUtilisateur)");
 			e.printStackTrace();
-		}
-		users.addAll(listenerBR.getresult());
-		return users;		
+		}		
+		return listenerBR;
 	}
 
 	private String choixPseudo() {
