@@ -6,7 +6,7 @@ public class ChatSystem {
 
 	public static ArrayList<Utilisateur> tableUtilisateur;
 	public static Utilisateur self;
-
+	public static Boolean doRun;
 	public static void addUtilisateur(Utilisateur nouvel_utilisateur) {
 		if(nouvel_utilisateur.getStatus().equals("NEW")) {
 			tableUtilisateur.add(nouvel_utilisateur);
@@ -32,9 +32,11 @@ public class ChatSystem {
 	
 
 	public static void main(String[] args) {
+		doRun = true;
 		tableUtilisateur = new ArrayList<Utilisateur>();
 		self = new Utilisateur();
 		Initialiseur.initApp();
+		doRun = false;
 	}
 	
 	

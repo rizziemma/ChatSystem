@@ -12,20 +12,22 @@ import java.net.SocketException;
 public class ListenerBroadcast extends Thread{
 	private DatagramSocket serveur;
 	private int port;
+	
+	
 	public ListenerBroadcast(int port) {
 		this.port=port;
-		this.serveur=null;	
+		try {
+			this.serveur=new DatagramSocket(port);
+		} catch (SocketException e) {
+			e.printStackTrace();
+		}	
 	}
 
 
 	public void run() {
 
-		try {
-			serveur = new DatagramSocket(port);
-		} catch (SocketException e1) {
-			e1.printStackTrace();
-		}
-		while(true){
+
+		while(ChatSystem.doRun){
 
 			//On s'occupe maintenant de l'objet paquet
 			byte[] buffer = new byte[8192];
@@ -38,6 +40,7 @@ public class ListenerBroadcast extends Thread{
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
+			System.out.println("Message reçu");
 			Utilisateur nouvel_utilisateur= null;
 			ObjectInputStream OIS = null;
 			try {
@@ -53,7 +56,7 @@ public class ListenerBroadcast extends Thread{
 			} catch (IOException e1) {
 				e1.printStackTrace();
 			}
-
+			System.out.println(nouvel_utilisateur.toString());
 			ChatSystem.addUtilisateur(nouvel_utilisateur);
 			packet.setLength(buffer.length);
 			if(nouvel_utilisateur.getStatus().equals("NEW")) {

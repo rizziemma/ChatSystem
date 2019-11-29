@@ -2,13 +2,12 @@ package src;
 import java.util.Date;
 
 public class Utilisateur {
-
+	
 	private String pseudo;
 	private String addrIP;
 	private String addrMAC;
 	private String status;
 	private Date derniereConnexion;
-	
 	
 	public Utilisateur() {
 		super();
@@ -54,7 +53,13 @@ public class Utilisateur {
 		this.derniereConnexion = derniereConnexion;
 	}
 
+	@Override
+	public String toString() {
+		return "Utilisateur [pseudo=" + pseudo + ", addrIP=" + addrIP + ", addrMAC=" + addrMAC + ", status=" + status
+				+ ", derniereConnexion=" + derniereConnexion + "]";
+	}
 
+	
 	
 
 }

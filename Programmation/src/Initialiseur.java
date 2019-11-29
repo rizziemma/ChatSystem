@@ -4,11 +4,13 @@ import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
+import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.Date;
+import java.util.Enumeration;
 import java.util.concurrent.TimeUnit;
 
 import src.Utilisateur;
@@ -18,16 +20,40 @@ public class Initialiseur {
 
 
 	public static void initApp () {
-		InetAddress address = null;
+		InetAddress lanIp = null;
 		try {
-			address = InetAddress.getLocalHost();
-		} catch (UnknownHostException e) {
+            String ipAddress = null;
+            Enumeration<NetworkInterface> net = null;
+            net = NetworkInterface.getNetworkInterfaces();
+
+            while (net.hasMoreElements()) {
+                NetworkInterface element = net.nextElement();
+                Enumeration<InetAddress> addresses = element.getInetAddresses();
+
+                while (addresses.hasMoreElements() && element.getHardwareAddress().length > 0 ) {
+                    InetAddress ip = addresses.nextElement();
+                    if (ip instanceof Inet4Address) {
+
+                        if (ip.isSiteLocalAddress()) {
+                            ipAddress = ip.getHostAddress();
+                            lanIp = InetAddress.getByName(ipAddress);
+                        }
+
+                    }
+
+                }
+            }
+		}catch (UnknownHostException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SocketException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		System.out.println(lanIp.toString());
 	    NetworkInterface ni = null;
 		try {
-			ni = NetworkInterface.getByInetAddress(address);
+			ni = NetworkInterface.getByInetAddress(lanIp);
 		} catch (SocketException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -39,10 +65,12 @@ public class Initialiseur {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		demandeTableUtilisateur(mac,address);
+		System.out.println(mac.toString());
+		
+		demandeTableUtilisateur(mac,lanIp);
 		ChatSystem.self.setPseudo(choixPseudo());
 		ChatSystem.self.setStatus("Nouvel Utilisateur");
-		ChatSystem.self.setAddrMAC(address.toString());
+		ChatSystem.self.setAddrMAC(lanIp.toString());
 		ChatSystem.self.setAddrIP(mac.toString());
 		ChatSystem.self.setDerniereConnexion(new Date());
 	}
@@ -51,7 +79,7 @@ public class Initialiseur {
 	}
 	private static ListenerBroadcast initListenerBroadcast (int port) throws UnknownHostException{
 		ListenerBroadcast listener = new ListenerBroadcast(port);
-		listener.run();
+		listener.start();
 		return listener;
 		
 	}
@@ -62,8 +90,9 @@ public class Initialiseur {
 	}
 
 	private static ListenerBroadcast demandeTableUtilisateur (byte [] mac,InetAddress Ip) {
-		ChatSystem.addAllUsers(UtilisateurDAO.getTable()); //table venant du serveur
-		int port = 42069;
+		//ChatSystem.addAllUsers(UtilisateurDAO.getTable()); //table venant du serveur
+		int portBR = 42069;
+		int port = 42070;
 		ListenerBroadcast listenerBR=null;
 		try {
 			listenerBR = initListenerBroadcast(port);
@@ -72,7 +101,7 @@ public class Initialiseur {
 		}
 		DatagramSocket UDPsocket=null;
 		try {
-			UDPsocket = new DatagramSocket(port);
+			UDPsocket = new DatagramSocket(portBR);
 		} catch (SocketException e) {
 			System.out.println("Impossible de creer le socket UDP");
 			e.printStackTrace();
