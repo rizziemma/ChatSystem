@@ -3,7 +3,6 @@ import java.util.Date;
 
 public class Utilisateur {
 
-	private Integer idUtilisateur;
 	private String pseudo;
 	private String addrIP;
 	private String addrMAC;
@@ -15,22 +14,14 @@ public class Utilisateur {
 		super();
 	}
 	
-	public Utilisateur(Integer idUtilisateur, String pseudo, String addrIP, String addrMAC, String status,
+	public Utilisateur(String pseudo, String addrIP, String addrMAC, String status,
 			Date derniereConnexion) {
 		super();
-		this.idUtilisateur = idUtilisateur;
 		this.pseudo = pseudo;
 		this.addrIP = addrIP;
 		this.addrMAC = addrMAC;
 		this.status = status;
 		this.derniereConnexion = derniereConnexion;
-	}
-	
-	public Integer getIdUtilisateur() {
-		return idUtilisateur;
-	}
-	public void setIdUtilisateur(Integer idUtilisateur) {
-		this.idUtilisateur = idUtilisateur;
 	}
 	public String getPseudo() {
 		return pseudo;
