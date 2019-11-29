@@ -1,6 +1,10 @@
 package src;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
@@ -14,15 +18,15 @@ public class ListenerBroadcast extends Thread{
 	private byte[] mac;
 	private String pseudo;
 
-public ListenerBroadcast(int port,InetAddress AddrIp,byte[] mac,String pseudo) {
-	this.port=port;
-	this.AddrIp=AddrIp;
-	this.mac = mac;
-	this.pseudo=pseudo;
-	this.serveur=null;	
-}
-	
-	
+	public ListenerBroadcast(int port,InetAddress AddrIp,byte[] mac,String pseudo) {
+		this.port=port;
+		this.AddrIp=AddrIp;
+		this.mac = mac;
+		this.pseudo=pseudo;
+		this.serveur=null;	
+	}
+
+
 	public void run() {
 
 		try {
@@ -45,20 +49,43 @@ public ListenerBroadcast(int port,InetAddress AddrIp,byte[] mac,String pseudo) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			String recu = new String (packet.getData());
-			String[] part = recu.split(" ");
-			if (part.length == 2){//reception d'un nouvel utilisateur sans pseudo avec un statu NEW
-				@SuppressWarnings("deprecation")
-				Date d = new Date(part[1]);
-				Utilisateur nouvel_utilisateur = new Utilisateur(/*??? TODO*/0, "TBD",packet.getAddress().toString() ,part[0],"NEW",d);
-				ChatSystem.addUtilisateur(nouvel_utilisateur);
+			Utilisateur nouvel_utilisateur= null;
+			ObjectInputStream OIS = null;
+			try {
+				OIS = new ObjectInputStream(new ByteArrayInputStream(packet.getData()));
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 
+			try {
+				nouvel_utilisateur= (Utilisateur)OIS.readObject();
+			} catch (ClassNotFoundException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 
-
-				packet.setLength(buffer.length);
-
-				//et nous allons répondre à notre client, donc même principe
-				byte[] buffer2 = new String(AddrIp.toString() + mac.toString() + pseudo + (new Date()).toString() ).getBytes();
+			ChatSystem.addUtilisateur(nouvel_utilisateur);
+			packet.setLength(buffer.length);
+			if(nouvel_utilisateur.getStatus().equals("NEW")) {
+				ByteArrayOutputStream BAOS = new ByteArrayOutputStream();
+				ObjectOutputStream OOS = null;
+				try {
+					OOS = new ObjectOutputStream (BAOS);
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				try {
+					OOS.writeObject(ChatSystem.self);
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				byte[] buffer2 =  BAOS.toByteArray();
 				DatagramPacket packet2 = new DatagramPacket(
 						buffer2,             //Les données 
 						buffer2.length,      //La taille des données
@@ -74,11 +101,6 @@ public ListenerBroadcast(int port,InetAddress AddrIp,byte[] mac,String pseudo) {
 					e.printStackTrace();
 				}
 				packet2.setLength(buffer2.length);
-			}
-			else {
-				if(part.length== 3) {//reception du pseudo d'un utilisateur -> ajout a la table + mise a jour du status vers connecté
-					//TODO
-				}
 			}
 		}
 	}

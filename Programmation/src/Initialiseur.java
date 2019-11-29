@@ -1,5 +1,7 @@
 package src;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
@@ -39,7 +41,7 @@ public class Initialiseur {
 			e.printStackTrace();
 		}
 		Utilisateur self = new Utilisateur();
-		demandeTableUtilisateur(mac);
+		demandeTableUtilisateur(mac,address);
 		self.setPseudo(choixPseudo());
 		self.setStatus("Nouvel Utilisateur");
 		self.setAddrMAC(address.toString());
@@ -62,7 +64,7 @@ public class Initialiseur {
 		return null;
 	}
 
-	private ListenerBroadcast demandeTableUtilisateur (byte [] mac) {
+	private ListenerBroadcast demandeTableUtilisateur (byte [] mac,InetAddress Ip) {
 		ChatSystem.addAllUsers(UtilisateurDAO.getTable()); //table venant du serveur
 		int port = 42069;
 		ListenerBroadcast listenerBR=null;
@@ -86,7 +88,21 @@ public class Initialiseur {
 			System.out.println("Impossible recuperer l'adresse de Broadcast UDP");
 			e.printStackTrace();
 		}
-		byte buffer[] = (mac.toString () + new String((new Date()).toString())).getBytes();
+		ByteArrayOutputStream BAOS = new ByteArrayOutputStream();
+		ObjectOutputStream OOS = null;
+		try {
+			OOS = new ObjectOutputStream (BAOS);
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		try {
+			OOS.writeObject(new Utilisateur("TBD",Ip.toString(),mac.toString(),"NEW",new Date()));
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		byte[] buffer =  BAOS.toByteArray();
 		DatagramPacket UDPpacket = new DatagramPacket(buffer,buffer.length,brAddr,port);
 		try {
 			UDPsocket.setBroadcast(true);
