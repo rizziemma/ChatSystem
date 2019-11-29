@@ -7,22 +7,13 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
-import java.net.InetAddress;
 import java.net.SocketException;
-import java.util.Date;
 
 public class ListenerBroadcast extends Thread{
 	private DatagramSocket serveur;
 	private int port;
-	private InetAddress AddrIp;
-	private byte[] mac;
-	private String pseudo;
-
-	public ListenerBroadcast(int port,InetAddress AddrIp,byte[] mac,String pseudo) {
+	public ListenerBroadcast(int port) {
 		this.port=port;
-		this.AddrIp=AddrIp;
-		this.mac = mac;
-		this.pseudo=pseudo;
 		this.serveur=null;	
 	}
 
@@ -32,7 +23,6 @@ public class ListenerBroadcast extends Thread{
 		try {
 			serveur = new DatagramSocket(port);
 		} catch (SocketException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 		while(true){
@@ -46,7 +36,6 @@ public class ListenerBroadcast extends Thread{
 			try {
 				serveur.receive(packet);
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			Utilisateur nouvel_utilisateur= null;
@@ -54,17 +43,14 @@ public class ListenerBroadcast extends Thread{
 			try {
 				OIS = new ObjectInputStream(new ByteArrayInputStream(packet.getData()));
 			} catch (IOException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 
 			try {
 				nouvel_utilisateur= (Utilisateur)OIS.readObject();
 			} catch (ClassNotFoundException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			} catch (IOException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 
@@ -76,13 +62,11 @@ public class ListenerBroadcast extends Thread{
 				try {
 					OOS = new ObjectOutputStream (BAOS);
 				} catch (IOException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 				try {
 					OOS.writeObject(ChatSystem.self);
 				} catch (IOException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 				byte[] buffer2 =  BAOS.toByteArray();
@@ -97,7 +81,6 @@ public class ListenerBroadcast extends Thread{
 				try {
 					serveur.send(packet2);
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				packet2.setLength(buffer2.length);

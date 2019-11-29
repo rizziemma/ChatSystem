@@ -8,7 +8,6 @@ import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.net.UnknownHostException;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
@@ -18,7 +17,7 @@ import src.UtilisateurDAO;
 public class Initialiseur {
 
 
-	public Utilisateur initApp () {
+	public static void initApp () {
 		InetAddress address = null;
 		try {
 			address = InetAddress.getLocalHost();
@@ -40,38 +39,35 @@ public class Initialiseur {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		Utilisateur self = new Utilisateur();
 		demandeTableUtilisateur(mac,address);
-		self.setPseudo(choixPseudo());
-		self.setStatus("Nouvel Utilisateur");
-		self.setAddrMAC(address.toString());
-		self.setAddrIP(mac.toString());
-		self.setDerniereConnexion(new Date());
-		return(self);
+		ChatSystem.self.setPseudo(choixPseudo());
+		ChatSystem.self.setStatus("Nouvel Utilisateur");
+		ChatSystem.self.setAddrMAC(address.toString());
+		ChatSystem.self.setAddrIP(mac.toString());
+		ChatSystem.self.setDerniereConnexion(new Date());
 	}
 	private void initListener () {
 		//TODO
 	}
-	private ListenerBroadcast initListenerBroadcast (int port) throws UnknownHostException{
-		ListenerBroadcast listener = new ListenerBroadcast(port, InetAddress.getByName(ChatSystem.self.getAddrIP()) ,(ChatSystem.self.getAddrMAC()).getBytes() ,ChatSystem.self.getPseudo() );
+	private static ListenerBroadcast initListenerBroadcast (int port) throws UnknownHostException{
+		ListenerBroadcast listener = new ListenerBroadcast(port);
 		listener.run();
 		return listener;
 		
 	}
 
-	private String demandePseudo(String message) {
+	private static String demandePseudo(String message) {
 		//java Swing
-		return null;
+		return "Pseudo_Test";
 	}
 
-	private ListenerBroadcast demandeTableUtilisateur (byte [] mac,InetAddress Ip) {
+	private static ListenerBroadcast demandeTableUtilisateur (byte [] mac,InetAddress Ip) {
 		ChatSystem.addAllUsers(UtilisateurDAO.getTable()); //table venant du serveur
 		int port = 42069;
 		ListenerBroadcast listenerBR=null;
 		try {
 			listenerBR = initListenerBroadcast(port);
 		} catch (UnknownHostException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 		DatagramSocket UDPsocket=null;
@@ -93,13 +89,11 @@ public class Initialiseur {
 		try {
 			OOS = new ObjectOutputStream (BAOS);
 		} catch (IOException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 		try {
 			OOS.writeObject(new Utilisateur("TBD",Ip.toString(),mac.toString(),"NEW",new Date()));
 		} catch (IOException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 		byte[] buffer =  BAOS.toByteArray();
@@ -125,7 +119,7 @@ public class Initialiseur {
 		return listenerBR;
 	}
 
-	private String choixPseudo() {
+	private static String choixPseudo() {
 		boolean done = false;
 		String pseudo=null;
 		boolean libre=true;
