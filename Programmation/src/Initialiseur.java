@@ -19,7 +19,7 @@ import src.UtilisateurDAO;
 public class Initialiseur {
 
 
-	public static void initApp () {
+	public static ListenerBroadcast initApp () {
 		InetAddress lanIp = null;
 		try {
 			String ipAddress = null;
@@ -67,13 +67,13 @@ public class Initialiseur {
 			e.printStackTrace();
 		}
 		System.out.println(String.format("%2x",mac[0])+":"+String.format("%2x",mac[1])+":"+String.format("%2x",mac[2])+":"+String.format("%2x",mac[3])+":"+String.format("%2x",mac[4])+":"+String.format("%2x",mac[5]));
-
-		demandeTableUtilisateur(mac,lanIp);
-		ChatSystem.self.setPseudo(choixPseudo());
-		ChatSystem.self.setStatus("Nouvel Utilisateur");
 		ChatSystem.self.setAddrIP(lanIp.toString());
 		ChatSystem.self.setAddrMAC(mac);
+		ListenerBroadcast list = demandeTableUtilisateur(mac,lanIp);
+		ChatSystem.self.setPseudo(choixPseudo());
+		ChatSystem.self.setStatus("Nouvel Utilisateur");
 		ChatSystem.self.setDerniereConnexion(new Date());
+		return list;
 	}
 	private void initListener () {
 		//TODO
