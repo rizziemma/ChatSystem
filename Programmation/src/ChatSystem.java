@@ -16,7 +16,8 @@ public class ChatSystem {
 				if(user.getAddrMAC().equals(nouvel_utilisateur.getAddrMAC())) {
 					user.setPseudo(nouvel_utilisateur.getPseudo());
 					user.setStatus(nouvel_utilisateur.getStatus());
-					user.setAddrIP(nouvel_utilisateur.getAddrMAC());
+					user.setAddrIP(nouvel_utilisateur.getAddrIP());
+					user.setAddrMAC(nouvel_utilisateur.getAddrMAC());
 					user.setDerniereConnexion(nouvel_utilisateur.getDerniereConnexion());
 					break;
 				}
@@ -28,7 +29,13 @@ public class ChatSystem {
 		tableUtilisateur.addAll(table);
 		
 	}
-	
+	public static String printTableUtilisateur() {
+		String str = new String("");
+		for (Utilisateur user: tableUtilisateur) {
+			str = str + user.toString() +"\n";
+		}
+		return str;
+	}
 	
 
 	public static void main(String[] args) {
@@ -36,6 +43,7 @@ public class ChatSystem {
 		tableUtilisateur = new ArrayList<Utilisateur>();
 		self = new Utilisateur();
 		Initialiseur.initApp();
+		System.out.println(printTableUtilisateur());
 		doRun = false;
 	}
 	
