@@ -1,4 +1,5 @@
 package src;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
@@ -13,13 +14,9 @@ import java.util.Date;
 import java.util.Enumeration;
 import java.util.concurrent.TimeUnit;
 
-import src.Utilisateur;
-import src.UtilisateurDAO;
-
 public class Initialiseur {
 
-
-	public static ListenerBroadcast initApp () {
+	public static ListenerBroadcast initApp() {
 		InetAddress lanIp = null;
 		try {
 			String ipAddress = null;
@@ -28,10 +25,10 @@ public class Initialiseur {
 
 			while (net.hasMoreElements()) {
 				NetworkInterface element = net.nextElement();
-				if(! element.getName().equals("lo")) {
+				if (!element.getName().equals("lo")) {
 					Enumeration<InetAddress> addresses = element.getInetAddresses();
 
-					while (addresses.hasMoreElements() && element.getHardwareAddress().length > 0 ) {
+					while (addresses.hasMoreElements() && element.getHardwareAddress().length > 0) {
 						InetAddress ip = addresses.nextElement();
 						if (ip instanceof Inet4Address) {
 
@@ -44,7 +41,7 @@ public class Initialiseur {
 					}
 				}
 			}
-		}catch (UnknownHostException e) {
+		} catch (UnknownHostException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (SocketException e) {
@@ -66,19 +63,23 @@ public class Initialiseur {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		System.out.println(String.format("%2x",mac[0])+":"+String.format("%2x",mac[1])+":"+String.format("%2x",mac[2])+":"+String.format("%2x",mac[3])+":"+String.format("%2x",mac[4])+":"+String.format("%2x",mac[5]));
+		System.out.println(String.format("%2x", mac[0]) + ":" + String.format("%2x", mac[1]) + ":"
+				+ String.format("%2x", mac[2]) + ":" + String.format("%2x", mac[3]) + ":" + String.format("%2x", mac[4])
+				+ ":" + String.format("%2x", mac[5]));
 		ChatSystem.self.setAddrIP(lanIp.toString());
 		ChatSystem.self.setAddrMAC(mac);
-		ListenerBroadcast list = demandeTableUtilisateur(mac,lanIp);
+		ListenerBroadcast list = demandeTableUtilisateur(mac, lanIp);
 		ChatSystem.self.setPseudo(choixPseudo());
 		ChatSystem.self.setStatus("Nouvel Utilisateur");
 		ChatSystem.self.setDerniereConnexion(new Date());
 		return list;
 	}
-	private void initListener () {
-		//TODO
+
+	private void initListener() {
+		// TODO
 	}
-	private static ListenerBroadcast initListenerBroadcast (int port) throws UnknownHostException{
+
+	private static ListenerBroadcast initListenerBroadcast(int port) throws UnknownHostException {
 		ListenerBroadcast listener = new ListenerBroadcast(port);
 		listener.start();
 		return listener;
@@ -86,21 +87,21 @@ public class Initialiseur {
 	}
 
 	private static String demandePseudo(String message) {
-		//java Swing
+		// java Swing
 		return "Pseudo_Test";
 	}
 
-	private static ListenerBroadcast demandeTableUtilisateur (byte [] mac,InetAddress Ip) {
-		//ChatSystem.addAllUsers(UtilisateurDAO.getTable()); //table venant du serveur
+	private static ListenerBroadcast demandeTableUtilisateur(byte[] mac, InetAddress Ip) {
+		// ChatSystem.addAllUsers(UtilisateurDAO.getTable()); //table venant du serveur
 		int portBR = 42069;
 		int port = 42070;
-		ListenerBroadcast listenerBR=null;
+		ListenerBroadcast listenerBR = null;
 		try {
 			listenerBR = initListenerBroadcast(port);
 		} catch (UnknownHostException e1) {
 			e1.printStackTrace();
 		}
-		DatagramSocket UDPsocket=null;
+		DatagramSocket UDPsocket = null;
 		try {
 			UDPsocket = new DatagramSocket(portBR);
 		} catch (SocketException e) {
@@ -117,17 +118,17 @@ public class Initialiseur {
 		ByteArrayOutputStream BAOS = new ByteArrayOutputStream();
 		ObjectOutputStream OOS = null;
 		try {
-			OOS = new ObjectOutputStream (BAOS);
+			OOS = new ObjectOutputStream(BAOS);
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
 		try {
-			OOS.writeObject(new Utilisateur("TBD",Ip.toString(),mac,"NEW",new Date()));
+			OOS.writeObject(new Utilisateur("TBD", Ip.toString(), mac, "NEW", new Date()));
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
-		byte[] buffer =  BAOS.toByteArray();
-		DatagramPacket UDPpacket = new DatagramPacket(buffer,buffer.length,brAddr,port);
+		byte[] buffer = BAOS.toByteArray();
+		DatagramPacket UDPpacket = new DatagramPacket(buffer, buffer.length, brAddr, port);
 		try {
 			UDPsocket.setBroadcast(true);
 		} catch (SocketException e) {
@@ -145,36 +146,31 @@ public class Initialiseur {
 		} catch (InterruptedException e) {
 			System.out.println("Impossible de sleep (dans Initialiseur.demandeTableUtilisateur)");
 			e.printStackTrace();
-		}		
+		}
 		return listenerBR;
 	}
 
 	private static String choixPseudo() {
 		boolean done = false;
-		String pseudo=null;
-		boolean libre=true;
-		while(!done ){
-			if (libre==false){
+		String pseudo = null;
+		boolean libre = true;
+		while (!done) {
+			if (libre == false) {
 				pseudo = demandePseudo("Pseudo deja pris choisisez en un autre");
-			}
-			else {
+			} else {
 				pseudo = demandePseudo("Choisisez un Pseudo");
 			}
 			libre = true;
-			for (Utilisateur user : ChatSystem.tableUtilisateur){
-				if(pseudo == user.getPseudo()){
+			for (Utilisateur user : ChatSystem.tableUtilisateur) {
+				if (pseudo == user.getPseudo()) {
 					libre = false;
 				}
 			}
-			if(libre = true){
+			if (libre = true) {
 				done = true;
 			}
 		}
 		return pseudo;
 	}
-
-
-
-
 
 }

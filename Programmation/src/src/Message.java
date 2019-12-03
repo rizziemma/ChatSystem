@@ -1,13 +1,14 @@
 package src;
+
 import java.util.Date;
 
 import javax.persistence.*;
 
 @Entity
-@Table(name="MESSAGE")
+@Table(name = "MESSAGE")
 public class Message {
 
-	@Id 
+	@Id
 	@GeneratedValue
 	@Column(name = "ID")
 	private Integer idMessage;
