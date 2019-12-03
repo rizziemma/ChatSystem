@@ -6,6 +6,9 @@ public class ChatSystem {
 
 	public static ArrayList<Utilisateur> tableUtilisateur;
 	public static Utilisateur self;
+	public static Listener List;
+	public static ListenerBroadcast ListBR;
+	
 
 	public static void addUtilisateur(Utilisateur nouvel_utilisateur) {
 		if (nouvel_utilisateur.getStatus().equals("NEW")) {
@@ -40,8 +43,9 @@ public class ChatSystem {
 	public static void main(String[] args) {
 		tableUtilisateur = new ArrayList<Utilisateur>();
 		self = new Utilisateur();
-		ListenerBroadcast listBR = Initialiseur.initApp();
-		listBR.interrupt();
+		Initialiseur.initApp();
+		ListBR.interrupt();
+		List.fin();
 		System.out.println(printTableUtilisateur());
 
 	}
