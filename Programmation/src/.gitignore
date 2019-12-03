@@ -6,3 +6,5 @@
 /Notification.class
 /Utilisateur.class
 /UtilisateurDAO.class
+/GestionnaireConversation.class
+/Listener.class

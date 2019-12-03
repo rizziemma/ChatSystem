@@ -22,27 +22,28 @@ public class Initialiseur {
 	public static void initApp () {
 		InetAddress lanIp = null;
 		try {
-            String ipAddress = null;
-            Enumeration<NetworkInterface> net = null;
-            net = NetworkInterface.getNetworkInterfaces();
+			String ipAddress = null;
+			Enumeration<NetworkInterface> net = null;
+			net = NetworkInterface.getNetworkInterfaces();
 
-            while (net.hasMoreElements()) {
-                NetworkInterface element = net.nextElement();
-                Enumeration<InetAddress> addresses = element.getInetAddresses();
+			while (net.hasMoreElements()) {
+				NetworkInterface element = net.nextElement();
+				if(! element.getName().equals("lo")) {
+					Enumeration<InetAddress> addresses = element.getInetAddresses();
 
-                while (addresses.hasMoreElements() && element.getHardwareAddress().length > 0 ) {
-                    InetAddress ip = addresses.nextElement();
-                    if (ip instanceof Inet4Address) {
+					while (addresses.hasMoreElements() && element.getHardwareAddress().length > 0 ) {
+						InetAddress ip = addresses.nextElement();
+						if (ip instanceof Inet4Address) {
 
-                        if (ip.isSiteLocalAddress()) {
-                            ipAddress = ip.getHostAddress();
-                            lanIp = InetAddress.getByName(ipAddress);
-                        }
+							if (ip.isSiteLocalAddress()) {
+								ipAddress = ip.getHostAddress();
+								lanIp = InetAddress.getByName(ipAddress);
+							}
 
-                    }
-
-                }
-            }
+						}
+					}
+				}
+			}
 		}catch (UnknownHostException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -51,27 +52,27 @@ public class Initialiseur {
 			e.printStackTrace();
 		}
 		System.out.println(lanIp.toString());
-	    NetworkInterface ni = null;
+		NetworkInterface ni = null;
 		try {
 			ni = NetworkInterface.getByInetAddress(lanIp);
 		} catch (SocketException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	    byte[] mac = null;
+		byte[] mac = null;
 		try {
 			mac = ni.getHardwareAddress();
 		} catch (SocketException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		System.out.println(mac.toString());
-		
+		System.out.println(String.format("%2x",mac[0])+":"+String.format("%2x",mac[1])+":"+String.format("%2x",mac[2])+":"+String.format("%2x",mac[3])+":"+String.format("%2x",mac[4])+":"+String.format("%2x",mac[5]));
+
 		demandeTableUtilisateur(mac,lanIp);
 		ChatSystem.self.setPseudo(choixPseudo());
 		ChatSystem.self.setStatus("Nouvel Utilisateur");
-		ChatSystem.self.setAddrMAC(lanIp.toString());
-		ChatSystem.self.setAddrIP(mac.toString());
+		ChatSystem.self.setAddrIP(lanIp.toString());
+		ChatSystem.self.setAddrMAC(mac);
 		ChatSystem.self.setDerniereConnexion(new Date());
 	}
 	private void initListener () {
@@ -81,7 +82,7 @@ public class Initialiseur {
 		ListenerBroadcast listener = new ListenerBroadcast(port);
 		listener.start();
 		return listener;
-		
+
 	}
 
 	private static String demandePseudo(String message) {
@@ -121,7 +122,7 @@ public class Initialiseur {
 			e1.printStackTrace();
 		}
 		try {
-			OOS.writeObject(new Utilisateur("TBD",Ip.toString(),mac.toString(),"NEW",new Date()));
+			OOS.writeObject(new Utilisateur("TBD",Ip.toString(),mac,"NEW",new Date()));
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
