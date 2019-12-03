@@ -61,4 +61,8 @@ public class Listener extends Thread {
 		}
 		return found;
 	}
+	
+	public void fin() {
+		
+	}
 }
