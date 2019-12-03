@@ -2,13 +2,34 @@ package src;
 import java.io.Serializable;
 import java.util.Date;
 
+import javax.persistence.*;
+
+@Entity
+@Table(name="UTILISATEUR")
 public class Utilisateur implements Serializable{
 	
+	private static final long serialVersionUID = 1L;
+
+	@Column(name = "PSEUDO")
 	private String pseudo;
+
+	@Column(name = "IP")
 	private String addrIP;
+
+	@Id
+	@Column(name = "MAC")
 	private byte[] addrMAC;
+
+	@Column(name = "STATUS")
 	private String status;
+
+	@Column(name = "CONNEXION")
 	private Date derniereConnexion;
+
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "HISTORIQUE", referencedColumnName = "HISTORIQUE_ID")
+	private Historique historique;
+
 	
 	public Utilisateur() {
 		super();
