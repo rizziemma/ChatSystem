@@ -4,11 +4,13 @@ import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
+import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.Date;
+import java.util.Enumeration;
 import java.util.concurrent.TimeUnit;
 
 import src.Utilisateur;
@@ -18,32 +20,59 @@ public class Initialiseur {
 
 
 	public static void initApp () {
-		InetAddress address = null;
+		InetAddress lanIp = null;
 		try {
-			address = InetAddress.getLocalHost();
-		} catch (UnknownHostException e) {
+			String ipAddress = null;
+			Enumeration<NetworkInterface> net = null;
+			net = NetworkInterface.getNetworkInterfaces();
+
+			while (net.hasMoreElements()) {
+				NetworkInterface element = net.nextElement();
+				if(! element.getName().equals("lo")) {
+					Enumeration<InetAddress> addresses = element.getInetAddresses();
+
+					while (addresses.hasMoreElements() && element.getHardwareAddress().length > 0 ) {
+						InetAddress ip = addresses.nextElement();
+						if (ip instanceof Inet4Address) {
+
+							if (ip.isSiteLocalAddress()) {
+								ipAddress = ip.getHostAddress();
+								lanIp = InetAddress.getByName(ipAddress);
+							}
+
+						}
+					}
+				}
+			}
+		}catch (UnknownHostException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
-	    NetworkInterface ni = null;
-		try {
-			ni = NetworkInterface.getByInetAddress(address);
 		} catch (SocketException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	    byte[] mac = null;
+		System.out.println(lanIp.toString());
+		NetworkInterface ni = null;
+		try {
+			ni = NetworkInterface.getByInetAddress(lanIp);
+		} catch (SocketException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		byte[] mac = null;
 		try {
 			mac = ni.getHardwareAddress();
 		} catch (SocketException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		demandeTableUtilisateur(mac,address);
+		System.out.println(String.format("%2x",mac[0])+":"+String.format("%2x",mac[1])+":"+String.format("%2x",mac[2])+":"+String.format("%2x",mac[3])+":"+String.format("%2x",mac[4])+":"+String.format("%2x",mac[5]));
+
+		demandeTableUtilisateur(mac,lanIp);
 		ChatSystem.self.setPseudo(choixPseudo());
 		ChatSystem.self.setStatus("Nouvel Utilisateur");
-		ChatSystem.self.setAddrMAC(address.toString());
-		ChatSystem.self.setAddrIP(mac.toString());
+		ChatSystem.self.setAddrIP(lanIp.toString());
+		ChatSystem.self.setAddrMAC(mac);
 		ChatSystem.self.setDerniereConnexion(new Date());
 	}
 	private void initListener () {
@@ -51,9 +80,9 @@ public class Initialiseur {
 	}
 	private static ListenerBroadcast initListenerBroadcast (int port) throws UnknownHostException{
 		ListenerBroadcast listener = new ListenerBroadcast(port);
-		listener.run();
+		listener.start();
 		return listener;
-		
+
 	}
 
 	private static String demandePseudo(String message) {
@@ -62,8 +91,9 @@ public class Initialiseur {
 	}
 
 	private static ListenerBroadcast demandeTableUtilisateur (byte [] mac,InetAddress Ip) {
-		ChatSystem.addAllUsers(UtilisateurDAO.getTable()); //table venant du serveur
-		int port = 42069;
+		//ChatSystem.addAllUsers(UtilisateurDAO.getTable()); //table venant du serveur
+		int portBR = 42069;
+		int port = 42070;
 		ListenerBroadcast listenerBR=null;
 		try {
 			listenerBR = initListenerBroadcast(port);
@@ -72,7 +102,7 @@ public class Initialiseur {
 		}
 		DatagramSocket UDPsocket=null;
 		try {
-			UDPsocket = new DatagramSocket(port);
+			UDPsocket = new DatagramSocket(portBR);
 		} catch (SocketException e) {
 			System.out.println("Impossible de creer le socket UDP");
 			e.printStackTrace();
@@ -92,7 +122,7 @@ public class Initialiseur {
 			e1.printStackTrace();
 		}
 		try {
-			OOS.writeObject(new Utilisateur("TBD",Ip.toString(),mac.toString(),"NEW",new Date()));
+			OOS.writeObject(new Utilisateur("TBD",Ip.toString(),mac,"NEW",new Date()));
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}

@@ -1,20 +1,20 @@
 package src;
+import java.io.Serializable;
 import java.util.Date;
 
-public class Utilisateur {
-
+public class Utilisateur implements Serializable{
+	
 	private String pseudo;
 	private String addrIP;
-	private String addrMAC;
+	private byte[] addrMAC;
 	private String status;
 	private Date derniereConnexion;
-	
 	
 	public Utilisateur() {
 		super();
 	}
 	
-	public Utilisateur(String pseudo, String addrIP, String addrMAC, String status,
+	public Utilisateur(String pseudo, String addrIP, byte[] addrMAC, String status,
 			Date derniereConnexion) {
 		super();
 		this.pseudo = pseudo;
@@ -35,11 +35,11 @@ public class Utilisateur {
 	public void setAddrIP(String addrIP) {
 		this.addrIP = addrIP;
 	}
-	public String getAddrMAC() {
+	public byte[] getAddrMAC() {
 		return addrMAC;
 	}
-	public void setAddrMAC(String addrMAC) {
-		this.addrMAC = addrMAC;
+	public void setAddrMAC(byte[] mac) {
+		this.addrMAC = mac;
 	}
 	public String getStatus() {
 		return status;
@@ -54,7 +54,13 @@ public class Utilisateur {
 		this.derniereConnexion = derniereConnexion;
 	}
 
+	@Override
+	public String toString() {
+		return "Utilisateur [pseudo=" + pseudo + ", addrIP=" + addrIP + ", addrMAC=" + String.format("%2x",addrMAC[0])+":"+String.format("%2x",addrMAC[1])+":"+String.format("%2x",addrMAC[2])+":"+String.format("%2x",addrMAC[3])+":"+String.format("%2x",addrMAC[4])+":"+String.format("%2x",addrMAC[5]) + ", status=" + status
+				+ ", derniereConnexion=" + derniereConnexion + "]";
+	}
 
+	
 	
 
 }
