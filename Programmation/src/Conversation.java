@@ -1,18 +1,40 @@
 package src;
 
+import java.io.IOException;
+import java.net.InetAddress;
+import java.net.Socket;
 import java.util.ArrayList;
 
 public class Conversation {
 	private Historique historique;
 	private GestionnaireConversation gestionnaire;
-
+	
+	public static void nouveauSYN(Socket sock) { //instentie le gestionnaire conversation du SYN reçus pour commencer la conversation avec la session distante ou resyncronyse si la connexion a été perdu
+		for (Conversation conv : ChatSystem.convs) {
+			if (conv.getHistorique().getContact().getAddrIP().equals(sock.getInetAddress().toString())) {
+				if(conv.getGestionnaire() == null) {
+					conv.setGestionnaire( new GestionnaireConversation(sock));
+				}
+				else {
+					//TODO arrive uniquement en cas de perte de connexion d'une des deux machines
+				}
+				
+				break;
+			}
+			
+		}
+	}
+	
+	
 	public void nouveauMessage(Message m) {
-		// if gestionnaire = null
-		// creer gestionnaire, creation du socket
-
-		// verifie si message envoyé ou recu
-		// ajout a la bdd locale historique
-		// envoi par le gestionnaire de conv
+		if(this.gestionnaire == null) {
+			try {
+				gestionnaire= new GestionnaireConversation(new Socket(InetAddress.getByName(this.historique.getContact().getAddrIP()),ChatSystem.List.getPort()));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			gestionnaire.envoyerMessage(m);
+		}
 	}
 
 	public Historique getHistorique() {
@@ -29,14 +51,6 @@ public class Conversation {
 
 	public void setGestionnaire(GestionnaireConversation gestionnaire) {
 		this.gestionnaire = gestionnaire;
-	}
-
-	public static ArrayList<Conversation> getConvs() {
-		// TODO
-		// recuperer la liste des convs associees aux utilisateurs connectes mtn + convs
-		// dans lhistorique, avec status connecte ou pas
-
-		return null;
 	}
 
 }

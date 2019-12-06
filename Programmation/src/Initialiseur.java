@@ -42,10 +42,8 @@ public class Initialiseur {
 				}
 			}
 		} catch (UnknownHostException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (SocketException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		System.out.println(lanIp.toString());
@@ -53,14 +51,12 @@ public class Initialiseur {
 		try {
 			ni = NetworkInterface.getByInetAddress(lanIp);
 		} catch (SocketException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		byte[] mac = null;
 		try {
 			mac = ni.getHardwareAddress();
 		} catch (SocketException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		System.out.println(String.format("%2x", mac[0]) + ":" + String.format("%2x", mac[1]) + ":"
