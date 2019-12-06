@@ -6,7 +6,7 @@ public class Conversation {
 	private Historique historique;
 	private GestionnaireConversation gestionnaire;
 
-	public void nouveauMessage(Message m, Utilisateur contact) {
+	public void nouveauMessage(Message m) {
 		// if gestionnaire = null
 		// creer gestionnaire, creation du socket
 

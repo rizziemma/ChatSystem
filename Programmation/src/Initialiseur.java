@@ -16,7 +16,7 @@ import java.util.concurrent.TimeUnit;
 
 public class Initialiseur {
 
-	public static ListenerBroadcast initApp() {
+	public static void initApp() {
 		InetAddress lanIp = null;
 		try {
 			String ipAddress = null;
@@ -68,15 +68,17 @@ public class Initialiseur {
 				+ ":" + String.format("%2x", mac[5]));
 		ChatSystem.self.setAddrIP(lanIp.toString());
 		ChatSystem.self.setAddrMAC(mac);
-		ListenerBroadcast list = demandeTableUtilisateur(mac, lanIp);
+		ChatSystem.ListBR=demandeTableUtilisateur(mac, lanIp);
 		ChatSystem.self.setPseudo(choixPseudo());
 		ChatSystem.self.setStatus("Nouvel Utilisateur");
 		ChatSystem.self.setDerniereConnexion(new Date());
-		return list;
+		ChatSystem.List = initListener();
 	}
 
-	private void initListener() {
-		// TODO
+	private static Listener initListener() {
+		Listener L = new Listener();
+		L.start();
+		return(L);
 	}
 
 	private static ListenerBroadcast initListenerBroadcast(int port) throws UnknownHostException {

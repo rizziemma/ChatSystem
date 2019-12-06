@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 public class Listener extends Thread {
 	private ServerSocket server;
-	private ArrayList<Conversation> convs;
+	private static ArrayList<Conversation> convs;
 
 	public Listener() {
 		try {
@@ -50,5 +50,19 @@ public class Listener extends Thread {
 				g.start();
 			}
 		}
+	}
+	
+	public static Conversation getConversationByGestionnaire(GestionnaireConversation g) {
+		Conversation found = null;
+		for (Conversation c : convs) {
+			if (c.getGestionnaire().equals(g)) {
+				found = c;
+			}
+		}
+		return found;
+	}
+	
+	public void fin() {
+		
 	}
 }
