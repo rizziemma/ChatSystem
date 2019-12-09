@@ -192,8 +192,8 @@ public class Initialiseur {
 	            String messages = "CREATE TABLE MESSAGE (ID integer PRIMARY KEY, DATE text, DATA blob, STATUS text, SENT integer, CONTACT text, FOREIGN KEY (CONTACT) REFERENCES UTILISATEUR(MAC))";
 
 	            Statement stmt = conn.createStatement();
-	            stmt.execute(messages);
 	            stmt.execute(utilisateurs);
+	            stmt.execute(messages);
 
 	            conn.close();
 	        } catch (SQLException e) {
