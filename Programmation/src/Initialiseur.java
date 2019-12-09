@@ -183,13 +183,13 @@ public class Initialiseur {
 		return pseudo;
 	}
 	
-	private static void initBaseLocale() {
+	public static void initBaseLocale() {
 		//Si bdd pas initialisée
 		if (!(new File(Properties.BaseLocalePath)).exists()) {
 			try {          
 	            Connection conn = DriverManager.getConnection(Properties.SQLiteDriver+Properties.BaseLocalePath);
 	            String utilisateurs = "CREATE TABLE UTILISATEUR (PSEUDO text, IP text, MAC text PRIMARY KEY, STATUS text, CONNEXION text);";
-	            String messages = "CREATE TABLE (ID integer PRIMARY KEY, DATE text, DATA blob, STATUS text, SENT integer, CONTACT text), FOREIGN KEY(CONTACT) REFERENCES UTILISATEUR(MAC)";
+	            String messages = "CREATE TABLE MESSAGE (ID integer PRIMARY KEY, DATE text, DATA blob, STATUS text, SENT integer, CONTACT text), FOREIGN KEY(CONTACT) REFERENCES UTILISATEUR(MAC)";
 
 	            Statement stmt = conn.createStatement();
 	            stmt.execute(utilisateurs);
