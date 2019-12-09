@@ -2,37 +2,41 @@ package src;
 
 import java.util.List;
 
-import org.hibernate.*;
-import org.hibernate.cfg.Configuration;
-import org.hibernate.service.ServiceRegistry;
-import org.hibernate.service.ServiceRegistryBuilder;
+import java.sql.*;
+
+//https://www.sqlitetutorial.net/sqlite-java/
 
 public class HistoriqueDAO {
-
-	private Session session;
-
+	private String url = "jdbc:sqlite:data/storage.db";
 	public HistoriqueDAO() {
-		Configuration configuration = new Configuration().configure("resources/hibernate.cfg.xml");
-		ServiceRegistry serviceRegistry = new ServiceRegistryBuilder().applySettings(configuration.getProperties())
-				.buildServiceRegistry();
-		SessionFactory sessionFactory = configuration.buildSessionFactory(serviceRegistry);
-		session = sessionFactory.openSession();
+        
 	}
 
 	public void updateHistorique(Historique h) {
-		session.beginTransaction();
-		session.merge(h);
-		session.getTransaction().commit();
+
 	}
 
-	@SuppressWarnings("unchecked")
 	public List<Historique> getHistoriques() {
-		Query query = session.createQuery("from HISTORIQUE");
-		return (List<Historique>) query.list();
+		return null;
+
 	}
 
 	public Historique getHistoriqueByUtilisateur(Utilisateur u) {
-		Query query = session.createQuery("from HISTORIQUE H where  H.contact = " + u);
-		return (Historique) query.list().get(0);
+		try {          
+            // create a connection to the database
+            Connection conn = DriverManager.getConnection(url);
+            
+            //System.out.println("Connection to SQLite has been established.");
+            //transaction
+            
+            
+            //fermeture
+            conn.close();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+		return null;
+		
+
 	}
 }
