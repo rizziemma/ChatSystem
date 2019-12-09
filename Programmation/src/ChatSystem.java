@@ -2,6 +2,8 @@ package src;
 
 import java.util.ArrayList;
 
+import src.model.Utilisateur;
+
 public class ChatSystem {
 
 	public static ArrayList<Utilisateur> tableUtilisateur;

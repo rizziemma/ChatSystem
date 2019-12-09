@@ -2,6 +2,9 @@ package src;
 
 import java.io.Serializable;
 
+import src.model.Message;
+import src.model.Utilisateur;
+
 public class Notification implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private String type;

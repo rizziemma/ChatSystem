@@ -5,6 +5,8 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 
+import src.model.Utilisateur;
+
 public class Listener extends Thread {
 	private ServerSocket server;
 	private static ArrayList<Conversation> convs;

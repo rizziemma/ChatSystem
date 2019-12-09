@@ -5,6 +5,8 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
+import src.model.Message;
+
 public class GestionnaireConversation extends Thread {
 	private Socket sock;
 	private Boolean run;

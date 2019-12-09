@@ -2,6 +2,9 @@ package src;
 
 import java.util.List;
 
+import src.model.Historique;
+import src.model.Utilisateur;
+
 import java.sql.*;
 
 //https://www.sqlitetutorial.net/sqlite-java/

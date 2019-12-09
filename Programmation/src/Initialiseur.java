@@ -20,6 +20,7 @@ import java.util.Enumeration;
 import java.util.concurrent.TimeUnit;
 
 import resources.Properties;
+import src.model.Utilisateur;
 
 public class Initialiseur {
 
