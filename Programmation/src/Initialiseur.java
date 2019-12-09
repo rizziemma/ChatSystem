@@ -1,6 +1,7 @@
 package src;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.net.DatagramPacket;
@@ -10,9 +11,15 @@ import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.net.UnknownHostException;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.concurrent.TimeUnit;
+
+import resources.Properties;
 
 public class Initialiseur {
 
@@ -173,6 +180,25 @@ public class Initialiseur {
 			}
 		}
 		return pseudo;
+	}
+	
+	private static void initBaseLocale() {
+		//Si bdd pas initialisée
+		if (!(new File(Properties.BaseLocalePath)).exists()) {
+			try {          
+	            Connection conn = DriverManager.getConnection(Properties.SQLiteDriver+Properties.BaseLocalePath);
+	            String utilisateurs = "CREATE TABLE UTILISATEUR (PSEUDO text, IP text, MAC text PRIMARY KEY, STATUS text, CONNEXION text);";
+	            String messages = "CREATE TABLE (ID integer PRIMARY KEY, DATE text, DATA blob, STATUS text, SENT integer, CONTACT text), FOREIGN KEY(CONTACT) REFERENCES UTILISATEUR(MAC)";
+
+	            Statement stmt = conn.createStatement();
+	            stmt.execute(utilisateurs);
+	            stmt.execute(messages);
+
+	            conn.close();
+	        } catch (SQLException e) {
+	            System.out.println(e.getMessage());
+	        }
+		}
 	}
 
 }
