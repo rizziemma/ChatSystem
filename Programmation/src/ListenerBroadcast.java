@@ -10,6 +10,8 @@ import java.net.DatagramSocket;
 import java.net.SocketException;
 import java.util.Arrays;
 
+import src.model.Utilisateur;
+
 public class ListenerBroadcast extends Thread {
 	private DatagramSocket serveur;
 

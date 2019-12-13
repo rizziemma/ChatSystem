@@ -5,6 +5,9 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.util.ArrayList;
 
+import src.model.Historique;
+import src.model.Message;
+
 public class Conversation {
 	private Historique historique;
 	private GestionnaireConversation gestionnaire;
