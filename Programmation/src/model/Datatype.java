@@ -4,5 +4,6 @@ public enum Datatype{
 	MESSAGE,
 	UTILISATEUR,
 	IMAGE,
-	FICHIER,
+	FICHIER, 
+	VU
 }

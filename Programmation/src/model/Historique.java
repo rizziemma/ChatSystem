@@ -11,6 +11,11 @@ public class Historique {
 	public Historique() {
 		super();
 	}
+	
+	public Historique(Utilisateur u) {
+		this.contact = u;
+		this.Datagrammes = new ArrayList<Datagram>();
+	}
 
 	public Utilisateur getContact() {
 		return contact;
@@ -26,6 +31,10 @@ public class Historique {
 
 	public void setMessages(ArrayList<Datagram> messages) {
 		this.Datagrammes = messages;
+	}
+	
+	public void addMessage(Datagram D) {
+		this.Datagrammes.add(D);
 	}
 
 	public void nouveauMessage(Datagram m) {

@@ -45,7 +45,9 @@ public class Listener extends Thread {
 	}
 
 	public void traitement(Socket sock) {
-		Conversation.nouveauSYN(sock);
+		Conversation conv = new Conversation(ChatSystem.getUserByIp(sock.getInetAddress()));
+		ChatSystem.convs.add(conv);
+		conv.nouveauSYN(sock);
 	}
 	
 	

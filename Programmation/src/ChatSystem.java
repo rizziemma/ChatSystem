@@ -1,5 +1,6 @@
 package src;
 
+import java.net.InetAddress;
 import java.util.ArrayList;
 
 import src.model.Utilisateur;
@@ -29,7 +30,18 @@ public class ChatSystem {
 			}
 		}
 	}
-
+	
+	public static Utilisateur getUserByIp(InetAddress IP) {
+		Utilisateur ret=null;
+		for (Utilisateur u : tableUtilisateur) {
+			if(u.getAddrIP().equals(IP.toString())) {
+				ret = u;
+				break;
+			}
+		}
+		return ret;
+	}
+	
 	public static void addAllUsers(ArrayList<Utilisateur> table) {
 		tableUtilisateur.addAll(table);
 

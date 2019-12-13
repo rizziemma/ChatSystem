@@ -3,9 +3,10 @@ package src.model;
 import java.util.Date;
 
 public class Datagram {
+	public static enum status_type {NEW,RECEIVED,SENT,ARCHIVED,READ};
 	private Datatype type;
 	private Object data;
-	private String status;
+	private status_type status; 
 	private Boolean sent;
 	private Date date;
 	
@@ -14,7 +15,7 @@ public class Datagram {
 		this .data = data;
 		setDate(new Date());
 		setSent(true);
-		setStatus("new");
+		setStatus(status_type.NEW);
 	}
 	
 	public Datatype getType() {
@@ -30,11 +31,11 @@ public class Datagram {
 		this.data = data;
 	}
 
-	public String getStatus() {
+	public status_type getStatus() {
 		return status;
 	}
 
-	public void setStatus(String status) {
+	public void setStatus(status_type status) {
 		this.status = status;
 	}
 

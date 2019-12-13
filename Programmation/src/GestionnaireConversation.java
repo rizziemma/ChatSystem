@@ -7,15 +7,18 @@ import java.net.Socket;
 import src.model.Utilisateur;
 import src.model.Datagram;
 import src.model.Datatype;
+import src.model.Historique;
 
 public class GestionnaireConversation extends Thread {
 	private Socket sock;
 	private boolean isRunning = true;
 	private ObjectOutputStream out = null;
     private ObjectInputStream in = null;
+    private Historique h;
 
-	public GestionnaireConversation(Socket sock) {
+	public GestionnaireConversation(Socket sock,Historique hist) {
 		this.sock = sock;
+		this.h = hist;
 		try {
 			this.out = new ObjectOutputStream(sock.getOutputStream());
 			this.in = new ObjectInputStream(sock.getInputStream());
@@ -31,11 +34,15 @@ public class GestionnaireConversation extends Thread {
 			try {
 				if(in.available()>0) {
 					Datagram Data = (Datagram) in.readObject(); //NOUVEAU MESSAGE RECU
+					Data.setStatus(Datagram.status_type.RECEIVED);
 					if(Data.getType() == Datatype.MESSAGE) {
-						traiterMessage((String)Data.getData());
+						traiterMessage(Data);
 					}
 					if(Data.getType() == Datatype.UTILISATEUR) {
 						traiterUtilisateur((Utilisateur)Data.getData());
+					}
+					if(Data.getType()==Datatype.VU) {
+						traiterVu();
 					}
 				}			
 			} catch (IOException | ClassNotFoundException e) {
@@ -66,12 +73,14 @@ public class GestionnaireConversation extends Thread {
 	}
 
 
-	private void traiterMessage(String m) {
-		System.out.println("message reçu : " + m.toString());
+	private void traiterMessage(Datagram data) {
+		System.out.println("message reçu : " + (String)data.getData());
 		//TODO envoyer le message aux classes qui en ont besoin
-		// vers DAO
-		// vers stockage local
+		h.addMessage(data);
 		// notify observer
+		HistoriqueDAO DAO = new HistoriqueDAO();
+		DAO.nouveauDatagramme(h,data);
+		DAO.close();
 	}
 
 
@@ -82,6 +91,7 @@ public class GestionnaireConversation extends Thread {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		data.setStatus(Datagram.status_type.SENT);
 		//TODO envoyer le message aux classes qui en ont besoin
 	}
 	
@@ -94,6 +104,20 @@ public class GestionnaireConversation extends Thread {
 		}
 	}
 	
+	private void traiterVu() {
+		//TODO envoyer a observer +dao +local (ordre important)
+	}
+	
+	
+	public void envoyerVu() {
+		Datagram data = new Datagram(Datatype.VU,null);
+		try {
+			out.writeObject(data);
+		}
+		catch(IOException e) {
+			e.printStackTrace();
+		}
+	}
 	
 	//arrete le thread proprement
 	public void fin() {

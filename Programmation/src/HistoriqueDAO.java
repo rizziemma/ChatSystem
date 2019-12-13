@@ -53,7 +53,7 @@ public class HistoriqueDAO {
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
-		 d.setStatus("archived");
+		 d.setStatus(Datagram.status_type.ARCHIVED);
 	}
 	
 	public void vuConversation(Historique h) {

@@ -76,12 +76,16 @@ public class Initialiseur {
 		ChatSystem.self.setPseudo(choixPseudo());
 		ChatSystem.self.setStatus("Nouvel Utilisateur");
 		ChatSystem.self.setDerniereConnexion(new Date());
-		//TODO envoie de self a tout le monde
+		notifyNewPseudo();
 		ChatSystem.List = initListener();
 		initBaseLocale();
 	}
 
-	private static void notify_valid_pseudo() {}
+	private static void notifyNewPseudo(/*self*/) {
+		for(Utilisateur u : ChatSystem.tableUtilisateur) {
+			
+		}
+	}
 	
 	
 	private static Listener initListener() {
@@ -152,6 +156,7 @@ public class Initialiseur {
 			System.out.println("Impossible d'envoyer le paquer UDP en broadcast");
 			e.printStackTrace();
 		}
+		UDPsocket.close();
 		try {
 			TimeUnit.SECONDS.sleep(2);
 		} catch (InterruptedException e) {
@@ -190,7 +195,7 @@ public class Initialiseur {
 			try {          
 	            Connection conn = DriverManager.getConnection(Properties.SQLiteDriver+Properties.BaseLocalePath);
 	            String utilisateurs = "CREATE TABLE UTILISATEUR (PSEUDO text, IP text, MAC text PRIMARY KEY, STATUS text, CONNEXION text);";
-	            String messages = "CREATE TABLE MESSAGE (ID integer PRIMARY KEY, DATE text, DATA blob, STATUS text, SENT integer, CONTACT text, FOREIGN KEY (CONTACT) REFERENCES UTILISATEUR(MAC))";
+	            String messages = "CREATE TABLE MESSAGE (ID integer PRIMARY KEY, DATE text, TYPE integer, DATA blob, STATUS integer, SENT integer, CONTACT text, FOREIGN KEY (CONTACT) REFERENCES UTILISATEUR(MAC))";
 
 	            Statement stmt = conn.createStatement();
 	            stmt.execute(utilisateurs);
