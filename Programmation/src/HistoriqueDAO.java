@@ -11,6 +11,7 @@ import java.util.List;
 
 import resources.Properties;
 import src.model.Datagram;
+import src.model.Datatype;
 import src.model.Historique;
 
 //https://www.sqlitetutorial.net/sqlite-java/
@@ -76,27 +77,54 @@ public class HistoriqueDAO {
 	}
 
 	public ArrayList<Datagram> getDatagrams10(Historique h) { 
-	return null;
-	}
-	
-	public ArrayList<Datagram> getDatagramsByDate(Historique h, String date) {      
-        String sql = "SELECT (DATE, TYPE, DATA, STATUS, SENT) FROM MESSAGE WHERE";
-        Statement stmt;
-        ArrayList<Datagram> l = ;
+		String sql = "SELECT (DATE, TYPE, DATA, STATUS, SENT) FROM MESSAGE WHERE (CONTACT = ?) ODRDER BY datetime(DATE) DESC Limit 10";
+		PreparedStatement stmt;
+        ArrayList<Datagram> l = new ArrayList<Datagram>();
 		try {
-			stmt = conn.createStatement();
-			ResultSet rs    = stmt.executeQuery(sql);
+			stmt = conn.prepareStatement(sql);
+			stmt.setString(1, h.getContact().getAddrMAC().toString());
+			ResultSet rs    = stmt.executeQuery();
 	        while (rs.next()) {
-	        	System.out.println(rs.getInt("id") +  "\t" + 
-	                               rs.getString("name") + "\t" +
-	                               rs.getDouble("capacity"));
+	        	Datagram d = new Datagram();
+	        	d.setDate(rs.getDate("DATE"));
+	        	d.setData(rs.getObject("DATA"));
+	        	d.setSent(rs.getInt("SENT")==1);
+	        	d.setStatus(Datagram.status_types.values()[rs.getInt("STATUS")]);
+	        	d.setType(Datatype.values()[rs.getInt("STATUS")]);
+	        	l.add(d);
 	        }
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
         
-		return h;
+		return l;
+	}
+	
+	public ArrayList<Datagram> getDatagramsByDate(Historique h, String date) {      
+        String sql = "SELECT (DATE, TYPE, DATA, STATUS, SENT) FROM MESSAGE WHERE (CONTACT = ? and Datetime(DATE)<=?) ODRDER BY datetime(DATE) DESC Limit 10";
+        PreparedStatement stmt;
+        ArrayList<Datagram> l = new ArrayList<Datagram>();
+		try {
+			stmt = conn.prepareStatement(sql);
+			stmt.setString(1, h.getContact().getAddrMAC().toString());
+			stmt.setString(2, date);
+			ResultSet rs    = stmt.executeQuery();
+	        while (rs.next()) {
+	        	Datagram d = new Datagram();
+	        	d.setDate(rs.getDate("DATE"));
+	        	d.setData(rs.getObject("DATA"));
+	        	d.setSent(rs.getInt("SENT")==1);
+	        	d.setStatus(Datagram.status_types.values()[rs.getInt("STATUS")]);
+	        	d.setType(Datatype.values()[rs.getInt("STATUS")]);
+	        	l.add(d);
+	        }
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        
+		return l;
 		
 
 	}
