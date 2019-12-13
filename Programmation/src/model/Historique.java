@@ -6,7 +6,7 @@ public class Historique {
 
 	private Utilisateur contact;
 
-	private ArrayList<Message> messages;
+	private ArrayList<Datagram> Datagrammes;
 
 	public Historique() {
 		super();
@@ -20,15 +20,15 @@ public class Historique {
 		this.contact = contact;
 	}
 
-	public ArrayList<Message> getMessages() {
-		return messages;
+	public ArrayList<Datagram> getMessages() {
+		return Datagrammes;
 	}
 
-	public void setMessages(ArrayList<Message> messages) {
-		this.messages = messages;
+	public void setMessages(ArrayList<Datagram> messages) {
+		this.Datagrammes = messages;
 	}
 
-	public void nouveauMessage(Message m) {
-		messages.add(m);
+	public void nouveauMessage(Datagram m) {
+		Datagrammes.add(m);
 	}
 }

@@ -5,7 +5,6 @@ import java.net.InetAddress;
 import java.net.Socket;
 
 import src.model.Historique;
-import src.model.Message;
 
 public class Conversation {
 	private Historique historique;
@@ -28,7 +27,7 @@ public class Conversation {
 	}
 	
 	
-	public void nouveauMessage(Message m) {
+	public void nouveauMessage(String m) {
 		if(this.gestionnaire == null) {
 			try {
 				gestionnaire= new GestionnaireConversation(new Socket(InetAddress.getByName(this.historique.getContact().getAddrIP()),ChatSystem.List.getPort()));

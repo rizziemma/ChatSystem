@@ -7,7 +7,6 @@ import java.net.Socket;
 import src.model.Utilisateur;
 import src.model.Datagram;
 import src.model.Datatype;
-import src.model.Message;
 
 public class GestionnaireConversation extends Thread {
 	private Socket sock;
@@ -33,7 +32,7 @@ public class GestionnaireConversation extends Thread {
 				if(in.available()>0) {
 					Datagram Data = (Datagram) in.readObject(); //NOUVEAU MESSAGE RECU
 					if(Data.getType() == Datatype.MESSAGE) {
-						traiterMessage((Message)Data.getData());
+						traiterMessage((String)Data.getData());
 					}
 					if(Data.getType() == Datatype.UTILISATEUR) {
 						traiterUtilisateur((Utilisateur)Data.getData());
@@ -67,7 +66,7 @@ public class GestionnaireConversation extends Thread {
 	}
 
 
-	private void traiterMessage(Message m) {
+	private void traiterMessage(String m) {
 		System.out.println("message reçu : " + m.toString());
 		//TODO envoyer le message aux classes qui en ont besoin
 		// vers DAO
@@ -76,7 +75,7 @@ public class GestionnaireConversation extends Thread {
 	}
 
 
-	public void envoyerMessage(Message m) {
+	public void envoyerMessage(String m) {
 		Datagram data = new Datagram(Datatype.MESSAGE, (Object)m);
 		try {
 			out.writeObject(data);
