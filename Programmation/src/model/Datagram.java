@@ -17,6 +17,10 @@ public class Datagram {
 		setStatus("new");
 	}
 	
+	public Datagram() {
+		// TODO Auto-generated constructor stub
+	}
+
 	public Datatype getType() {
 		return type;
 	}
