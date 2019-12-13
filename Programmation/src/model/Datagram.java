@@ -1,6 +1,4 @@
-package src;
-
-import resources.Datatype;
+package src.model;
 
 public class Datagram {
 	private Datatype type;

@@ -3,12 +3,10 @@ package src;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.ArrayList;
-
-import src.model.Utilisateur;
+import resources.Properties;
 
 public class Listener extends Thread {
-	private int port = 12345;
+	private int port = Properties.TCPServerSocketPort;
 	private ServerSocket server = null;
 	private boolean isRunning = true;
 

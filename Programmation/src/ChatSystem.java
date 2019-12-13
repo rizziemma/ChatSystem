@@ -10,6 +10,7 @@ public class ChatSystem {
 	public static Utilisateur self;
 	public static Listener List;
 	public static ListenerBroadcast ListBR;
+	public static ArrayList<Conversation> convs;
 	
 
 	public static void addUtilisateur(Utilisateur nouvel_utilisateur) {
@@ -46,6 +47,7 @@ public class ChatSystem {
 		tableUtilisateur = new ArrayList<Utilisateur>();
 		self = new Utilisateur();
 		Initialiseur.initApp();
+		//message
 		ListBR.interrupt();
 		List.fin();
 		System.out.println(printTableUtilisateur());

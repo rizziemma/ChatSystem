@@ -76,9 +76,14 @@ public class Initialiseur {
 		ChatSystem.self.setPseudo(choixPseudo());
 		ChatSystem.self.setStatus("Nouvel Utilisateur");
 		ChatSystem.self.setDerniereConnexion(new Date());
+		//TODO envoie de self a tout le monde
 		ChatSystem.List = initListener();
+		initBaseLocale();
 	}
 
+	private static void notify_valid_pseudo() {}
+	
+	
 	private static Listener initListener() {
 		Listener L = new Listener();
 		L.start();
@@ -179,7 +184,7 @@ public class Initialiseur {
 		return pseudo;
 	}
 	
-	public static void initBaseLocale() {
+	private static void initBaseLocale() {
 		//Si bdd pas initialisée
 		if (!(new File(Properties.BaseLocalePath)).exists()) {
 			try {          

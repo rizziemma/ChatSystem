@@ -1,12 +1,12 @@
 package src;
 
-import resources.Datatype;
-
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-
+import src.model.Utilisateur;
+import src.model.Datagram;
+import src.model.Datatype;
 import src.model.Message;
 
 public class GestionnaireConversation extends Thread {
@@ -70,6 +70,9 @@ public class GestionnaireConversation extends Thread {
 	private void traiterMessage(Message m) {
 		System.out.println("message reçu : " + m.toString());
 		//TODO envoyer le message aux classes qui en ont besoin
+		// vers DAO
+		// vers stockage local
+		// notify observer
 	}
 
 
@@ -80,6 +83,7 @@ public class GestionnaireConversation extends Thread {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		//TODO envoyer le message aux classes qui en ont besoin
 	}
 	
 	public void envoyerUtilisateur(Utilisateur u) {

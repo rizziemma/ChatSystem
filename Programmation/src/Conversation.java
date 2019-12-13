@@ -3,7 +3,6 @@ package src;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.Socket;
-import java.util.ArrayList;
 
 import src.model.Historique;
 import src.model.Message;
