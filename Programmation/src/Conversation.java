@@ -36,11 +36,10 @@ public class Conversation {
 		}
 	}
 	
-	
 	public void nouveauMessage(String m) {
 		if(this.gestionnaire == null) {
 			try {
-				gestionnaire= new GestionnaireConversation(new Socket(InetAddress.getByName(this.historique.getContact().getAddrIP()),ChatSystem.List.getPort()),historique);
+				gestionnaire= new GestionnaireConversation(new Socket(this.historique.getContact().getAddrIP(),ChatSystem.List.getPort()),historique);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}

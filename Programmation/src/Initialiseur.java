@@ -72,7 +72,7 @@ public class Initialiseur {
 		System.out.println(String.format("%2x", mac[0]) + ":" + String.format("%2x", mac[1]) + ":"
 				+ String.format("%2x", mac[2]) + ":" + String.format("%2x", mac[3]) + ":" + String.format("%2x", mac[4])
 				+ ":" + String.format("%2x", mac[5]));
-		ChatSystem.self.setAddrIP(lanIp.toString());
+		ChatSystem.self.setAddrIP(lanIp);
 		ChatSystem.self.setAddrMAC(mac);
 		ChatSystem.ListBR=demandeTableUtilisateur(mac, lanIp);
 		ChatSystem.self.setPseudo(choixPseudo());
@@ -183,7 +183,7 @@ public class Initialiseur {
 			e1.printStackTrace();
 		}
 		try {
-			OOS.writeObject(new Utilisateur("TBD", Ip.toString(), mac, "NEW", new Date()));
+			OOS.writeObject(new Utilisateur("TBD", Ip, mac, "NEW", new Date()));
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}

@@ -1,6 +1,7 @@
 package src.model;
 
 import java.io.Serializable;
+import java.net.InetAddress;
 import java.util.Date;
 
 
@@ -10,7 +11,7 @@ public class Utilisateur implements Serializable {
 
 	private String pseudo;
 
-	private String addrIP;
+	private InetAddress addrIP;
 
 	private byte[] addrMAC;
 
@@ -22,7 +23,7 @@ public class Utilisateur implements Serializable {
 		super();
 	}
 
-	public Utilisateur(String pseudo, String addrIP, byte[] addrMAC, String status, Date derniereConnexion) {
+	public Utilisateur(String pseudo, InetAddress addrIP, byte[] addrMAC, String status, Date derniereConnexion) {
 		super();
 		this.pseudo = pseudo;
 		this.addrIP = addrIP;
@@ -39,11 +40,11 @@ public class Utilisateur implements Serializable {
 		this.pseudo = pseudo;
 	}
 
-	public String getAddrIP() {
+	public InetAddress getAddrIP() {
 		return addrIP;
 	}
 
-	public void setAddrIP(String addrIP) {
+	public void setAddrIP(InetAddress addrIP) {
 		this.addrIP = addrIP;
 	}
 
