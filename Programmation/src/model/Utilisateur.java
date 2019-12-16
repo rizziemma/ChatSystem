@@ -74,7 +74,7 @@ public class Utilisateur implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Utilisateur [pseudo=" + pseudo + ", addrIP=" + addrIP + ", addrMAC=" + String.format("%2x", addrMAC[0])
+		return "Utilisateur [pseudo=" + pseudo + ", addrIP=" + addrIP.toString() + ", addrMAC=" + String.format("%2x", addrMAC[0])
 				+ ":" + String.format("%2x", addrMAC[1]) + ":" + String.format("%2x", addrMAC[2]) + ":"
 				+ String.format("%2x", addrMAC[3]) + ":" + String.format("%2x", addrMAC[4]) + ":"
 				+ String.format("%2x", addrMAC[5]) + ", status=" + status + ", derniereConnexion=" + derniereConnexion
