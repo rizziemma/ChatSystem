@@ -5,7 +5,6 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,7 +39,7 @@ public class HistoriqueDAO {
             PreparedStatement pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, d.getDate().toString());
             pstmt.setInt(2, d.getType().ordinal());
-            pstmt.setBytes(3, (byte[])d.getData());
+            pstmt.setObject(3, d.getData());
             pstmt.setInt(4, d.getStatus().ordinal());
             if(d.getSent()) {
             	pstmt.setInt(5, 1);
