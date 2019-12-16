@@ -39,7 +39,6 @@ public class ListenerBroadcast extends Thread {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			System.out.println("Message reçu");
 			Utilisateur nouvel_utilisateur = null;
 			ObjectInputStream OIS = null;
 			try {
@@ -57,10 +56,10 @@ public class ListenerBroadcast extends Thread {
 			}
 			if (Arrays.equals(nouvel_utilisateur.getAddrMAC(), ChatSystem.self.getAddrMAC())
 					&& nouvel_utilisateur.getAddrIP().equals(ChatSystem.self.getAddrIP())) {
-				System.out.println("reception du son propre utilisateur");
+				System.out.println("reception du \"self\"");
 			} 
 			else {
-				System.out.println(nouvel_utilisateur.toString());
+				System.out.println("Reception UDP : "+nouvel_utilisateur.toString());
 				ChatSystem.addUtilisateur(nouvel_utilisateur);
 				packet.setLength(buffer.length);
 				if (nouvel_utilisateur.getStatus().equals("NEW")) {
