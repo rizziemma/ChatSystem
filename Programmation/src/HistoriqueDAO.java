@@ -39,7 +39,7 @@ public class HistoriqueDAO {
             PreparedStatement pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, d.getDate().toString());
             pstmt.setInt(2, d.getType().ordinal());
-            pstmt.setBytes(3, (byte[])d.getData());
+            pstmt.setObject(3, d.getData());
             pstmt.setInt(4, d.getStatus().ordinal());
             if(d.getSent()) {
             	pstmt.setInt(5, 1);
