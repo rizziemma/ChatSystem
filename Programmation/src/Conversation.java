@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.Socket;
 
+import resources.Properties;
 import src.model.Historique;
 import src.model.Utilisateur;
 
@@ -39,7 +40,7 @@ public class Conversation {
 	public void nouveauMessage(String m) {
 		if(this.gestionnaire == null) {
 			try {
-				gestionnaire= new GestionnaireConversation(new Socket(this.historique.getContact().getAddrIP(),ChatSystem.List.getPort()),historique);
+				gestionnaire= new GestionnaireConversation(new Socket(this.historique.getContact().getAddrIP(),Properties.TCPServerSocketPort),historique);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
