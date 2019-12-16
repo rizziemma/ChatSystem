@@ -79,7 +79,7 @@ public class ListenerBroadcast extends Thread {
 					DatagramPacket packet2 = new DatagramPacket(buffer2, // Les données
 							buffer2.length, // La taille des données
 							packet.getAddress(), // L'adresse de l'émetteur
-							packet.getPort() // Le port de l'émetteur
+							serveur.getPort() // Le port de l'émetteur
 					);
 
 					// Et on envoie vers l'émetteur du datagramme reçu précédemment
