@@ -79,8 +79,8 @@ public class GestionnaireConversation extends Thread {
 		h.addMessage(data);
 		// notify observer
 		HistoriqueDAO DAO = new HistoriqueDAO();
-		DAO.nouveauDatagramme(h,data);
-		DAO.close();
+		//DAO.nouveauDatagramme(h,data);
+		//DAO.close();
 	}
 
 

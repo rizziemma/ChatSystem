@@ -13,9 +13,9 @@ public class Conversation {
 	
 	public Conversation(Utilisateur u) {
 		this.historique = new Historique(u);
-		HistoriqueDAO DAO = new HistoriqueDAO();
-		historique.setMessages(DAO.getDatagrams10(historique));
-		DAO.close();
+		//HistoriqueDAO DAO = new HistoriqueDAO();
+		//historique.setMessages(DAO.getDatagrams10(historique));
+		//DAO.close();
 		//TODO notify affichage messages chargés
 	}
 	

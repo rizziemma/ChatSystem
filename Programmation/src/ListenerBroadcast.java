@@ -58,7 +58,8 @@ public class ListenerBroadcast extends Thread {
 			if (Arrays.equals(nouvel_utilisateur.getAddrMAC(), ChatSystem.self.getAddrMAC())
 					&& nouvel_utilisateur.getAddrIP().equals(ChatSystem.self.getAddrIP())) {
 				System.out.println("reception du son propre utilisateur");
-			} else {
+			} 
+			else {
 				System.out.println(nouvel_utilisateur.toString());
 				ChatSystem.addUtilisateur(nouvel_utilisateur);
 				packet.setLength(buffer.length);
