@@ -59,7 +59,11 @@ public class ChatSystem {
 		tableUtilisateur = new ArrayList<Utilisateur>();
 		self = new Utilisateur();
 		Initialiseur.initApp();
-		//message
+		Conversation conv = new Conversation(tableUtilisateur.get(0));
+		conv.nouveauMessage("Ceci est un test");
+		
+		
+		
 		ListBR.interrupt();
 		List.fin();
 		System.out.println(printTableUtilisateur());

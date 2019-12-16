@@ -23,7 +23,9 @@ import resources.Properties;
 import src.model.Utilisateur;
 
 public class Initialiseur {
-
+	static DatagramSocket UDPsocket = null;
+	static int portBRServer = 42069;
+	static int portBRClient = 42070;
 	public static void initApp() {
 		InetAddress lanIp = null;
 		try {
@@ -82,9 +84,46 @@ public class Initialiseur {
 	}
 
 	private static void notifyNewPseudo(/*self*/) {
-		for(Utilisateur u : ChatSystem.tableUtilisateur) {
-			
+		try {
+			UDPsocket = new DatagramSocket(portBRServer);
+		} catch (SocketException e) {
+			System.out.println("Impossible de creer le socket UDP");
+			e.printStackTrace();
 		}
+		InetAddress brAddr = null;
+		try {
+			brAddr = InetAddress.getByName("255.255.255.255");
+		} catch (UnknownHostException e) {
+			System.out.println("Impossible recuperer l'adresse de Broadcast UDP");
+			e.printStackTrace();
+		}
+		ByteArrayOutputStream BAOS = new ByteArrayOutputStream();
+		ObjectOutputStream OOS = null;
+		try {
+			OOS = new ObjectOutputStream(BAOS);
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+		try {
+			OOS.writeObject(ChatSystem.self);
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+		byte[] buffer = BAOS.toByteArray();
+		DatagramPacket UDPpacket = new DatagramPacket(buffer, buffer.length, brAddr, portBRClient);
+		try {
+			UDPsocket.setBroadcast(true);
+		} catch (SocketException e) {
+			System.out.println("Impossible configurer le socket UDP en broadcast");
+			e.printStackTrace();
+		}
+		try {
+			UDPsocket.send(UDPpacket);
+		} catch (IOException e) {
+			System.out.println("Impossible d'envoyer le paquer UDP en broadcast");
+			e.printStackTrace();
+		}		
+		UDPsocket.close();
 	}
 	
 	
@@ -103,22 +142,22 @@ public class Initialiseur {
 
 	private static String demandePseudo(String message) {
 		// java Swing
-		return "Pseudo_Test";
+		return "TestUser "+ChatSystem.self.getAddrIP();
 	}
 
 	private static ListenerBroadcast demandeTableUtilisateur(byte[] mac, InetAddress Ip) {
 		// ChatSystem.addAllUsers(UtilisateurDAO.getTable()); //table venant du serveur
-		int portBR = 42069;
-		int port = 42070;
+
+
 		ListenerBroadcast listenerBR = null;
 		try {
-			listenerBR = initListenerBroadcast(port);
+			listenerBR = initListenerBroadcast(portBRClient);
 		} catch (UnknownHostException e1) {
 			e1.printStackTrace();
 		}
-		DatagramSocket UDPsocket = null;
+		
 		try {
-			UDPsocket = new DatagramSocket(portBR);
+			UDPsocket = new DatagramSocket(portBRServer);
 		} catch (SocketException e) {
 			System.out.println("Impossible de creer le socket UDP");
 			e.printStackTrace();
@@ -143,7 +182,7 @@ public class Initialiseur {
 			e1.printStackTrace();
 		}
 		byte[] buffer = BAOS.toByteArray();
-		DatagramPacket UDPpacket = new DatagramPacket(buffer, buffer.length, brAddr, port);
+		DatagramPacket UDPpacket = new DatagramPacket(buffer, buffer.length, brAddr, portBRClient);
 		try {
 			UDPsocket.setBroadcast(true);
 		} catch (SocketException e) {
