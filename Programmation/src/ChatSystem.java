@@ -15,7 +15,7 @@ public class ChatSystem {
 	
 
 	public static void addUtilisateur(Utilisateur nouvel_utilisateur) {
-		if (nouvel_utilisateur.getStatus().equals("NEW")) {
+		if (nouvel_utilisateur.getStatus().equals("NEW") ||nouvel_utilisateur.getStatus().equals("Nouvel Utilisateur")  ) {
 			tableUtilisateur.add(nouvel_utilisateur);
 		} else {
 			for (Utilisateur user : tableUtilisateur) {
@@ -34,7 +34,7 @@ public class ChatSystem {
 	public static Utilisateur getUserByIp(InetAddress IP) {
 		Utilisateur ret=null;
 		for (Utilisateur u : tableUtilisateur) {
-			if(u.getAddrIP().equals(IP.toString())) {
+			if(u.getAddrIP().equals(IP)) {
 				ret = u;
 				break;
 			}
