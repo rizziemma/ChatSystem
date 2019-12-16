@@ -14,6 +14,7 @@ import src.model.Utilisateur;
 
 public class ListenerBroadcast extends Thread {
 	private DatagramSocket serveur;
+	private int port;
 
 	public ListenerBroadcast(int port) {
 		try {
@@ -21,6 +22,7 @@ public class ListenerBroadcast extends Thread {
 		} catch (SocketException e) {
 			e.printStackTrace();
 		}
+		this.port = port;
 	}
 
 	public void run() {
@@ -79,7 +81,7 @@ public class ListenerBroadcast extends Thread {
 					DatagramPacket packet2 = new DatagramPacket(buffer2, // Les données
 							buffer2.length, // La taille des données
 							packet.getAddress(), // L'adresse de l'émetteur
-							serveur.getPort() // Le port de l'émetteur
+							port // Le port de l'émetteur
 					);
 
 					// Et on envoie vers l'émetteur du datagramme reçu précédemment
