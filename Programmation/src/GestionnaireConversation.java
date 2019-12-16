@@ -1,13 +1,15 @@
 package src;
 
+import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import src.model.Utilisateur;
+
 import src.model.Datagram;
 import src.model.Datatype;
 import src.model.Historique;
+import src.model.Utilisateur;
 
 public class GestionnaireConversation extends Thread {
 	private Socket sock;
@@ -21,7 +23,7 @@ public class GestionnaireConversation extends Thread {
 		this.h = hist;
 		try {
 			this.out = new ObjectOutputStream(sock.getOutputStream());
-			this.in = new ObjectInputStream(sock.getInputStream());
+			this.in = new ObjectInputStream(new BufferedInputStream(sock.getInputStream()));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
