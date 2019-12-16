@@ -122,7 +122,13 @@ public class Initialiseur {
 		} catch (IOException e) {
 			System.out.println("Impossible d'envoyer le paquer UDP en broadcast");
 			e.printStackTrace();
-		}		
+		}
+		try {
+			TimeUnit.SECONDS.sleep(2);
+		} catch (InterruptedException e) {
+			System.out.println("Impossible de sleep (dans Initialiseur.demandeTableUtilisateur)");
+			e.printStackTrace();
+		}
 		UDPsocket.close();
 	}
 	
