@@ -22,7 +22,7 @@ public class Conversation {
 	
 	public void nouveauSYN(Socket sock) { //instentie le gestionnaire conversation du SYN reçus pour commencer la conversation avec la session distante ou resyncronyse si la connexion a été perdu
 		for (Conversation conv : ChatSystem.convs) {
-			if (conv.getHistorique().getContact().getAddrIP().equals(sock.getInetAddress().toString())) {
+			if (conv.getHistorique().getContact().getAddrIP().equals(sock.getInetAddress())) {
 				if(conv.getGestionnaire() == null) {
 					conv.setGestionnaire( new GestionnaireConversation(sock,historique));
 				}
@@ -39,7 +39,8 @@ public class Conversation {
 	public void nouveauMessage(String m) {
 		if(this.gestionnaire == null) {
 			try {
-				gestionnaire= new GestionnaireConversation(new Socket(this.historique.getContact().getAddrIP(),Properties.TCPServerSocketPort),historique);
+				Socket sock = new Socket (this.historique.getContact().getAddrIP(),Properties.TCPServerSocketPort);
+				gestionnaire= new GestionnaireConversation(sock,historique);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}

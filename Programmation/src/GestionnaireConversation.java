@@ -1,7 +1,9 @@
 package src;
 
 
+import java.io.BufferedInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
@@ -23,7 +25,11 @@ public class GestionnaireConversation extends Thread {
 		this.h = hist;
 		try {
 			this.out = new ObjectOutputStream(sock.getOutputStream());
-			this.in = new ObjectInputStream(sock.getInputStream());
+			InputStream IS = sock.getInputStream();
+			BufferedInputStream BIS = new BufferedInputStream(IS);
+			this.in = new ObjectInputStream(BIS);
+			
+			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
