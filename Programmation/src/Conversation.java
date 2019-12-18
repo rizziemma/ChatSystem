@@ -23,8 +23,9 @@ public class Conversation {
 	public void nouveauSYN(Socket sock) { //instentie le gestionnaire conversation du SYN reçus pour commencer la conversation avec la session distante ou resyncronyse si la connexion a été perdu
 		for (Conversation conv : ChatSystem.convs) {
 			if (conv.getHistorique().getContact().getAddrIP().equals(sock.getInetAddress())) {
-				if(conv.getGestionnaire() == null) {
-					conv.setGestionnaire( new GestionnaireConversation(sock,historique));
+				if(conv.getGestionnaire() == null) { 
+					conv.setGestionnaire(new GestionnaireConversation(sock,historique));
+					
 				}
 				else {
 					//TODO arrive uniquement en cas de perte de connexion d'une des deux machines
@@ -41,6 +42,7 @@ public class Conversation {
 			try {
 				Socket sock = new Socket (this.historique.getContact().getAddrIP(),Properties.TCPServerSocketPort);
 				gestionnaire= new GestionnaireConversation(sock,historique);
+				gestionnaire.run();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -62,6 +64,7 @@ public class Conversation {
 
 	public void setGestionnaire(GestionnaireConversation gestionnaire) {
 		this.gestionnaire = gestionnaire;
+		gestionnaire.run();
 	}
 
 }
