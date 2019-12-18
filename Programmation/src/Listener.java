@@ -14,14 +14,9 @@ public class Listener extends Thread {
 
 	public Listener() {
 		try {
-			server = new ServerSocket(port);
+			server = new ServerSocket(port,100,ChatSystem.self.getAddrIP());
 		} catch (IOException e) {
 			e.printStackTrace();
-		}
-		try {
-			server.setSoTimeout(1000);
-		} catch (SocketException e1) {
-			e1.printStackTrace();
 		}
 	}
 
@@ -31,6 +26,7 @@ public class Listener extends Thread {
 			try {
 				Socket sock = null;
 				sock = server.accept();
+				System.out.println("Connection entrante");
 				traitement(sock);
 			} catch (Exception e) {
 				e.printStackTrace();
