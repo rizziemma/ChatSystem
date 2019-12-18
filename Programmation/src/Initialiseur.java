@@ -242,11 +242,12 @@ public class Initialiseur {
 		if (!(new File(Properties.BaseLocalePath)).exists()) {
 			try {          
 	            Connection conn = DriverManager.getConnection(Properties.SQLiteDriver+Properties.BaseLocalePath);
-	            String utilisateurs = "CREATE TABLE UTILISATEUR (PSEUDO text, IP text, MAC text PRIMARY KEY, STATUS text, CONNEXION text);";
-	            String messages = "CREATE TABLE MESSAGE (ID integer PRIMARY KEY, DATE text, TYPE integer, DATA blob, STATUS integer, SENT integer, CONTACT text, FOREIGN KEY (CONTACT) REFERENCES UTILISATEUR(MAC))";
+	            //String utilisateurs = "CREATE TABLE UTILISATEUR (PSEUDO text, IP text, MAC text PRIMARY KEY, STATUS text, CONNEXION text);";
+	            //String messages = "CREATE TABLE MESSAGE (ID integer PRIMARY KEY, DATE text, TYPE integer, DATA blob, STATUS integer, SENT integer, CONTACT text, FOREIGN KEY (CONTACT) REFERENCES UTILISATEUR(MAC))";
+	            String messages = "CREATE TABLE MESSAGE (ID integer PRIMARY KEY, DATE text, TYPE integer, DATA blob, STATUS integer, SENT integer, CONTACT text)";
 
 	            Statement stmt = conn.createStatement();
-	            stmt.execute(utilisateurs);
+	            //stmt.execute(utilisateurs);
 	            stmt.execute(messages);
 
 	            conn.close();
