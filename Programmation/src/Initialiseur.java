@@ -24,10 +24,12 @@ import resources.Properties;
 import src.model.Utilisateur;
 
 public class Initialiseur {
+	
 	static DatagramSocket UDPsocket = null;
 	static int portBRServer = 42069;
 	static int portBRClient = 42070;
 	public static void initApp() {
+		ChatSystem.List = initListener();
 		InetAddress lanIp = null;
 		try {
 			String ipAddress = null;
@@ -80,7 +82,7 @@ public class Initialiseur {
 		ChatSystem.self.setStatus("Nouvel Utilisateur");
 		ChatSystem.self.setDerniereConnexion(new Date());
 		notifyNewPseudo();
-		ChatSystem.List = initListener();
+		
 		ChatSystem.convs = new ArrayList<Conversation>();
 		initBaseLocale();
 

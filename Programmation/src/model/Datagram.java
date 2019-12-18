@@ -3,7 +3,7 @@ package src.model;
 import java.util.Date;
 
 public class Datagram {
-	public static enum status_type {NEW,RECEIVED,SENT,ARCHIVED,READ};
+	public static enum status_type {NEW,ARCHIVED,READ};
 	private Datatype type;
 	private Object data;
 	private status_type status; 

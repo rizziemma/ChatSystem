@@ -3,6 +3,8 @@ package src;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
+
 import resources.Properties;
 
 public class Listener extends Thread {
@@ -16,12 +18,19 @@ public class Listener extends Thread {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		try {
+			server.setSoTimeout(1000);
+		} catch (SocketException e1) {
+			e1.printStackTrace();
+		}
 	}
 
 	public void run() {
+		
 		while (isRunning == true) {
 			try {
-				Socket sock = server.accept();
+				Socket sock = null;
+				sock = server.accept();
 				traitement(sock);
 			} catch (Exception e) {
 				e.printStackTrace();

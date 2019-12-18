@@ -1,6 +1,6 @@
 package src;
 
-import java.io.BufferedInputStream;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -23,7 +23,7 @@ public class GestionnaireConversation extends Thread {
 		this.h = hist;
 		try {
 			this.out = new ObjectOutputStream(sock.getOutputStream());
-			this.in = new ObjectInputStream(new BufferedInputStream(sock.getInputStream()));
+			this.in = new ObjectInputStream(sock.getInputStream());
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -36,15 +36,25 @@ public class GestionnaireConversation extends Thread {
 			try {
 				if(in.available()>0) {
 					Datagram Data = (Datagram) in.readObject(); //NOUVEAU MESSAGE RECU
-					Data.setStatus(Datagram.status_type.RECEIVED);
-					if(Data.getType() == Datatype.MESSAGE) {
+					switch(Data.getType()) {
+					case MESSAGE:
 						traiterMessage(Data);
-					}
-					if(Data.getType() == Datatype.UTILISATEUR) {
-						traiterUtilisateur((Utilisateur)Data.getData());
-					}
-					if(Data.getType()==Datatype.VU) {
+						break;
+					case UTILISATEUR:
+						traiterUtilisateur(Data);
+						break;
+					case VU:
 						traiterVu();
+						break;
+					case IMAGE:
+						traiterImage(Data);
+						break;
+					case FICHIER:
+						traiterFichier(Data);
+						break;
+					default:
+						System.out.println("Datagram not recognised");
+						break;
 					}
 				}			
 			} catch (IOException | ClassNotFoundException e) {
@@ -69,7 +79,20 @@ public class GestionnaireConversation extends Thread {
 
 	}
 
-	private void traiterUtilisateur(Utilisateur u) {
+	private void traiterFichier(Datagram data) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	private void traiterImage(Datagram data) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	private void traiterUtilisateur(Datagram data) {
+		Utilisateur u = (Utilisateur)data.getData();
 		ChatSystem.addUtilisateur(u);
 		
 	}
@@ -93,7 +116,6 @@ public class GestionnaireConversation extends Thread {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		data.setStatus(Datagram.status_type.SENT);
 		//TODO envoyer le message aux classes qui en ont besoin
 	}
 	
@@ -119,10 +141,10 @@ public class GestionnaireConversation extends Thread {
 		catch(IOException e) {
 			e.printStackTrace();
 		}
+		//TODO notifier la BDD locale du VU envoyé
 	}
 	
-	//arrete le thread proprement
-	public void fin() {
+	public void fin() { // arrete le thread proprement (fin du thread dans le Run())
 		this.isRunning = false;
 	}
 }
