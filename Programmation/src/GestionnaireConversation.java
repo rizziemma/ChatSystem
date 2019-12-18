@@ -122,6 +122,11 @@ public class GestionnaireConversation extends Thread {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		try {
+			out.flush();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		//TODO envoyer le message aux classes qui en ont besoin
 	}
 	
