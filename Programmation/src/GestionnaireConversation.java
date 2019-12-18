@@ -34,6 +34,7 @@ public class GestionnaireConversation extends Thread {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}  
+		this.start();
 	}
 
 

@@ -42,7 +42,6 @@ public class Conversation {
 			try {
 				Socket sock = new Socket (this.historique.getContact().getAddrIP(),Properties.TCPServerSocketPort);
 				gestionnaire= new GestionnaireConversation(sock,historique);
-				gestionnaire.run();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -64,7 +63,6 @@ public class Conversation {
 
 	public void setGestionnaire(GestionnaireConversation gestionnaire) {
 		this.gestionnaire = gestionnaire;
-		gestionnaire.run();
 	}
 
 }
