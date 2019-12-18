@@ -1,8 +1,14 @@
 package src.model;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class Datagram {
+public class Datagram implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	public static enum status_type {NEW,ARCHIVED,READ};
 	private Datatype type;
 	private Object data;
