@@ -17,8 +17,8 @@ public class GestionnaireConversation extends Thread {
 	private Socket sock;
 	private boolean isRunning = true;
 	private ObjectOutputStream out = null;
-    private ObjectInputStream in = null;
-    private Historique h;
+	private ObjectInputStream in = null;
+	private Historique h;
 
 	public GestionnaireConversation(Socket sock,Historique hist) {
 		this.sock = sock;
@@ -28,8 +28,8 @@ public class GestionnaireConversation extends Thread {
 			InputStream IS = sock.getInputStream();
 			BufferedInputStream BIS = new BufferedInputStream(IS);
 			this.in = new ObjectInputStream(BIS);
-			
-			
+
+
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -41,36 +41,30 @@ public class GestionnaireConversation extends Thread {
 	public void run() {
 		while(this.isRunning) {
 			try {
-				if(in.available()>0) {
-					Datagram Data = (Datagram) in.readObject(); //NOUVEAU MESSAGE RECU
-					switch(Data.getType()) {
-					case MESSAGE:
-						traiterMessage(Data);
-						break;
-					case UTILISATEUR:
-						traiterUtilisateur(Data);
-						break;
-					case VU:
-						traiterVu();
-						break;
-					case IMAGE:
-						traiterImage(Data);
-						break;
-					case FICHIER:
-						traiterFichier(Data);
-						break;
-					default:
-						System.out.println("Datagram not recognised");
-						break;
-					}
-				}			
+
+				Datagram Data = (Datagram) in.readObject(); //NOUVEAU MESSAGE RECU
+				switch(Data.getType()) {
+				case MESSAGE:
+					traiterMessage(Data);
+					break;
+				case UTILISATEUR:
+					traiterUtilisateur(Data);
+					break;
+				case VU:
+					traiterVu();
+					break;
+				case IMAGE:
+					traiterImage(Data);
+					break;
+				case FICHIER:
+					traiterFichier(Data);
+					break;
+				default:
+					System.out.println("Datagram not recognised");
+					break;
+				}
+
 			} catch (IOException | ClassNotFoundException e) {
-				e.printStackTrace();
-			}
-			try {
-				Thread.sleep(1);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -88,20 +82,20 @@ public class GestionnaireConversation extends Thread {
 
 	private void traiterFichier(Datagram data) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 
 	private void traiterImage(Datagram data) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 
 	private void traiterUtilisateur(Datagram data) {
 		Utilisateur u = (Utilisateur)data.getData();
 		ChatSystem.addUtilisateur(u);
-		
+
 	}
 
 
@@ -130,7 +124,7 @@ public class GestionnaireConversation extends Thread {
 		}
 		//TODO envoyer le message aux classes qui en ont besoin
 	}
-	
+
 	public void envoyerUtilisateur(Utilisateur u) {
 		Datagram data = new Datagram(Datatype.UTILISATEUR, (Object)u);
 		try {
@@ -139,12 +133,12 @@ public class GestionnaireConversation extends Thread {
 			e.printStackTrace();
 		}
 	}
-	
+
 	private void traiterVu() {
 		//TODO envoyer a observer +dao +local (ordre important)
 	}
-	
-	
+
+
 	public void envoyerVu() {
 		Datagram data = new Datagram(Datatype.VU,null);
 		try {
@@ -155,7 +149,7 @@ public class GestionnaireConversation extends Thread {
 		}
 		//TODO notifier la BDD locale du VU envoyé
 	}
-	
+
 	public void fin() { // arrete le thread proprement (fin du thread dans le Run())
 		this.isRunning = false;
 	}

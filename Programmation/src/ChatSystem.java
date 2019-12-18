@@ -62,7 +62,11 @@ public class ChatSystem {
 		while(tableUtilisateur.isEmpty()) {}
 		Conversation conv = new Conversation(tableUtilisateur.get(0));
 		conv.nouveauMessage("Ceci est un test");
-		
+		conv.nouveauMessage("TEST2");
+		conv.nouveauMessage("TEST3");
+		conv.nouveauMessage("TEST4");
+		conv.nouveauMessage("TEST5");
+		conv.nouveauMessage("TEST6");
 		
 		
 		ListBR.interrupt();
