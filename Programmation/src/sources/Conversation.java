@@ -1,4 +1,4 @@
-package src;
+package sources;
 
 import java.io.IOException;
 import java.net.Socket;

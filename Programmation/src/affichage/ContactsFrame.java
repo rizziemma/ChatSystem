@@ -1,4 +1,4 @@
-package src.affichage;
+package affichage;
 
 import java.awt.Frame;
 

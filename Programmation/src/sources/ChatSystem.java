@@ -1,9 +1,10 @@
-package src;
+package sources;
 
 import java.net.InetAddress;
 import java.util.ArrayList;
 
 import model.Utilisateur;
+
 public class ChatSystem {
 
 	public static ArrayList<Utilisateur> tableUtilisateur;
