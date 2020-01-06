@@ -1,4 +1,4 @@
-package src;
+package src.application;
 
 
 import java.io.BufferedInputStream;
@@ -8,10 +8,10 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
-import model.Datagram;
-import model.Datatype;
-import model.Historique;
-import model.Utilisateur;
+import src.model.Datagram;
+import src.model.Datatype;
+import src.model.Historique;
+import src.model.Utilisateur;
 
 public class GestionnaireConversation extends Thread {
 	private Socket sock;

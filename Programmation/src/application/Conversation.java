@@ -1,11 +1,11 @@
-package src;
+package src.application;
 
 import java.io.IOException;
 import java.net.Socket;
 
-import resources.Properties;
-import model.Historique;
-import model.Utilisateur;
+import src.model.Historique;
+import src.model.Utilisateur;
+import src.resources.Properties;
 
 public class Conversation {
 	private Historique historique;

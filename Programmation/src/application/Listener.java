@@ -1,11 +1,10 @@
-package src;
+package src.application;
 
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.net.SocketException;
 
-import resources.Properties;
+import src.resources.Properties;
 
 public class Listener extends Thread {
 	private int port = Properties.TCPServerSocketPort;

@@ -1,9 +1,9 @@
-package src;
+package src.application;
 
 import java.net.InetAddress;
 import java.util.ArrayList;
 
-import model.Utilisateur;
+import src.model.Utilisateur;
 public class ChatSystem {
 
 	public static ArrayList<Utilisateur> tableUtilisateur;

@@ -1,8 +1,8 @@
-package src;
+package src.application;
 
 import java.util.ArrayList;
 
-import model.Utilisateur;
+import src.model.Utilisateur;
 
 public class UtilisateurDAO {
 

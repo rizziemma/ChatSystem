@@ -1,4 +1,4 @@
-package src;
+package src.application;
 
 
 import java.io.ByteArrayInputStream;
@@ -11,7 +11,7 @@ import java.net.DatagramSocket;
 import java.net.SocketException;
 import java.util.Arrays;
 
-import model.Utilisateur;
+import src.model.Utilisateur;
 
 public class ListenerBroadcast extends Thread {
 	private DatagramSocket serveur;

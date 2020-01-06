@@ -1,4 +1,4 @@
-package src;
+package src.application;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -12,10 +12,10 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import resources.Properties;
-import model.Datagram;
-import model.Datatype;
-import model.Historique;
+import src.model.Datagram;
+import src.model.Datatype;
+import src.model.Historique;
+import src.resources.Properties;
 
 //https://www.sqlitetutorial.net/sqlite-java/
 

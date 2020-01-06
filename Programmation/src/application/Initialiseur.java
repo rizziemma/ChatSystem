@@ -1,4 +1,4 @@
-package src;
+package src.application;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -20,8 +20,8 @@ import java.util.Date;
 import java.util.Enumeration;
 import java.util.concurrent.TimeUnit;
 
-import resources.Properties;
-import model.Utilisateur;
+import src.model.Utilisateur;
+import src.resources.Properties;
 
 public class Initialiseur {
 	
