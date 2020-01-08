@@ -15,6 +15,7 @@ import java.util.List;
 import src.model.Datagram;
 import src.model.Datatype;
 import src.model.Historique;
+import src.model.Utilisateur;
 import src.resources.Properties;
 
 //https://www.sqlitetutorial.net/sqlite-java/
@@ -108,6 +109,35 @@ public class HistoriqueDAO {
         try {
 			stmt = conn.prepareStatement(sql);
 			stmt.setString(1, h.getContact().getAddrMAC().toString());
+			ResultSet rs    = stmt.executeQuery();
+	        while (rs.next()) {
+	        	Datagram d = new Datagram();
+	        	d.setDate(formatter.parse(rs.getString("DATE")));
+	        	d.setData(rs.getObject("DATA"));
+	        	d.setSent(rs.getInt("SENT")==1);
+	        	d.setStatus(Datagram.status_type.values()[rs.getInt("STATUS")]);
+	        	d.setType(Datatype.values()[rs.getInt("STATUS")]);
+	        	l.add(d);
+	        }
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        
+		return l;
+	}
+	
+	public ArrayList<Datagram> getDatagrams10(Utilisateur u) { 
+		String sql = "SELECT * FROM MESSAGE WHERE (CONTACT = ?) ORDER BY datetime(DATE) DESC LIMIT 10";
+		PreparedStatement stmt;
+        ArrayList<Datagram> l = new ArrayList<Datagram>();
+        SimpleDateFormat formatter=new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");         
+        try {
+			stmt = conn.prepareStatement(sql);
+			stmt.setString(1, u.getAddrMAC().toString());
 			ResultSet rs    = stmt.executeQuery();
 	        while (rs.next()) {
 	        	Datagram d = new Datagram();
