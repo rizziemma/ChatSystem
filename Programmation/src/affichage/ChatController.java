@@ -70,19 +70,24 @@ public class ChatController implements Initializable {
     public void updateView(){
         Platform.runLater(() -> {
             userListView.getItems().clear();
-            ArrayList<Utilisateur> online = new ArrayList<>();
-            ArrayList<Utilisateur> offline = new ArrayList<>();
+            ArrayList<Utilisateur> online = ChatSystem.tableUtilisateur;
+            ArrayList<Utilisateur> offline = new ArrayList<Utilisateur>() ;
 
-            for (Utilisateur u : ChatSystem.tableUtilisateur){
-                if (!u.equals(ChatSystem.self)) {
-                    if(u.getStatus().equals("OFFLINE")){
-                        offline.add(u);
-                    } else {
-                        online.add(u);
-                    }
-                }
+            HistoriqueDAO dao = HistoriqueDAO.getInstance();
+
+           for (Utilisateur current : dao.getContacts()){
+        	   Boolean off = true;
+        	   for(Utilisateur u : online) {
+        		   if(u.getAddrMAC().equals(current.getAddrMAC())) {
+        			   off = false;
+        			   break;
+        		   }
+        	   }
+        	   if(off) {
+        		   offline.add(current);
+        	   }
             }
-
+         
             userListView.getItems().addAll(online);
             userListView.getItems().addAll(offline);
 
@@ -209,7 +214,7 @@ public class ChatController implements Initializable {
     @FXML
     public void userClicked () {
         if (!userListView.getItems().isEmpty() && (userListView.getSelectionModel().getSelectedItem() != null)){
-            if(activeUser.getStatus().equals("ONLINE")){
+            if(activeUser.getOnline()){
                 textArea.setDisable(false);
                 fileButton.setDisable(false);
                 sendButton.setDisable(false);
@@ -265,11 +270,7 @@ public class ChatController implements Initializable {
     }
 
     private void send(){
-        //Prendre le texte et l'envoyer
-        System.out.println(textArea.getText());
-        
-        //get historique by activeUser + nouveau message (textArea.getText())
-        
+        ChatSystem.getConv(activeUser).nouveauMessage(textArea.getText());
         textArea.clear();
         updateFeed();
     }

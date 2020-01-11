@@ -1,5 +1,6 @@
 package src.application;
 
+import java.nio.charset.StandardCharsets;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -54,7 +55,9 @@ public class HistoriqueDAO {
 	
 	
 	public void nouveauDatagramme(Historique h, Datagram d) {
-		String sql = "INSERT INTO MESSAGE(DATE,TYPE,DATA,STATUS,SENT,CONTACT) VALUES(?,?,?,?,?,?)";
+		String sql = "INSERT INTO MESSAGE(DATE,TYPE,DATA,STATUS,SENT,CONTACT) VALUES(?,?,?,?,?,?);"
+				+ "UPDATE UTILISATEUR set PSEUDO=? where MAC=?;"
+				+ "INSERT INTO UTILISATEUR (PSEUDO, MAC) VALUES(?,?) where not exists (SELECT MAC from UTILISATEUR where MAC=?) ";
 		DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss"); 
 		try {
             PreparedStatement pstmt = conn.prepareStatement(sql);
@@ -67,7 +70,13 @@ public class HistoriqueDAO {
             }else {
             	pstmt.setInt(5, 0);
             }
-            pstmt.setString(6, h.getContact().getAddrMAC().toString());
+            String mac = new String(h.getContact().getAddrMAC(), StandardCharsets.UTF_8);
+            pstmt.setString(6, mac);
+            pstmt.setString(7, h.getContact().getPseudo());
+            pstmt.setString(8, mac);
+            pstmt.setString(9, h.getContact().getPseudo());
+            pstmt.setString(10, mac);
+            pstmt.setString(11, mac);         
             
             pstmt.executeUpdate();
             
@@ -82,7 +91,7 @@ public class HistoriqueDAO {
 		 try {
            PreparedStatement pstmt = conn.prepareStatement(sql);
            pstmt.setInt(1, Datagram.status_type.READ.ordinal());
-           pstmt.setString(2, h.getContact().getAddrMAC().toString());
+           pstmt.setString(2, new String(h.getContact().getAddrMAC(), StandardCharsets.UTF_8));
            pstmt.setInt(3, Datagram.status_type.ARCHIVED.ordinal());
            if(vuSent) {
         	   pstmt.setInt(4, 0);
@@ -96,38 +105,23 @@ public class HistoriqueDAO {
        }
 	}
 
-	public List<Historique> getHistoriques() {
-		return null;
-
-	}
-
-	public ArrayList<Datagram> getDatagrams10(Historique h) { 
-		String sql = "SELECT * FROM MESSAGE WHERE (CONTACT = ?) ORDER BY datetime(DATE) DESC LIMIT 10";
-		PreparedStatement stmt;
-        ArrayList<Datagram> l = new ArrayList<Datagram>();
-        SimpleDateFormat formatter=new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");         
-        try {
-			stmt = conn.prepareStatement(sql);
-			stmt.setString(1, h.getContact().getAddrMAC().toString());
-			ResultSet rs    = stmt.executeQuery();
-	        while (rs.next()) {
-	        	Datagram d = new Datagram();
-	        	d.setDate(formatter.parse(rs.getString("DATE")));
-	        	d.setData(rs.getObject("DATA"));
-	        	d.setSent(rs.getInt("SENT")==1);
-	        	d.setStatus(Datagram.status_type.values()[rs.getInt("STATUS")]);
-	        	d.setType(Datatype.values()[rs.getInt("STATUS")]);
-	        	l.add(d);
-	        }
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-        
-		return l;
+	public void updateUser(Utilisateur u) {
+		String sql = "UPDATE UTILISATEUR set PSEUDO=? where MAC=?;"
+				+ "INSERT INTO UTILISATEUR (PSEUDO, MAC) VALUES(?,?) where not exists (SELECT MAC from UTILISATEUR where MAC=?) ";
+		 try {
+          PreparedStatement pstmt = conn.prepareStatement(sql);
+          String mac = new String(u.getAddrMAC(), StandardCharsets.UTF_8);
+          pstmt.setString(1, u.getPseudo());
+          pstmt.setString(2, mac);
+          pstmt.setString(3, u.getPseudo());
+          pstmt.setString(4, mac);
+          pstmt.setString(5, mac);   
+          
+          pstmt.executeUpdate();
+          
+      } catch (SQLException e) {
+          System.out.println(e.getMessage());
+      }
 	}
 	
 	public ArrayList<Datagram> getDatagrams(Utilisateur u) { 
@@ -137,7 +131,7 @@ public class HistoriqueDAO {
         SimpleDateFormat formatter=new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");         
         try {
 			stmt = conn.prepareStatement(sql);
-			stmt.setString(1, u.getAddrMAC().toString());
+			stmt.setString(1, new String(u.getAddrMAC(), StandardCharsets.UTF_8));
 			ResultSet rs    = stmt.executeQuery();
 	        while (rs.next()) {
 	        	Datagram d = new Datagram();
@@ -159,36 +153,25 @@ public class HistoriqueDAO {
 		return l;
 	}
 	
-	public ArrayList<Datagram> getDatagramsByDate(Historique h, Date date) {      
-        String sql = "SELECT * FROM MESSAGE WHERE (CONTACT = ? and Datetime(DATE)<=?) ORDER BY datetime(DATE) DESC LIMIT 10";
-        PreparedStatement stmt;
-        ArrayList<Datagram> l = new ArrayList<Datagram>();		
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");     
-        SimpleDateFormat formatter=new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");    
-		try {
+	public ArrayList<Utilisateur> getContacts(){
+		String sql = "SELECT * FROM UTILISATEUR";
+		PreparedStatement stmt;
+        ArrayList<Utilisateur> l = new ArrayList<Utilisateur>();
+        try {
 			stmt = conn.prepareStatement(sql);
-			stmt.setString(1, h.getContact().getAddrMAC().toString());
-			stmt.setString(2, dateFormat.format(date));
 			ResultSet rs    = stmt.executeQuery();
 	        while (rs.next()) {
-	        	Datagram d = new Datagram();
-	        	d.setDate(formatter.parse(rs.getString("DATE")));
-	        	d.setData(rs.getObject("DATA"));
-	        	d.setSent(rs.getInt("SENT")==1);
-	        	d.setStatus(Datagram.status_type.values()[rs.getInt("STATUS")]);
-	        	d.setType(Datatype.values()[rs.getInt("STATUS")]);
-	        	l.add(d);
+	        	Utilisateur u = new Utilisateur();
+	        	u.setAddrMAC(rs.getString("CONTACT").getBytes(StandardCharsets.UTF_8));
+	        	u.setPseudo(rs.getString("PSEUDO"));
+	        	l.add(u);
 	        }
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-        
-		return l;
-		
-
+		}	
+        return l;
+	
 	}
+	
 }
