@@ -44,7 +44,7 @@ public class ChatController implements Initializable {
                     setStyle("");
                 } else {
                     setText(d.toString());
-                    if (d.getSent()) { // I feel dirty just writing that
+                    if (d.getSent()) {
                         setStyle("-fx-background-color: #33CEFF");
                     } else {
                         setStyle("");
