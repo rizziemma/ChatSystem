@@ -3,9 +3,10 @@ package src.application;
 import java.net.InetAddress;
 import java.util.ArrayList;
 
+
 import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import src.model.Utilisateur;
 public class ChatSystem extends Application {
@@ -15,7 +16,8 @@ public class ChatSystem extends Application {
 	public static Listener List;
 	public static ListenerBroadcast ListBR;
 	public static ArrayList<Conversation> convs;
-  
+    private Stage stage;
+
 	
 	public static void addUtilisateur(Utilisateur nouvel_utilisateur) {
 		if (nouvel_utilisateur.getStatus().equals("NEW") ||nouvel_utilisateur.getStatus().equals("Nouvel Utilisateur")  ) {
@@ -73,11 +75,15 @@ public class ChatSystem extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		try {
-			BorderPane root = new BorderPane();
-			Scene scene = new Scene(root,400,400);
-			scene.getStylesheets().add(getClass().getResource("src/resources/application.css").toExternalForm());
-			primaryStage.setScene(scene);
-			primaryStage.show();
+			javafx.scene.Parent root = FXMLLoader.load(getClass().getResource("/login.fxml"));
+	        Scene scene = new Scene (root);
+	        primaryStage.setTitle("PaChat System");
+	        primaryStage.setScene(scene);
+	        primaryStage.setOnCloseRequest(windowEvent -> this.stop());
+	        //Image image = new Image("/icon2.png");
+	        //primaryStage.getIcons().add(image);
+	        primaryStage.show();
+	        this.stage = primaryStage;
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
@@ -91,6 +97,10 @@ public class ChatSystem extends Application {
         INSTANCE = new Controller();
         */
     }
+	
+	public void stop() {
+		//stop threads
+	}
 	
 	public static void main(String[] args) {
 		//init les variables

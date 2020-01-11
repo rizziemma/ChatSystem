@@ -64,4 +64,15 @@ public class Datagram implements Serializable{
 	public void setDate(Date date) {
 		this.date = date;
 	}
+	
+	@Override
+	public String toString() {
+		if (this.type.equals(Datatype.MESSAGE)) {
+			return this.date.toString()+ " : " + (String)this.data;
+		}else if(this.type.equals(Datatype.FICHIER)){
+			return "file";
+		}else {
+			return this.date.toString();
+		}
+	}
 }

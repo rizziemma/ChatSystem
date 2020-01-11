@@ -2,8 +2,6 @@ package src.affichage;
 
 
 import javafx.application.Platform;
-import javafx.collections.ListChangeListener;
-import javafx.collections.MapChangeListener;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -18,6 +16,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import src.application.ChatSystem;
 import src.application.HistoriqueDAO;
+import src.model.Datagram;
 import src.model.Utilisateur;
 
 import java.io.*;
@@ -35,6 +34,25 @@ public class ChatController implements Initializable {
         userListView.setStyle("-fx-control-inner-background: #242A31;");
         userListView.setFixedCellSize(50);
         username.setText(ChatSystem.self.getPseudo());
+        
+        messageFeed.setCellFactory(lv -> new ListCell<Datagram>() {
+            @Override
+            protected void updateItem(Datagram d, boolean empty) {
+                super.updateItem(d, empty);
+                if (empty) {
+                    setText(null);
+                    setStyle("");
+                } else {
+                    setText(d.toString());
+                    if (d.getSent()) { // I feel dirty just writing that
+                        setStyle("-fx-background-color: #33CEFF");
+                    } else {
+                        setStyle("");
+                    }
+                }
+            }
+        });
+        
         hideDistant();
         updateView();
 
@@ -52,15 +70,15 @@ public class ChatController implements Initializable {
     public void updateView(){
         Platform.runLater(() -> {
             userListView.getItems().clear();
-            ArrayList<String> online = new ArrayList<>();
-            ArrayList<String> offline = new ArrayList<>();
+            ArrayList<Utilisateur> online = new ArrayList<>();
+            ArrayList<Utilisateur> offline = new ArrayList<>();
 
             for (Utilisateur u : ChatSystem.tableUtilisateur){
                 if (!u.equals(ChatSystem.self)) {
                     if(u.getStatus().equals("OFFLINE")){
-                        offline.add(u.getPseudo() + " - Hors ligne");
+                        offline.add(u);
                     } else {
-                        online.add(u.getPseudo());
+                        online.add(u);
                     }
                 }
             }
@@ -86,14 +104,14 @@ public class ChatController implements Initializable {
         });
     }
 
+   
+    
     private void updateFeed(){
         Platform.runLater(() -> {
             if (activeUser != null) {
                 messageFeed.getItems().clear();
                 HistoriqueDAO dao = HistoriqueDAO.getInstance();
-                //format string attendu pour affichage
-                //messageFeed.getItems().addAll(dao.getDatagrams10(activeUser));
-
+                messageFeed.getItems().addAll(dao.getDatagrams(activeUser));
                 messageFeed.scrollTo(messageFeed.getItems().size() - 1);
             }
         });
@@ -106,7 +124,7 @@ public class ChatController implements Initializable {
     private Label distantUser;
 
     @FXML
-    private ListView<String> userListView;
+    private ListView<Utilisateur> userListView;
 
     @FXML
     private Button closeDiscussionButton;
@@ -121,7 +139,7 @@ public class ChatController implements Initializable {
     private TextArea textArea;
 
     @FXML
-    private ListView<String> messageFeed;
+    private ListView<Datagram> messageFeed;
 
     @FXML
     private Label usersOnline;
@@ -191,8 +209,6 @@ public class ChatController implements Initializable {
     @FXML
     public void userClicked () {
         if (!userListView.getItems().isEmpty() && (userListView.getSelectionModel().getSelectedItem() != null)){
-            activeUser = ChatSystem.getUserByPseudo(((String) userListView.getSelectionModel().getSelectedItem())
-                    .replace(" - Hors ligne",""));
             if(activeUser.getStatus().equals("ONLINE")){
                 textArea.setDisable(false);
                 fileButton.setDisable(false);
@@ -209,7 +225,7 @@ public class ChatController implements Initializable {
             distantUser.setOpacity(1);
             textArea.setOpacity(1);
             closeDiscussionButton.setOpacity(1);
-            distantUser.setText((String) userListView.getSelectionModel().getSelectedItem());
+            distantUser.setText(userListView.getSelectionModel().getSelectedItem().toString());
             updateFeed();
         }
     }

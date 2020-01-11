@@ -130,8 +130,8 @@ public class HistoriqueDAO {
 		return l;
 	}
 	
-	public ArrayList<Datagram> getDatagrams10(Utilisateur u) { 
-		String sql = "SELECT * FROM MESSAGE WHERE (CONTACT = ?) ORDER BY datetime(DATE) DESC LIMIT 10";
+	public ArrayList<Datagram> getDatagrams(Utilisateur u) { 
+		String sql = "SELECT * FROM MESSAGE WHERE (CONTACT = ?) ORDER BY datetime(DATE) DESC";
 		PreparedStatement stmt;
         ArrayList<Datagram> l = new ArrayList<Datagram>();
         SimpleDateFormat formatter=new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");         
