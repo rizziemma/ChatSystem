@@ -239,6 +239,11 @@ public class Initialiseur {
 		return pseudo;
 	}
 	
+	//TODO
+	public static boolean pseudoDisponible(String pseudo) {
+		return true;
+	}
+	
 	private static void initBaseLocale() {
 		//Si bdd pas initialisée
 		if (!(new File(Properties.BaseLocalePath)).exists()) {

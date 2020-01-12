@@ -121,6 +121,7 @@ public class ChatController implements Initializable {
             }
         });
     }
+    
 
     @FXML
     private Label username;
