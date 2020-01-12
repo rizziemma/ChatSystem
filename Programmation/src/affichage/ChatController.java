@@ -1,6 +1,15 @@
 package src.affichage;
 
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.io.IOException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.ResourceBundle;
+
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -8,26 +17,28 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.ListView;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
-import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import src.application.ChatSystem;
 import src.application.HistoriqueDAO;
+import src.application.Initialiseur;
 import src.model.Datagram;
 import src.model.Utilisateur;
 
-
-import java.io.*;
-import java.net.URL;
-import java.util.*;
-
-public class ChatController implements Initializable {
+public class ChatController implements Initializable, PropertyChangeListener {
 
 
     private Utilisateur activeUser = null;
+    private HistoriqueDAO dao = null;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -35,6 +46,8 @@ public class ChatController implements Initializable {
         userListView.setStyle("-fx-control-inner-background: #242A31;");
         userListView.setFixedCellSize(50);
         username.setText(ChatSystem.self.getPseudo());
+        dao = HistoriqueDAO.getInstance();
+     
         
         messageFeed.setCellFactory(lv -> new ListCell<Datagram>() {
             @Override
@@ -56,7 +69,7 @@ public class ChatController implements Initializable {
         
         hideDistant();
         updateView();
-
+        dao.addObserver(this);
     }
 
     private void hideDistant() {
@@ -73,8 +86,6 @@ public class ChatController implements Initializable {
             userListView.getItems().clear();
             ArrayList<Utilisateur> online = ChatSystem.tableUtilisateur;
             ArrayList<Utilisateur> offline = new ArrayList<Utilisateur>() ;
-
-            HistoriqueDAO dao = HistoriqueDAO.getInstance();
 
            for (Utilisateur current : dao.getContacts()){
         	   Boolean off = true;
@@ -116,7 +127,6 @@ public class ChatController implements Initializable {
         Platform.runLater(() -> {
             if (activeUser != null) {
                 messageFeed.getItems().clear();
-                HistoriqueDAO dao = HistoriqueDAO.getInstance();
                 messageFeed.getItems().addAll(dao.getDatagrams(activeUser));
                 messageFeed.scrollTo(messageFeed.getItems().size() - 1);
             }
@@ -189,27 +199,18 @@ public class ChatController implements Initializable {
                 alert.setContentText("Le pseudo ne peut pas être vide");
                 alert.showAndWait();
             }
-            //TRAITEMENT PSEUDO
-            /* 
-            else if (!controller.usernameInList(result.get())) {
-                username.setText(result.get());
-                controller.getSelf().setPseudo(result.get());
-
-                for (User u : controller.getList()){
-                    if(u.getAddress() == controller.getSelf().getAddress()){
-                        u.setPseudo(result.get());
-                    }
-                }
-                controller.sendPacket(Notifications.createNewPseudoPacket(controller.getSelf(),null));
-                controller.setUsername(result.get());
-                onChanged((ListChangeListener.Change) null);
+            
+            else if (Initialiseur.changerPseudo(result.get())) {
+            	//changement pseudo ok
+            	username.setText(ChatSystem.self.getPseudo());
             } else {
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            	Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("Erreur");
                 alert.setHeaderText(null);
                 alert.setContentText("Ce pseudo n'est pas disponible");
                 alert.showAndWait();
-            }*/
+            }
+            
         }
     }
 
@@ -243,20 +244,7 @@ public class ChatController implements Initializable {
         messageFeed.getItems().clear();
         textArea.setDisable(true);
 
-    }
- //EVENT A GERER
-    /*
-    @Override
-    public void onChanged(ListChangeListener.Change c) {
-        updateView();
-    }
-
-    @Override
-    public void onChanged(MapChangeListener.Change change) {
-        System.out.println("coucou");
-        updateFeed();
-    }
-    */
+    }    
 
     @FXML
     public void sendByClick () {
@@ -276,7 +264,16 @@ public class ChatController implements Initializable {
         textArea.clear();
         updateFeed();
     }
-    
+
+	@Override
+	public void propertyChange(PropertyChangeEvent e) {
+		if(e.getPropertyName().equals(HistoriqueDAO.Actions.UpdateFeed.name())){
+			this.updateFeed();
+		}else if(e.getPropertyName().equals(HistoriqueDAO.Actions.UpdateUsers.name())) {
+			this.updateView();
+		}
+	}
+	
     //ENVOI D'UN FICHIER
 /*
     @FXML
@@ -309,5 +306,4 @@ public class ChatController implements Initializable {
 
     }
     */
-
 }

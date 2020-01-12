@@ -1,5 +1,7 @@
 package src.application;
 
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.nio.charset.StandardCharsets;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -10,8 +12,6 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 import src.model.Datagram;
 import src.model.Datatype;
@@ -21,7 +21,15 @@ import src.resources.Properties;
 
 //https://www.sqlitetutorial.net/sqlite-java/
 
-public class HistoriqueDAO {
+public class HistoriqueDAO{
+	
+	public enum Actions{
+		UpdateFeed,
+		UpdateUsers
+	}
+	
+	private PropertyChangeSupport property_support = new PropertyChangeSupport(this);
+	
 	private static HistoriqueDAO instance;
 	Connection conn;
 	
@@ -31,9 +39,12 @@ public class HistoriqueDAO {
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
-        
-    
 	}
+	
+	public void addObserver(PropertyChangeListener listener) {
+		this.property_support.addPropertyChangeListener(Actions.UpdateFeed.name(), listener);
+	}
+	
 	
 	public void close() {
 		try {
@@ -56,9 +67,7 @@ public class HistoriqueDAO {
 	
 	
 	public void nouveauDatagramme(Historique h, Datagram d) {
-		String sql = "INSERT INTO MESSAGE(DATE,TYPE,DATA,STATUS,SENT,CONTACT) VALUES(?,?,?,?,?,?);"
-				+ "UPDATE UTILISATEUR set PSEUDO=? where MAC=?;"
-				+ "INSERT INTO UTILISATEUR (PSEUDO, MAC) VALUES(?,?) where not exists (SELECT MAC from UTILISATEUR where MAC=?) ";
+		String sql = "INSERT INTO MESSAGE(DATE,TYPE,DATA,STATUS,SENT,CONTACT) VALUES(?,?,?,?,?,?);";
 		DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss"); 
 		try {
             PreparedStatement pstmt = conn.prepareStatement(sql);
@@ -71,21 +80,17 @@ public class HistoriqueDAO {
             }else {
             	pstmt.setInt(5, 0);
             }
-            String mac = new String(h.getContact().getAddrMAC(), StandardCharsets.UTF_8);
-            pstmt.setString(6, mac);
-            pstmt.setString(7, h.getContact().getPseudo());
-            pstmt.setString(8, mac);
-            pstmt.setString(9, h.getContact().getPseudo());
-            pstmt.setString(10, mac);
-            pstmt.setString(11, mac);         
+            pstmt.setString(6, new String(h.getContact().getAddrMAC(), StandardCharsets.UTF_8));       
             
             pstmt.executeUpdate();
             
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
-		 d.setStatus(Datagram.status_type.ARCHIVED);
+		d.setStatus(Datagram.status_type.ARCHIVED);
+		this.property_support.firePropertyChange(Actions.UpdateFeed.name(), null, null);
 	}
+	
 	
 	public void vuConversation(Historique h, boolean vuSent) {
 		String sql = "UPDATE MESSAGE SET STATUS = ? WHERE CONTACT = ? and STATUS = ? and SENT = ?";
@@ -120,9 +125,11 @@ public class HistoriqueDAO {
           
           pstmt.executeUpdate();
           
-      } catch (SQLException e) {
-          System.out.println(e.getMessage());
-      }
+		 } catch (SQLException e) {
+			 System.out.println(e.getMessage());
+		 }
+		 this.property_support.firePropertyChange(Actions.UpdateUsers.name(), null, null);
+
 	}
 	
 	public ArrayList<Datagram> getDatagrams(Utilisateur u) { 
@@ -174,5 +181,7 @@ public class HistoriqueDAO {
         return l;
 	
 	}
+
+	
 	
 }
