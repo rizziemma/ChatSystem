@@ -1,11 +1,12 @@
 package src.application;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.Socket;
 
+import src.resources.Properties;
 import src.model.Historique;
 import src.model.Utilisateur;
-import src.resources.Properties;
 
 public class Conversation {
 	private Historique historique;
@@ -13,31 +14,28 @@ public class Conversation {
 	
 	public Conversation(Utilisateur u) {
 		this.historique = new Historique(u);
-		//HistoriqueDAO DAO = new HistoriqueDAO();
-		//historique.setMessages(DAO.getDatagrams10(historique));
-		//DAO.close();
-		//TODO notify affichage messages chargÃ©s
 	}
 	
 	
 	public void nouveauSYN(Socket sock) { //instentie le gestionnaire conversation du SYN reÃ§us pour commencer la conversation avec la session distante ou resyncronyse si la connexion a Ã©tÃ© perdu
+		Boolean done =false ;
 		for (Conversation conv : ChatSystem.convs) {
 			if (conv.getHistorique().getContact().getAddrIP().equals(sock.getInetAddress())) {
 				if(conv.getGestionnaire() == null) { 
-					conv.setGestionnaire(new GestionnaireConversation(sock,historique));
-					
-				}
-				else {
-					//TODO arrive uniquement en cas de perte de connexion d'une des deux machines
-				}
+					conv.setGestionnaire(new GestionnaireConversation(sock,historique));	
 				
+				}
+				done = true;
 				break;
 			}
 			
 		}
+		if (!done ) {
+			throw (new NoSuchFieldError("Erreur dans la reception du Syn sur le socket:" + sock.toString()+ "\n" + "la conversassion associée n'a pas été trouvée"));
+		}
 	}
 	
-	public void nouveauMessage(String m) {
+	public void envoyerMessage(String m) {
 		if(this.gestionnaire == null) {
 			try {
 				Socket sock = new Socket (this.historique.getContact().getAddrIP(),Properties.TCPServerSocketPort);
@@ -45,8 +43,8 @@ public class Conversation {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			gestionnaire.envoyerMessage(m);
 		}
+		gestionnaire.envoyerMessage(m);
 	}
 
 	public Historique getHistorique() {
@@ -61,8 +59,25 @@ public class Conversation {
 		return gestionnaire;
 	}
 
+	public void envoyerFicher(File f) {
+		if(this.gestionnaire == null) {
+			try {
+				Socket sock = new Socket (this.historique.getContact().getAddrIP(),Properties.TCPServerSocketPort);
+				gestionnaire= new GestionnaireConversation(sock,historique);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		gestionnaire.envoyerFicher(f);
+	}
 	public void setGestionnaire(GestionnaireConversation gestionnaire) {
 		this.gestionnaire = gestionnaire;
+	}
+
+
+	public void fin() {
+		this.gestionnaire.fin();
+		
 	}
 
 }

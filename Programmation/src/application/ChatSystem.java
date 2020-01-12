@@ -1,28 +1,27 @@
 package src.application;
 
-import java.net.InetAddress;
-import java.util.ArrayList;
-
-
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import src.model.Utilisateur;
-public class ChatSystem extends Application {
+import java.net.InetAddress;
+import java.util.ArrayList;
+
+public class ChatSystem {
 
 	public static ArrayList<Utilisateur> tableUtilisateur;
 	public static Utilisateur self;
 	public static Listener List;
 	public static ListenerBroadcast ListBR;
 	public static ArrayList<Conversation> convs;
-    private Stage stage;
-
 	
+
 	public static void addUtilisateur(Utilisateur nouvel_utilisateur) {
 		if (nouvel_utilisateur.getStatus().equals("NEW") ||nouvel_utilisateur.getStatus().equals("Nouvel Utilisateur")  ) {
 			tableUtilisateur.add(nouvel_utilisateur);
-		} else {
+		} 
+		else {
 			for (Utilisateur user : tableUtilisateur) {
 				if (user.getAddrMAC().equals(nouvel_utilisateur.getAddrMAC())) {
 					user.setPseudo(nouvel_utilisateur.getPseudo());
@@ -37,20 +36,9 @@ public class ChatSystem extends Application {
 	}
 	
 	public static Utilisateur getUserByIp(InetAddress IP) {
-		Utilisateur ret=null;
+		Utilisateur ret=self;
 		for (Utilisateur u : tableUtilisateur) {
 			if(u.getAddrIP().equals(IP)) {
-				ret = u;
-				break;
-			}
-		}
-		return ret;
-	}
-	
-	public static Utilisateur getUserByPseudo(String s) {
-		Utilisateur ret=null;
-		for (Utilisateur u : tableUtilisateur) {
-			if(u.getPseudo().equals(s)) {
 				ret = u;
 				break;
 			}

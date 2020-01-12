@@ -5,5 +5,6 @@ public class Properties {
 		public static String SQLiteDriver = "jdbc:sqlite:";
 		public static String BaseLocalePath = System.getProperty("user.home")+"ChatSystem/data/storage.db";
 		public static int TCPServerSocketPort = 12345;
+		public static String ReceivedFilesPath = "./receivedFiles/";
 		
 }

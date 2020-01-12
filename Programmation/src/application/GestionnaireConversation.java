@@ -2,6 +2,10 @@ package src.application;
 
 
 import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
@@ -10,8 +14,10 @@ import java.net.Socket;
 
 import src.model.Datagram;
 import src.model.Datatype;
+import src.model.FichierEnTransit;
 import src.model.Historique;
 import src.model.Utilisateur;
+import src.resources.Properties;
 
 public class GestionnaireConversation extends Thread {
 	private Socket sock;
@@ -41,7 +47,6 @@ public class GestionnaireConversation extends Thread {
 	public void run() {
 		while(this.isRunning) {
 			try {
-
 				Datagram Data = (Datagram) in.readObject(); //NOUVEAU MESSAGE RECU
 				switch(Data.getType()) {
 				case MESSAGE:
@@ -53,9 +58,6 @@ public class GestionnaireConversation extends Thread {
 				case VU:
 					traiterVu();
 					break;
-				case IMAGE:
-					traiterImage(Data);
-					break;
 				case FICHIER:
 					traiterFichier(Data);
 					break;
@@ -65,33 +67,55 @@ public class GestionnaireConversation extends Thread {
 				}
 
 			} catch (IOException | ClassNotFoundException e) {
-				e.printStackTrace();
+				//e.printStackTrace();
 			}
 		}
-		// receive doit pas etre bloquant pour donner la main a l'envoi regulierement
-		// fonction pour envoyer un message
-		try {
-			this.sock.close();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		this.sock = null;
+		//this.sock = null;
 
 	}
 
 	private void traiterFichier(Datagram data) {
-		// TODO Auto-generated method stub
-
+		FileOutputStream fos = null;
+		FichierEnTransit fet = (FichierEnTransit)data.getData();
+		File f = new File(Properties.ReceivedFilesPath + fet.nom);
+		int i = 0;
+		while(f.exists()) {
+			f= new File(Properties.ReceivedFilesPath + fet.nom + "(" + i + ")");
+		}
+		try {
+			fos = new FileOutputStream(f);
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		try {
+			fos.write(fet.barray);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
-
-	private void traiterImage(Datagram data) {
-		// TODO Auto-generated method stub
-
+	public void envoyerFicher(File f) {
+		 FileInputStream fis = null;
+		 BufferedInputStream bis = null;
+		byte [] barray = new byte[(int)f.length()];
+		try {
+			fis = new FileInputStream(f);
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		bis = new BufferedInputStream(fis);
+		try {
+			bis.read(barray,0,barray.length);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		Datagram data = new Datagram(Datatype.FICHIER,(Object) (new FichierEnTransit(barray,f.getName())));
+		sendDatagram(data);
 	}
-
-
+	
+	
 	private void traiterUtilisateur(Datagram data) {
 		Utilisateur u = (Utilisateur)data.getData();
 		ChatSystem.addUtilisateur(u);
@@ -101,17 +125,13 @@ public class GestionnaireConversation extends Thread {
 
 	private void traiterMessage(Datagram data) {
 		System.out.println("message reçu : " + (String)data.getData());
-		//TODO envoyer le message aux classes qui en ont besoin
 		h.addMessage(data);
-		// notify observer
-		//HistoriqueDAO DAO = new HistoriqueDAO();
-		//DAO.nouveauDatagramme(h,data);
-		//DAO.close();
+		HistoriqueDAO DAO = HistoriqueDAO.getInstance();
+		DAO.nouveauDatagramme(h,data);
+		//TODO applez un fontion pour mettre a jour l'affichage ou pop up
 	}
 
-
-	public void envoyerMessage(String m) {
-		Datagram data = new Datagram(Datatype.MESSAGE, (Object)m);
+	private void sendDatagram(Datagram data) {
 		try {
 			out.writeObject(data);
 		} catch (IOException e) {
@@ -122,7 +142,12 @@ public class GestionnaireConversation extends Thread {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		//TODO envoyer le message aux classes qui en ont besoin
+	}
+
+	public void envoyerMessage(String m) {
+		System.out.println("envoie du message : " +  m);
+		Datagram data = new Datagram(Datatype.MESSAGE, (Object)m);
+		sendDatagram(data);
 	}
 
 	public void envoyerUtilisateur(Utilisateur u) {
@@ -151,6 +176,18 @@ public class GestionnaireConversation extends Thread {
 	}
 
 	public void fin() { // arrete le thread proprement (fin du thread dans le Run())
+		
 		this.isRunning = false;
+		try {
+			sock.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		try {
+			in.close();
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+		//in = null;		
 	}
 }

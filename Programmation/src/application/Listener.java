@@ -3,6 +3,7 @@ package src.application;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
 
 import src.resources.Properties;
 
@@ -27,16 +28,14 @@ public class Listener extends Thread {
 				sock = server.accept();
 				System.out.println("Connection entrante");
 				traitement(sock);
-			} catch (Exception e) {
+			} 
+			catch(SocketException e) {
+				 //do nothing normal use
+				//server is closing
+			}
+			catch (Exception e) {
 				e.printStackTrace();
 			}
-		}
-		try {
-			server.close();
-		}
-		catch (IOException e) {
-			e.printStackTrace();
-			server=null;
 		}
 	}
 	
@@ -57,5 +56,11 @@ public class Listener extends Thread {
 	
 	public void fin() {
 		isRunning = false;
+		try {
+			server.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }
