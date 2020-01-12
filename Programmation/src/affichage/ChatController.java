@@ -275,9 +275,10 @@ public class ChatController implements Initializable, PropertyChangeListener {
 	}
 	
     //ENVOI D'UN FICHIER
-/*
+
     @FXML
     public void sendFile(MouseEvent event){
+    	/*
         System.out.println("hi");
         FileChooser choice = new FileChooser();
         Stage app_stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
@@ -303,7 +304,7 @@ public class ChatController implements Initializable, PropertyChangeListener {
             controller.sendPacket(toSend);
             System.out.println("File sent");
         }
-
+	*/
     }
-    */
+    
 }
