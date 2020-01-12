@@ -31,6 +31,7 @@ public class HistoriqueDAO {
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
+        
     
 	}
 	

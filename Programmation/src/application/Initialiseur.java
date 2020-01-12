@@ -240,7 +240,7 @@ public class Initialiseur {
 	}
 	
 	//TODO
-	public static boolean pseudoDisponible(String pseudo) {
+	public static boolean changerPseudo(String pseudo) {
 		return true;
 	}
 	
