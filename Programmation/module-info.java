@@ -5,4 +5,7 @@ module ChatSystem {
 	requires javafx.controls;
 	requires javafx.fxml;
 	requires org.controlsfx.controls;
+	exports src.resources;
+	exports src.application;
+	opens src.application to javafx.graphics;
 }

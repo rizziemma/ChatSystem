@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry excluding="lib/|lib/|data/|lib/" kind="src" path="Programmation"/>
+	<classpathentry excluding="lib/|resources/" kind="src" path="Programmation"/>
+	<classpathentry kind="src" path="Programmation/resources"/>
+	<classpathentry kind="src" path="Programmation/lib"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-11">
 		<attributes>
 			<attribute name="module" value="true"/>
@@ -47,11 +49,6 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="Programmation/lib/javafx.web.jar">
-		<attributes>
-			<attribute name="module" value="true"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="Programmation/lib/jfxrt.jar">
 		<attributes>
 			<attribute name="module" value="true"/>
 		</attributes>

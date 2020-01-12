@@ -14,6 +14,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
+import src.application.Initialiseur;
 
 import java.io.IOException;
 import java.net.URL;
@@ -35,7 +36,6 @@ public class LoginController implements Initializable {
 
     private void login(Event e) throws IOException{
     	//CHOIX PSEUDO
-    	/*
         if (userTextField.getText().equals("")){
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Erreur");
@@ -44,18 +44,21 @@ public class LoginController implements Initializable {
             alert.showAndWait();
 
            
-        } else if (controller.isUsernameAvailable(userTextField.getText())){
-            controller.setUsername(userTextField.getText());
-            Parent chat_parent = FXMLLoader.load(getClass().getResource("/chat.fxml"));
+        } else if (Initialiseur.changerPseudo(userTextField.getText())){
+            Parent chat_parent = FXMLLoader.load(getClass().getResource("resources/chat.fxml"));
             Scene chat_scene = new Scene(chat_parent);
             chat_scene.getStylesheets().add("/chatstyle.css");
             Stage app_stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
             app_stage.setScene(chat_scene);
             app_stage.show();
         } else {
-            controller.getList().clear();
+        	Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Erreur");
+            alert.setHeaderText(null);
+            alert.setContentText("Ce pseudo n'est pas disponible");
+            alert.showAndWait();
         }
-        */
+        
     }
 
     @FXML
