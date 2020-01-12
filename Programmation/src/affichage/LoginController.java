@@ -45,7 +45,7 @@ public class LoginController implements Initializable {
 
            
         } else if (Initialiseur.changerPseudo(userTextField.getText())){
-            Parent chat_parent = FXMLLoader.load(getClass().getResource("resources/chat.fxml"));
+            Parent chat_parent = FXMLLoader.load(getClass().getResource("/chat.fxml"));
             Scene chat_scene = new Scene(chat_parent);
             chat_scene.getStylesheets().add("/chatstyle.css");
             Stage app_stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
