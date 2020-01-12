@@ -16,6 +16,8 @@ public class Utilisateur implements Serializable {
 	private byte[] addrMAC;
 
 	private String status;
+	
+	private Boolean online;
 
 	private Date derniereConnexion;
 
@@ -23,12 +25,13 @@ public class Utilisateur implements Serializable {
 		super();
 	}
 
-	public Utilisateur(String pseudo, InetAddress addrIP, byte[] addrMAC, String status, Date derniereConnexion) {
+	public Utilisateur(String pseudo, InetAddress addrIP, byte[] addrMAC, String status, Boolean online, Date derniereConnexion) {
 		super();
 		this.pseudo = pseudo;
 		this.addrIP = addrIP;
 		this.addrMAC = addrMAC;
 		this.status = status;
+		this.online = online;
 		this.derniereConnexion = derniereConnexion;
 	}
 
@@ -62,6 +65,14 @@ public class Utilisateur implements Serializable {
 
 	public void setStatus(String status) {
 		this.status = status;
+	}
+
+	public Boolean getOnline() {
+		return online;
+	}
+
+	public void setOnline(Boolean online) {
+		this.online = online;
 	}
 
 	public Date getDerniereConnexion() {

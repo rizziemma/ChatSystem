@@ -1,14 +1,15 @@
 package src.application;
 
+
+import java.net.InetAddress;
+import java.util.ArrayList;
+
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import src.model.Utilisateur;
-import java.net.InetAddress;
-import java.util.ArrayList;
-
-public class ChatSystem {
+public class ChatSystem extends Application {
 
 	public static ArrayList<Utilisateur> tableUtilisateur;
 	public static Utilisateur self;

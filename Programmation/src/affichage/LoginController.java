@@ -14,6 +14,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
+import src.application.Initialiseur;
 
 import java.io.IOException;
 import java.net.URL;
@@ -35,7 +36,6 @@ public class LoginController implements Initializable {
 
     private void login(Event e) throws IOException{
     	//CHOIX PSEUDO
-    	/*
         if (userTextField.getText().equals("")){
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Erreur");
@@ -44,8 +44,7 @@ public class LoginController implements Initializable {
             alert.showAndWait();
 
            
-        } else if (controller.isUsernameAvailable(userTextField.getText())){
-            controller.setUsername(userTextField.getText());
+        } else if (Initialiseur.changerPseudo(userTextField.getText())){
             Parent chat_parent = FXMLLoader.load(getClass().getResource("/chat.fxml"));
             Scene chat_scene = new Scene(chat_parent);
             chat_scene.getStylesheets().add("/chatstyle.css");
@@ -53,9 +52,126 @@ public class LoginController implements Initializable {
             app_stage.setScene(chat_scene);
             app_stage.show();
         } else {
-            controller.getList().clear();
+        	Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Erreur");
+            alert.setHeaderText(null);
+            alert.setContentText("Ce pseudo n'est pas disponible");
+            alert.showAndWait();
         }
-        */
+        
+    }
+
+    @FXML
+    public void handleLoginClick(MouseEvent event) throws IOException{
+        login(event);
+    }
+
+    @FXML
+    public void connectViaEnter (KeyEvent event) throws IOException{
+        if(event.getCode().equals(KeyCode.ENTER)){
+            login(event);
+        }
+    }
+
+    @FXML
+    public void handleHoverConnect(){
+        test.setStyle("-fx-background-color: #79f4b3;");
+    }
+
+    @FXML
+    public void handleHoverConnectDone(){
+        test.setStyle("-fx-background-color:  #6ED9A0;");
+    }
+
+    @FXML
+    public void servon (){
+    	//switch avec ou sans serveur -> pas nécessaire ?
+        if (serverButton.getText().equals("Server on")){
+            //eteint
+            Controller.getInstance().initBroadcast();
+            serverButton.setText("Server off");
+        }else {
+            //allumé
+            if(controller.getUrlServer().equals("")){
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Erreur");
+                alert.setHeaderText(null);
+                alert.setContentText("Vous devez configurer le serveur de présence en entrant" +
+                        "son adresse IP dans le fichier ~/Clavardage/.configServer. " +
+                        "Redémarrez pour que les changements prennent effet");
+                alert.showAndWait();
+            } else {
+                Controller.getInstance().initServer();
+                serverButton.setText("Server on");
+            }
+        }*/
+    }
+
+    @Override
+    public void initialize(URL url, ResourceBundle rb) {
+    }
+}
+package src.affichage;
+
+import javafx.event.Event;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
+import javafx.stage.Stage;
+import src.application.Initialiseur;
+
+import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
+
+public class LoginController implements Initializable {
+
+
+    @FXML
+    private Button test;
+
+    @FXML
+    private Button serverButton;
+
+    @FXML
+    private TextField userTextField;
+
+    public LoginController(){}
+
+    private void login(Event e) throws IOException{
+    	//CHOIX PSEUDO
+        if (userTextField.getText().equals("")){
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Erreur");
+            alert.setHeaderText(null);
+            alert.setContentText("Entrez un pseudo.");
+            alert.showAndWait();
+
+           
+        } else if (Initialiseur.changerPseudo(userTextField.getText())){
+            Parent chat_parent = FXMLLoader.load(getClass().getResource("/chat.fxml"));
+            Scene chat_scene = new Scene(chat_parent);
+            chat_scene.getStylesheets().add("/chatstyle.css");
+            Stage app_stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
+            app_stage.setScene(chat_scene);
+            app_stage.show();
+        } else {
+        	Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Erreur");
+            alert.setHeaderText(null);
+            alert.setContentText("Ce pseudo n'est pas disponible");
+            alert.showAndWait();
+        }
+        
     }
 
     @FXML
