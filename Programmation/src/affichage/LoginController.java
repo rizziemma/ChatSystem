@@ -14,6 +14,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
+import src.application.ChatSystem;
 import src.application.Initialiseur;
 
 import java.io.IOException;
@@ -75,24 +76,25 @@ public class LoginController implements Initializable {
 
     @FXML
     public void handleHoverConnect(){
-        test.setStyle("-fx-background-color: #79f4b3;");
+        test.setStyle("-fx-background-color: #ffe680;");
     }
 
     @FXML
     public void handleHoverConnectDone(){
-        test.setStyle("-fx-background-color:  #6ED9A0;");
+        test.setStyle("-fx-background-color:  #ffd11a;");
     }
 
     @FXML
     public void servon (){
     	//switch avec ou sans serveur -> pas nécessaire ?
-    	/*
-        if (serverButton.getText().equals("Server on")){
+    	
+        if (serverButton.getText().equals("Connexion serveur")){
             //eteint
-            Controller.getInstance().initBroadcast();
-            serverButton.setText("Server off");
+            ChatSystem.setWithServer(false);
+            serverButton.setText("Connexion locale");
         }else {
             //allumé
+        	/*
             if(controller.getUrlServer().equals("")){
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("Erreur");
@@ -101,11 +103,11 @@ public class LoginController implements Initializable {
                         "son adresse IP dans le fichier ~/Clavardage/.configServer. " +
                         "Redémarrez pour que les changements prennent effet");
                 alert.showAndWait();
-            } else {
-                Controller.getInstance().initServer();
-                serverButton.setText("Server on");
-            }
-        }*/
+            } else {*/
+            ChatSystem.setWithServer(true);
+            serverButton.setText("Connexion serveur");
+            
+        }
     }
 
     @Override

@@ -20,8 +20,17 @@ public class ChatSystem extends Application {
 	public static ListenerBroadcast ListBR;
 	public static ArrayList<Conversation> convs;
     private Stage stage;
+    private static boolean withServer;
 
 	
+	public static boolean isWithServer() {
+		return withServer;
+	}
+
+	public static void setWithServer(boolean s) {
+		withServer = s;
+	}
+
 	public static void addUtilisateur(Utilisateur nouvel_utilisateur) {
 		if (nouvel_utilisateur.getStatus().equals("NEW") ||nouvel_utilisateur.getStatus().equals("Nouvel Utilisateur")  ) {
 			tableUtilisateur.add(nouvel_utilisateur);
