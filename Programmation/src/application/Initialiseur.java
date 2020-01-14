@@ -29,6 +29,7 @@ public class Initialiseur {
 	static int portBRServer = 42069;
 	static int portBRClient = 42070;
 	public static void initApp() {
+		initFolders();
 		ChatSystem.List = initListener();
 		InetAddress lanIp = null;
 		try {
@@ -246,9 +247,9 @@ public class Initialiseur {
 	
 	private static void initBaseLocale() {
 		//Si bdd pas initialisée
-		if (!(new File(Properties.BaseLocalePath)).exists()) {
+		if (!(new File(Properties.PathToAppFiles+Properties.BaseLocale)).exists()) {
 			try {          
-	            Connection conn = DriverManager.getConnection(Properties.SQLiteDriver+Properties.BaseLocalePath);
+	            Connection conn = DriverManager.getConnection(Properties.SQLiteDriver+Properties.PathToAppFiles+Properties.BaseLocale);
 	            String utilisateurs = "CREATE TABLE UTILISATEUR (PSEUDO text, MAC text PRIMARY KEY);";
 	            //String messages = "CREATE TABLE MESSAGE (ID integer PRIMARY KEY, DATE text, TYPE integer, DATA blob, STATUS integer, SENT integer, CONTACT text, FOREIGN KEY (CONTACT) REFERENCES UTILISATEUR(MAC))";
 	            String messages = "CREATE TABLE MESSAGE (ID integer PRIMARY KEY, DATE text, TYPE integer, DATA blob, STATUS integer, SENT integer, CONTACT text)";
@@ -261,6 +262,29 @@ public class Initialiseur {
 	        } catch (SQLException e) {
 	            System.out.println(e.getMessage());
 	        }
+		}
+	}
+	
+	private static void initFolders() {
+		File dir = new File(Properties.PathToAppFiles);
+		if (!dir.exists()) {
+			dir.mkdir();
+		}
+		File bdd = new File(Properties.PathToAppFiles+"data");
+		if(!bdd.exists()) {
+			try {
+				bdd.createNewFile();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		File dl = new File(Properties.PathToAppFiles+Properties.Downloads);
+		if(!dl.exists()) {
+			try {
+				dl.createNewFile();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 
