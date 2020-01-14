@@ -1,12 +1,15 @@
 package src.application;
 
-
 import java.net.InetAddress;
 import java.util.ArrayList;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import src.model.Utilisateur;
 public class ChatSystem extends Application {
@@ -16,13 +19,13 @@ public class ChatSystem extends Application {
 	public static Listener List;
 	public static ListenerBroadcast ListBR;
 	public static ArrayList<Conversation> convs;
-	
+    private Stage stage;
 
+	
 	public static void addUtilisateur(Utilisateur nouvel_utilisateur) {
 		if (nouvel_utilisateur.getStatus().equals("NEW") ||nouvel_utilisateur.getStatus().equals("Nouvel Utilisateur")  ) {
 			tableUtilisateur.add(nouvel_utilisateur);
-		} 
-		else {
+		} else {
 			for (Utilisateur user : tableUtilisateur) {
 				if (user.getAddrMAC().equals(nouvel_utilisateur.getAddrMAC())) {
 					user.setPseudo(nouvel_utilisateur.getPseudo());
@@ -45,6 +48,27 @@ public class ChatSystem extends Application {
 			}
 		}
 		return ret;
+	}
+	
+	public static Utilisateur getUserByPseudo(String s) {
+		Utilisateur ret=null;
+		for (Utilisateur u : tableUtilisateur) {
+			if(u.getPseudo().equals(s)) {
+				ret = u;
+				break;
+			}
+		}
+		return ret;
+	}
+	
+	public static Conversation getConv(Utilisateur u) {
+		Conversation result = null;
+		for (Conversation c : ChatSystem.convs) {
+			if (c.getHistorique().getContact().equals(u)) {
+				result = c;
+			}
+		}
+		return result;
 	}
 	
 	public static void addAllUsers(ArrayList<Utilisateur> table) {
@@ -77,6 +101,17 @@ public class ChatSystem extends Application {
 			e.printStackTrace();
 		}
 	}
+	
+	private void popup(String imgURL, String titre, String contenu){
+        Platform.runLater(() -> {
+            // Update UI here.
+            //PUSH NOTIFICATION TEST
+            Image img = new Image(imgURL);
+            org.controlsfx.control.Notifications.create().owner(this.stage)
+                    .title(titre).text(contenu)
+                    .graphic(new ImageView(img)).position(Pos.BOTTOM_LEFT).showWarning();
+        });
+    }
 	
 	public static void logout () {
        /* Notifications notifications=Notifications.createLogOutPacket(this.self,null);

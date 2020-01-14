@@ -260,7 +260,7 @@ public class ChatController implements Initializable, PropertyChangeListener {
     }
 
     private void send(){
-        ChatSystem.getConv(activeUser).nouveauMessage(textArea.getText());
+        ChatSystem.getConv(activeUser).envoyerMessage(textArea.getText());
         textArea.clear();
         updateFeed();
     }

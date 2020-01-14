@@ -9,4 +9,3 @@ public class Properties {
 		public static int TCPServerSocketPort = 12345;
 		
 }
-package src.resources;
