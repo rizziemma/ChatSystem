@@ -35,7 +35,7 @@ public class HistoriqueDAO{
 	
 	private HistoriqueDAO() {
         try {
-            conn = DriverManager.getConnection(Properties.SQLiteDriver+Properties.BaseLocalePath);
+            conn = DriverManager.getConnection(Properties.SQLiteDriver+Properties.PathToAppFiles+Properties.BaseLocale);
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
