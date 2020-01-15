@@ -24,12 +24,13 @@ import src.model.Utilisateur;
 import src.resources.Properties;
 
 public class Initialiseur {
-	
+
 	static DatagramSocket UDPsocket = null;
 	static int portBRServer = 42069;
 	static int portBRClient = 42070;
 	public static void initApp() {
 		initFolders();
+		initBaseLocale();
 		ChatSystem.List = initListener();
 		InetAddress lanIp = null;
 		try {
@@ -78,13 +79,10 @@ public class Initialiseur {
 		ChatSystem.self.setAddrIP(lanIp);
 		ChatSystem.self.setAddrMAC(mac);
 		ChatSystem.ListBR=demandeTableUtilisateur(mac, lanIp);
-		ChatSystem.self.setPseudo(choixPseudo());
-		ChatSystem.self.setStatus("Nouvel Utilisateur");
-		ChatSystem.self.setDerniereConnexion(new Date());
-		notifyNewPseudo();
-		
 		ChatSystem.convs = new ArrayList<Conversation>();
-		initBaseLocale();
+
+
+
 
 	}
 
@@ -131,13 +129,13 @@ public class Initialiseur {
 		try {
 			TimeUnit.SECONDS.sleep(2);
 		} catch (InterruptedException e) {
-			System.out.println("Impossible de sleep (dans Initialiseur.demandeTableUtilisateur)");
+			System.out.println("Impossible de sleep (dans Initialiseur.NotifyNewPseudo)");
 			e.printStackTrace();
 		}
 		UDPsocket.close();
 	}
-	
-	
+
+
 	private static Listener initListener() {
 		Listener L = new Listener();
 		L.start();
@@ -166,7 +164,7 @@ public class Initialiseur {
 		} catch (UnknownHostException e1) {
 			e1.printStackTrace();
 		}
-		
+
 		try {
 			UDPsocket = new DatagramSocket(portBRServer);
 		} catch (SocketException e) {
@@ -213,58 +211,48 @@ public class Initialiseur {
 			System.out.println("Impossible de sleep (dans Initialiseur.demandeTableUtilisateur)");
 			e.printStackTrace();
 		}
+		
 		return listenerBR;
 	}
 
-	private static String choixPseudo() {
-		boolean done = false;
-		String pseudo = null;
+
+	public static boolean changerPseudo(String pseudo) {
 		boolean libre = true;
-		while (!done) {
-			if (libre == false) {
-				pseudo = demandePseudo("Pseudo deja pris choisisez en un autre");
-			} else {
-				pseudo = demandePseudo("Choisisez un Pseudo");
-			}
-			libre = true;
-			for (Utilisateur user : ChatSystem.tableUtilisateur) {
-				if (pseudo == user.getPseudo()) {
-					libre = false;
-				}
-			}
-			if (libre = true) {
-				done = true;
+		for (Utilisateur user : ChatSystem.tableUtilisateur) {
+			if (pseudo == user.getPseudo()) {
+				libre = false;
 			}
 		}
-		return pseudo;
+		if(libre) { 
+			ChatSystem.self.setPseudo(pseudo);   
+			ChatSystem.self.setStatus("Online");
+			ChatSystem.self.setDerniereConnexion(new Date());
+			notifyNewPseudo();
+		}
+		return libre;
 	}
-	
-	//TODO
-	public static boolean changerPseudo(String pseudo) {
-		return true;
-	}
-	
+
 	private static void initBaseLocale() {
 		//Si bdd pas initialisée
 		if (!(new File(Properties.PathToAppFiles+Properties.BaseLocale)).exists()) {
 			try {          
-	            Connection conn = DriverManager.getConnection(Properties.SQLiteDriver+Properties.PathToAppFiles+Properties.BaseLocale);
-	            String utilisateurs = "CREATE TABLE UTILISATEUR (PSEUDO text, MAC text PRIMARY KEY);";
-	            //String messages = "CREATE TABLE MESSAGE (ID integer PRIMARY KEY, DATE text, TYPE integer, DATA blob, STATUS integer, SENT integer, CONTACT text, FOREIGN KEY (CONTACT) REFERENCES UTILISATEUR(MAC))";
-	            String messages = "CREATE TABLE MESSAGE (ID integer PRIMARY KEY, DATE text, TYPE integer, DATA blob, STATUS integer, SENT integer, CONTACT text)";
+				Connection conn = DriverManager.getConnection(Properties.SQLiteDriver+Properties.PathToAppFiles+Properties.BaseLocale);
+				String utilisateurs = "CREATE TABLE UTILISATEUR (PSEUDO text, MAC text PRIMARY KEY);";
+				//String messages = "CREATE TABLE MESSAGE (ID integer PRIMARY KEY, DATE text, TYPE integer, DATA blob, STATUS integer, SENT integer, CONTACT text, FOREIGN KEY (CONTACT) REFERENCES UTILISATEUR(MAC))";
+				String messages = "CREATE TABLE MESSAGE (ID integer PRIMARY KEY, DATE text, TYPE integer, DATA blob, STATUS integer, SENT integer, CONTACT text)";
 
-	            Statement stmt = conn.createStatement();
-	            stmt.execute(utilisateurs);
-	            stmt.execute(messages);
+				Statement stmt = conn.createStatement();
+				stmt.execute(utilisateurs);
+				stmt.execute(messages);
 
-	            conn.close();
-	        } catch (SQLException e) {
-	            System.out.println(e.getMessage());
-	            //e.printStackTrace();
-	        }
+				conn.close();
+			} catch (SQLException e) {
+				System.out.println(e.getMessage());
+				//e.printStackTrace();
+			}
 		}
 	}
-	
+
 	private static void initFolders() {
 		File dir = new File(Properties.PathToAppFiles);
 		if (!dir.exists()) {
