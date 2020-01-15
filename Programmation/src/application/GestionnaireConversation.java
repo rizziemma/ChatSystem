@@ -94,6 +94,7 @@ public class GestionnaireConversation extends Thread {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		ChatSystem.popup("file_received.png","Fichier reçu",fet.nom);
 	}
 
 	public void envoyerFicher(File f) {
@@ -119,7 +120,7 @@ public class GestionnaireConversation extends Thread {
 	private void traiterUtilisateur(Datagram data) {
 		Utilisateur u = (Utilisateur)data.getData();
 		ChatSystem.addUtilisateur(u);
-
+		ChatSystem.popup("new_user.png","Nouveau Status",u.getPseudo());
 	}
 
 
@@ -128,7 +129,6 @@ public class GestionnaireConversation extends Thread {
 		h.addMessage(data);
 		HistoriqueDAO DAO = HistoriqueDAO.getInstance();
 		DAO.nouveauDatagramme(h,data);
-		//TODO applez un fontion pour mettre a jour l'affichage ou pop up
 	}
 
 	private void sendDatagram(Datagram data) {
