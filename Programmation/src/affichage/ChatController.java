@@ -116,8 +116,6 @@ public class ChatController implements Initializable, PropertyChangeListener {
                 }
             }
 
-            String s = online.size()+ "";
-            usersOnline.setText(s);
         });
     }
 
@@ -158,8 +156,6 @@ public class ChatController implements Initializable, PropertyChangeListener {
     @FXML
     private ListView<Datagram> messageFeed;
 
-    @FXML
-    private Label usersOnline;
 
     @FXML
     public void logOut (MouseEvent event) throws IOException {
