@@ -186,7 +186,7 @@ public class Initialiseur {
 			e1.printStackTrace();
 		}
 		try {
-			OOS.writeObject(new Utilisateur("TBD", Ip, mac, "NEW", true, new Date()));
+			OOS.writeObject(new Utilisateur("TBD", Ip, mac,"Status", false, new Date()));
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
@@ -225,7 +225,7 @@ public class Initialiseur {
 		}
 		if(libre) { 
 			ChatSystem.self.setPseudo(pseudo);   
-			ChatSystem.self.setStatus("Online");
+			ChatSystem.self.setOnline(true);
 			ChatSystem.self.setDerniereConnexion(new Date());
 			notifyNewPseudo();
 		}
