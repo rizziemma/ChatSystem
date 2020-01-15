@@ -19,7 +19,7 @@ public class ChatSystem extends Application {
 	public static Listener List;
 	public static ListenerBroadcast ListBR;
 	public static ArrayList<Conversation> convs;
-    private Stage stage;
+    private static Stage stage;
     private static boolean withServer;
 
 	
@@ -111,12 +111,10 @@ public class ChatSystem extends Application {
 		}
 	}
 	
-	private void popup(String imgURL, String titre, String contenu){
+	public static void popup(String imgURL, String titre, String contenu){
         Platform.runLater(() -> {
-            // Update UI here.
-            //PUSH NOTIFICATION TEST
             Image img = new Image(imgURL);
-            org.controlsfx.control.Notifications.create().owner(this.stage)
+            org.controlsfx.control.Notifications.create().owner(stage)
                     .title(titre).text(contenu)
                     .graphic(new ImageView(img)).position(Pos.BOTTOM_LEFT).showWarning();
         });
@@ -132,6 +130,11 @@ public class ChatSystem extends Application {
     }
 	
 	public void stop() {
+		for(Conversation c:convs) {
+			c.fin();
+		}
+		ListBR.interrupt();
+		List.fin();
 		//stop threads
 	}
 	
