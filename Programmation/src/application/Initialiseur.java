@@ -50,7 +50,6 @@ public class Initialiseur {
 								ipAddress = ip.getHostAddress();
 								lanIp = InetAddress.getByName(ipAddress);
 							}
-
 						}
 					}
 				}
@@ -261,6 +260,7 @@ public class Initialiseur {
 	            conn.close();
 	        } catch (SQLException e) {
 	            System.out.println(e.getMessage());
+	            //e.printStackTrace();
 	        }
 		}
 	}
@@ -272,19 +272,11 @@ public class Initialiseur {
 		}
 		File bdd = new File(Properties.PathToAppFiles+"data");
 		if(!bdd.exists()) {
-			try {
-				bdd.createNewFile();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+			bdd.mkdir();
 		}
 		File dl = new File(Properties.PathToAppFiles+Properties.Downloads);
 		if(!dl.exists()) {
-			try {
-				dl.createNewFile();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+			dl.mkdir();
 		}
 	}
 }
