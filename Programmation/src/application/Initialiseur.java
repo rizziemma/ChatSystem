@@ -243,10 +243,11 @@ public class Initialiseur {
 				String utilisateurs = "CREATE TABLE UTILISATEUR (MAC text PRIMARY KEY, PSEUDO text, ONLINE integer)";
 				//String messages = "CREATE TABLE MESSAGE (ID integer PRIMARY KEY, DATE text, TYPE integer, DATA blob, STATUS integer, SENT integer, CONTACT text, FOREIGN KEY (CONTACT) REFERENCES UTILISATEUR(MAC))";
 				String messages = "CREATE TABLE MESSAGE (ID integer PRIMARY KEY, DATE text, TYPE integer, DATA blob, STATUS integer, SENT integer, CONTACT text)";
-
+				String index = "CREATE UNIQUE INDEX idx_mac_addr ON UTILISATEUR(MAC)";
 				Statement stmt = conn.createStatement();
 				stmt.execute(utilisateurs);
 				stmt.execute(messages);
+				stmt.execute(index);
 
 				conn.close();
 			} catch (SQLException e) {
