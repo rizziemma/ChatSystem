@@ -88,7 +88,7 @@ public class HistoriqueDAO{
             System.out.println(e.getMessage());
         }
 		d.setStatus(Datagram.status_type.ARCHIVED);
-		this.property_support.firePropertyChange(Actions.UpdateFeed.name(), null, null);
+		this.property_support.firePropertyChange(Actions.UpdateFeed.name(), false, true);
 	}
 	
 	
@@ -131,7 +131,7 @@ public class HistoriqueDAO{
 		 } catch (SQLException e) {
 			 System.out.println(e.getMessage());
 		 }
-		 this.property_support.firePropertyChange(Actions.UpdateUsers.name(), null, null);
+		 this.property_support.firePropertyChange(Actions.UpdateUsers.name(), false, true);
 
 	}
 	
