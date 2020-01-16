@@ -32,7 +32,7 @@ public class ChatSystem extends Application {
 	}
 
 	public static void addUtilisateur(Utilisateur nouvel_utilisateur) {
-		if (nouvel_utilisateur.getStatus().equals("NEW") ||nouvel_utilisateur.getStatus().equals("Nouvel Utilisateur")  ) {
+		if (nouvel_utilisateur.getOnline() == false  ) {
 			tableUtilisateur.add(nouvel_utilisateur);
 		} else {
 			for (Utilisateur user : tableUtilisateur) {

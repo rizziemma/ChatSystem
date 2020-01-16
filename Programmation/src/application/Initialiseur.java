@@ -78,6 +78,9 @@ public class Initialiseur {
 				+ ":" + String.format("%2x", mac[5]));
 		ChatSystem.self.setAddrIP(lanIp);
 		ChatSystem.self.setAddrMAC(mac);
+		ChatSystem.self.setPseudo("not chosen yet");   
+		ChatSystem.self.setOnline(false);
+		ChatSystem.self.setDerniereConnexion(new Date());
 		ChatSystem.ListBR=demandeTableUtilisateur(mac, lanIp);
 		ChatSystem.convs = new ArrayList<Conversation>();
 
