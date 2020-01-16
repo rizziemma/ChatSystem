@@ -112,7 +112,6 @@ public class ChatSystem extends Application {
 	}
 	
 	public static void popup(String imgURL, String titre, String contenu){
-		System.out.print(titre);
         Platform.runLater(() -> {
             Image img = new Image(imgURL);
             org.controlsfx.control.Notifications.create().owner(stage)
