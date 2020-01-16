@@ -19,10 +19,10 @@ public class ChatSystem extends Application {
 	public static Listener List;
 	public static ListenerBroadcast ListBR;
 	public static ArrayList<Conversation> convs;
-    private static Stage stage;
-    private static boolean withServer;
+	private static Stage stage;
+	private static boolean withServer;
 
-	
+
 	public static boolean isWithServer() {
 		return withServer;
 	}
@@ -32,22 +32,24 @@ public class ChatSystem extends Application {
 	}
 
 	public static void addUtilisateur(Utilisateur nouvel_utilisateur) {
-		if (nouvel_utilisateur.getOnline() == false  ) {
-			tableUtilisateur.add(nouvel_utilisateur);
-		} else {
-			for (Utilisateur user : tableUtilisateur) {
-				if (user.getAddrMAC().equals(nouvel_utilisateur.getAddrMAC())) {
-					user.setPseudo(nouvel_utilisateur.getPseudo());
-					user.setStatus(nouvel_utilisateur.getStatus());
-					user.setAddrIP(nouvel_utilisateur.getAddrIP());
-					user.setAddrMAC(nouvel_utilisateur.getAddrMAC());
-					user.setDerniereConnexion(nouvel_utilisateur.getDerniereConnexion());
-					break;
-				}
+		boolean found = false;
+		for (Utilisateur user : tableUtilisateur) {
+			if (user.getAddrMAC().equals(nouvel_utilisateur.getAddrMAC())) {
+				found = true;
+				user.setPseudo(nouvel_utilisateur.getPseudo());
+				user.setStatus(nouvel_utilisateur.getStatus());
+				user.setAddrIP(nouvel_utilisateur.getAddrIP());
+				user.setAddrMAC(nouvel_utilisateur.getAddrMAC());
+				user.setDerniereConnexion(nouvel_utilisateur.getDerniereConnexion());
+				break;
 			}
 		}
+		if(!found) {
+			tableUtilisateur.add(nouvel_utilisateur);
+		}
+		HistoriqueDAO.getInstance().updateUser(nouvel_utilisateur);
 	}
-	
+
 	public static Utilisateur getUserByIp(InetAddress IP) {
 		Utilisateur ret=self;
 		for (Utilisateur u : tableUtilisateur) {
@@ -58,7 +60,7 @@ public class ChatSystem extends Application {
 		}
 		return ret;
 	}
-	
+
 	public static Utilisateur getUserByPseudo(String s) {
 		Utilisateur ret=null;
 		for (Utilisateur u : tableUtilisateur) {
@@ -69,7 +71,7 @@ public class ChatSystem extends Application {
 		}
 		return ret;
 	}
-	
+
 	public static Conversation getConv(Utilisateur u) {
 		Conversation result = null;
 		for (Conversation c : ChatSystem.convs) {
@@ -79,7 +81,7 @@ public class ChatSystem extends Application {
 		}
 		return result;
 	}
-	
+
 	public static void addAllUsers(ArrayList<Utilisateur> table) {
 		tableUtilisateur.addAll(table);
 
@@ -98,37 +100,37 @@ public class ChatSystem extends Application {
 	public void start(Stage primaryStage) {
 		try {
 			javafx.scene.Parent root = FXMLLoader.load(getClass().getResource("/login.fxml"));
-	        Scene scene = new Scene (root);
-	        primaryStage.setTitle("PaChat System");
-	        primaryStage.setScene(scene);
-	        primaryStage.setOnCloseRequest(windowEvent -> this.stop());
-	        //Image image = new Image("/icon2.png");
-	        //primaryStage.getIcons().add(image);
-	        primaryStage.show();
-	        this.stage = primaryStage;
+			Scene scene = new Scene (root);
+			primaryStage.setTitle("PaChat System");
+			primaryStage.setScene(scene);
+			primaryStage.setOnCloseRequest(windowEvent -> this.stop());
+			//Image image = new Image("/icon2.png");
+			//primaryStage.getIcons().add(image);
+			primaryStage.show();
+			this.stage = primaryStage;
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public static void popup(String imgURL, String titre, String contenu){
-        Platform.runLater(() -> {
-            Image img = new Image(imgURL);
-            org.controlsfx.control.Notifications.create().owner(stage)
-                    .title(titre).text(contenu)
-                    .graphic(new ImageView(img)).position(Pos.BOTTOM_LEFT).show();
-        });
-    }
-	
+		Platform.runLater(() -> {
+			Image img = new Image(imgURL);
+			org.controlsfx.control.Notifications.create().owner(stage)
+			.title(titre).text(contenu)
+			.graphic(new ImageView(img)).position(Pos.BOTTOM_LEFT).show();
+		});
+	}
+
 	public static void logout () {
-       /* Notifications notifications=Notifications.createLogOutPacket(this.self,null);
+		/* Notifications notifications=Notifications.createLogOutPacket(this.self,null);
         this.sendPacket(notifications);
         System.out.println("Logout send");
         //Deletes all user data, resetting the app as if it was launched for the first time
         INSTANCE = new Controller();
-        */
-    }
-	
+		 */
+	}
+
 	public void stop() {
 		for(Conversation c:convs) {
 			c.fin();
@@ -137,17 +139,17 @@ public class ChatSystem extends Application {
 		List.fin();
 		//stop threads
 	}
-	
+
 	public static void main(String[] args) {
 		//init les variables
 		tableUtilisateur = new ArrayList<Utilisateur>();
 		self = new Utilisateur();
-		
+
 		Initialiseur.initApp();
-		
+
 		//lancement affichage
 		launch(args);
-		
+
 		//TEST
 		/*while(tableUtilisateur.isEmpty()) {}
 		Conversation conv = new Conversation(tableUtilisateur.get(0));
@@ -157,13 +159,13 @@ public class ChatSystem extends Application {
 		conv.nouveauMessage("TEST4");
 		conv.nouveauMessage("TEST5");
 		conv.nouveauMessage("TEST6");
-		
-		
+
+
 		ListBR.interrupt();
 		List.fin();
 		System.out.println(printTableUtilisateur());
-		*/
-		
+		 */
+
 	}
 
 }
