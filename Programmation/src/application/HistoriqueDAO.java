@@ -112,19 +112,23 @@ public class HistoriqueDAO{
 	}
 
 	public void updateUser(Utilisateur u) {
-		String sql = "UPDATE UTILISATEUR set PSEUDO=? where MAC=?;"
-				+ "INSERT INTO UTILISATEUR (PSEUDO, MAC) VALUES(?,?) where not exists (SELECT MAC from UTILISATEUR where MAC=?) ";
+		String sql1 = "UPDATE UTILISATEUR set PSEUDO=? where MAC=?";
+		String sql2 = "INSERT INTO UTILISATEUR (PSEUDO, MAC) VALUES(?,?) where not exists (SELECT MAC from UTILISATEUR where MAC=?) ";
 		 try {
-          PreparedStatement pstmt = conn.prepareStatement(sql);
+          PreparedStatement pstmt = conn.prepareStatement(sql1);
           String mac = new String(u.getAddrMAC(), StandardCharsets.UTF_8);
           pstmt.setString(1, u.getPseudo());
-          pstmt.setString(2, mac);
-          pstmt.setString(3, u.getPseudo());
-          pstmt.setString(4, mac);
-          pstmt.setString(5, mac);   
+          pstmt.setString(2, mac);   
           
           pstmt.executeUpdate();
           
+          pstmt = conn.prepareStatement(sql2);
+          pstmt.setString(1, u.getPseudo());
+          pstmt.setString(2, mac);
+          pstmt.setString(3, mac);
+          
+          pstmt.executeUpdate();
+
 		 } catch (SQLException e) {
 			 System.out.println(e.getMessage());
 		 }
