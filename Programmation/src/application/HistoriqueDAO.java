@@ -116,8 +116,8 @@ public class HistoriqueDAO{
 		 try {
           PreparedStatement pstmt = conn.prepareStatement(sql);
           
-          pstmt.setString(2, new String(u.getAddrMAC(), StandardCharsets.UTF_8)); 
-          pstmt.setString(1, u.getPseudo());
+          pstmt.setString(1, new String(u.getAddrMAC(), StandardCharsets.UTF_8)); 
+          pstmt.setString(2, u.getPseudo());
           if(u.getOnline()) {
         	  pstmt.setInt(3, 1);
           }else {
