@@ -93,7 +93,7 @@ public class HistoriqueDAO{
 	
 	
 	public void vuConversation(Historique h, boolean vuSent) {
-		String sql = "UPDATE MESSAGE SET STATUS = ? WHERE CONTACT = ? and STATUS = ? and SENT = ?";
+		String sql = "UPDATE MESSAGE SET STATUS = ? WHERE (CONTACT = ? AND STATUS = ? AND SENT = ?)";
 		 try {
            PreparedStatement pstmt = conn.prepareStatement(sql);
            pstmt.setInt(1, Datagram.status_type.READ.ordinal());
@@ -112,8 +112,8 @@ public class HistoriqueDAO{
 	}
 
 	public void updateUser(Utilisateur u) {
-		String sql1 = "UPDATE UTILISATEUR set PSEUDO=? where MAC=?";
-		String sql2 = "INSERT INTO UTILISATEUR (PSEUDO, MAC) VALUES(?,?) where not exists (SELECT MAC from UTILISATEUR where MAC=?) ";
+		String sql1 = "UPDATE UTILISATEUR SET PSEUDO=? WHERE MAC=?";
+		String sql2 = "INSERT INTO UTILISATEUR (PSEUDO, MAC) VALUES(?,?) WHERE NOT EXISTS (SELECT MAC FROM UTILISATEUR WHERE MAC=?) ";
 		 try {
           PreparedStatement pstmt = conn.prepareStatement(sql1);
           String mac = new String(u.getAddrMAC(), StandardCharsets.UTF_8);
