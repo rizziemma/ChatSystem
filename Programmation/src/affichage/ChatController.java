@@ -213,6 +213,7 @@ public class ChatController implements Initializable, PropertyChangeListener {
     @FXML
     public void userClicked () {
         if (!userListView.getItems().isEmpty() && (userListView.getSelectionModel().getSelectedItem() != null)){
+        	activeUser = userListView.getSelectionModel().getSelectedItem();
             if(activeUser.getOnline()){
                 textArea.setDisable(false);
                 fileButton.setDisable(false);
