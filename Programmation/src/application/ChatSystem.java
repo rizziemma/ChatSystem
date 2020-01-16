@@ -112,11 +112,12 @@ public class ChatSystem extends Application {
 	}
 	
 	public static void popup(String imgURL, String titre, String contenu){
+		System.out.print(titre);
         Platform.runLater(() -> {
             Image img = new Image(imgURL);
             org.controlsfx.control.Notifications.create().owner(stage)
                     .title(titre).text(contenu)
-                    .graphic(new ImageView(img)).position(Pos.BOTTOM_LEFT).showWarning();
+                    .graphic(new ImageView(img)).position(Pos.BOTTOM_LEFT).show();
         });
     }
 	
@@ -147,7 +148,6 @@ public class ChatSystem extends Application {
 		
 		//lancement affichage
 		launch(args);
-		
 		
 		//TEST
 		/*while(tableUtilisateur.isEmpty()) {}
