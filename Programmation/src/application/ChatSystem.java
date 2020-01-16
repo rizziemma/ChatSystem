@@ -47,7 +47,7 @@ public class ChatSystem extends Application {
 		if(!found) {
 			tableUtilisateur.add(nouvel_utilisateur);
 		}
-		HistoriqueDAO.getInstance().updateUser(nouvel_utilisateur);
+		
 	}
 
 	public static Utilisateur getUserByIp(InetAddress IP) {
@@ -60,7 +60,6 @@ public class ChatSystem extends Application {
 		}
 		return ret;
 	}
-
 	public static Utilisateur getUserByPseudo(String s) {
 		Utilisateur ret=null;
 		for (Utilisateur u : tableUtilisateur) {
