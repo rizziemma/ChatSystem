@@ -112,11 +112,17 @@ public class HistoriqueDAO{
 	}
 
 	public void updateUser(Utilisateur u) {
-		String sql = "INSERT OR REPLACE INTO UTILISATEUR VALUES (?,?)";
+		String sql = "INSERT OR REPLACE INTO UTILISATEUR (MAC,PSEUDO,ONLINE) VALUES (?,?,?)";
 		 try {
           PreparedStatement pstmt = conn.prepareStatement(sql);
-          pstmt.setString(1, u.getPseudo());
+          
           pstmt.setString(2, new String(u.getAddrMAC(), StandardCharsets.UTF_8)); 
+          pstmt.setString(1, u.getPseudo());
+          if(u.getOnline()) {
+        	  pstmt.setInt(3, 1);
+          }else {
+        	  pstmt.setInt(3, 0);
+          }
           
             
           pstmt.executeUpdate();
@@ -169,6 +175,29 @@ public class HistoriqueDAO{
 	        	Utilisateur u = new Utilisateur();
 	        	u.setAddrMAC(rs.getString("MAC").getBytes(StandardCharsets.UTF_8));
 	        	u.setPseudo(rs.getString("PSEUDO"));
+	        	u.setOnline(rs.getInt("ONLINE")==1);
+	        	l.add(u);
+	        }
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}	
+        return l;
+	
+	}
+	
+	public ArrayList<Utilisateur> getOffline(){
+		String sql = "SELECT * FROM UTILISATEUR WHERE (ONLINE=0)";
+		PreparedStatement stmt;
+        ArrayList<Utilisateur> l = new ArrayList<Utilisateur>();
+        try {
+			stmt = conn.prepareStatement(sql);
+			ResultSet rs    = stmt.executeQuery();
+	        while (rs.next()) {
+	        	Utilisateur u = new Utilisateur();
+	        	u.setAddrMAC(rs.getString("MAC").getBytes(StandardCharsets.UTF_8));
+	        	u.setPseudo(rs.getString("PSEUDO"));
+	        	u.setOnline(rs.getInt("ONLINE")==1);
 	        	l.add(u);
 	        }
 		} catch (SQLException e) {

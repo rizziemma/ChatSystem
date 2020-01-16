@@ -85,8 +85,8 @@ public class ChatController implements Initializable, PropertyChangeListener {
         Platform.runLater(() -> {
             userListView.getItems().clear();
             ArrayList<Utilisateur> online = ChatSystem.tableUtilisateur;
-            ArrayList<Utilisateur> offline = new ArrayList<Utilisateur>() ;
-
+            ArrayList<Utilisateur> offline = dao.getOffline();
+ /*           ArrayList<Utilisateur> offline = new ArrayList<Utilisateur>() ;
            for (Utilisateur current : dao.getContacts()){
         	   Boolean off = true;
         	   for(Utilisateur u : online) {
@@ -99,7 +99,7 @@ public class ChatController implements Initializable, PropertyChangeListener {
         		   offline.add(current);
         	   }
             }
-         
+*/         
             userListView.getItems().addAll(online);
             userListView.getItems().addAll(offline);
 
@@ -230,7 +230,7 @@ public class ChatController implements Initializable, PropertyChangeListener {
             distantUser.setOpacity(1);
             textArea.setOpacity(1);
             closeDiscussionButton.setOpacity(1);
-            distantUser.setText(userListView.getSelectionModel().getSelectedItem().toString());
+            distantUser.setText(activeUser.toString());
             updateFeed();
         }
     }
