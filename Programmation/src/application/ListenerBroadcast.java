@@ -67,10 +67,13 @@ public class ListenerBroadcast extends Thread {
 					System.out.println("reception du \"self\"");
 				} 
 				else {
-					System.out.println("Reception UDP : "+nouvel_utilisateur.toString());
 					if(nouvel_utilisateur.getOnline()) {
+						System.out.println("Reception UDP : "+nouvel_utilisateur.toString() + " is Online");
 						ChatSystem.popup("new_user.png","Utilisateur en ligne", nouvel_utilisateur.getPseudo());
 						HistoriqueDAO.getInstance().updateUser(nouvel_utilisateur);
+					}
+					else {
+						System.out.println("Reception UDP : "+nouvel_utilisateur.toString() + " is Offline");
 					}
 					ChatSystem.addUtilisateur(nouvel_utilisateur);
 					packet.setLength(buffer.length);
