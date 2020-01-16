@@ -112,13 +112,12 @@ public class HistoriqueDAO{
 	}
 
 	public void updateUser(Utilisateur u) {
-		String sql = "INSERT OR REPLACE INTO UTILISATEUR VALUES (PSEUDO,?), (MAC,?)";
+		String sql = "INSERT OR REPLACE INTO UTILISATEUR VALUES (?,?)";
 		 try {
           PreparedStatement pstmt = conn.prepareStatement(sql);
-          String mac = new String(u.getAddrMAC(), StandardCharsets.UTF_8);
+          pstmt.setString(2, new String(u.getAddrMAC(), StandardCharsets.UTF_8)); 
           pstmt.setString(1, u.getPseudo());
-          pstmt.setString(2, mac);   
-          
+            
           pstmt.executeUpdate();
           
 
