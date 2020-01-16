@@ -113,7 +113,7 @@ public class HistoriqueDAO{
 
 	public void updateUser(Utilisateur u) {
 		String sql1 = "UPDATE UTILISATEUR SET PSEUDO=? WHERE MAC=?";
-		String sql2 = "INSERT INTO UTILISATEUR (PSEUDO, MAC) VALUES(?,?) WHERE NOT EXISTS (SELECT MAC FROM UTILISATEUR WHERE MAC=?) ";
+		String sql2 = "INSERT INTO UTILISATEUR (PSEUDO, MAC)  SELECT (?,?) WHERE NOT EXISTS (SELECT MAC FROM UTILISATEUR WHERE MAC=?) ";
 		 try {
           PreparedStatement pstmt = conn.prepareStatement(sql1);
           String mac = new String(u.getAddrMAC(), StandardCharsets.UTF_8);
