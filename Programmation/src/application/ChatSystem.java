@@ -134,7 +134,7 @@ public class ChatSystem extends Application {
 		for(Conversation c:convs) {
 			c.fin();
 		}
-		ListBR.interrupt();
+		ListBR.fin();
 		List.fin();
 		//stop threads
 	}

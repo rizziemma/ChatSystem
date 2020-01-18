@@ -152,10 +152,6 @@ public class Initialiseur {
 
 	}
 
-	private static String demandePseudo(String message) {
-		// java Swing
-		return "TestUser "+ChatSystem.self.getAddrIP();
-	}
 
 	private static ListenerBroadcast demandeTableUtilisateur(byte[] mac, InetAddress Ip) {
 		// ChatSystem.addAllUsers(UtilisateurDAO.getTable()); //table venant du serveur

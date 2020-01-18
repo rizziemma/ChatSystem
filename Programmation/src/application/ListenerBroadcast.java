@@ -32,6 +32,7 @@ public class ListenerBroadcast extends Thread {
 	}
 	public void fin() {
 		isRunning = false;
+		this.interrupt();
 	}
 
 	public void run() {
