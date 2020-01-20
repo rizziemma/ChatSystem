@@ -10,6 +10,7 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.SocketException;
 import java.util.Arrays;
+import src.model.DatagramUDP;
 
 import src.model.Utilisateur;
 
@@ -50,6 +51,7 @@ public class ListenerBroadcast extends Thread {
 
 				Utilisateur nouvel_utilisateur = null;
 				ObjectInputStream OIS = null;
+				DatagramUDP datagram = null;
 				try {
 					OIS = new ObjectInputStream(new ByteArrayInputStream(packet.getData()));
 				} catch (IOException e1) {
@@ -57,54 +59,72 @@ public class ListenerBroadcast extends Thread {
 				}
 
 				try {
-					nouvel_utilisateur = (Utilisateur) OIS.readObject();
+					datagram = (DatagramUDP) OIS.readObject();
 				} catch (ClassNotFoundException e1) {
 					e1.printStackTrace();
 				} catch (IOException e1) {
 					e1.printStackTrace();
 				}
-				if (Arrays.equals(nouvel_utilisateur.getAddrMAC(), ChatSystem.self.getAddrMAC())
-						&& nouvel_utilisateur.getAddrIP().equals(ChatSystem.self.getAddrIP())) {
-					System.out.println("reception du \"self\"");
-				} 
-				else {
-					if(nouvel_utilisateur.getOnline()) {
-						System.out.println("Reception UDP : "+nouvel_utilisateur.toString() + " is Online");
-						ChatSystem.popup("new_user.png","Utilisateur en ligne", nouvel_utilisateur.getPseudo());
-						HistoriqueDAO.getInstance().updateUser(nouvel_utilisateur);
-					}
-					else {
-						System.out.println("Reception UDP : "+nouvel_utilisateur.toString() + " is Offline");
-					}
-					ChatSystem.addUtilisateur(nouvel_utilisateur);
-					packet.setLength(buffer.length);
-					if (nouvel_utilisateur.getOnline()==false && nouvel_utilisateur.getPseudo().equals("TBD")) {
-						ByteArrayOutputStream BAOS = new ByteArrayOutputStream();
-						ObjectOutputStream OOS = null;
-						try {
-							OOS = new ObjectOutputStream(BAOS);
-						} catch (IOException e1) {
-							e1.printStackTrace();
-						}
-						try {
-							OOS.writeObject(ChatSystem.self);
-						} catch (IOException e1) {
-							e1.printStackTrace();
-						}
-						byte[] buffer2 = BAOS.toByteArray();
-						DatagramPacket packet2 = new DatagramPacket(buffer2, // Les données
-								buffer2.length, // La taille des données
-								packet.getAddress(), // L'adresse de l'émetteur
-								port // Le port de l'émetteur
-								);
+				if(datagram.type.equals("User")) {
+					nouvel_utilisateur = datagram.payload;
 
-						// Et on envoie vers l'émetteur du datagramme reçu précédemment
-						try {
-							serveur.send(packet2);
-						} catch (IOException e) {
-							e.printStackTrace();
+					if (Arrays.equals(nouvel_utilisateur.getAddrMAC(), ChatSystem.self.getAddrMAC())
+							&& nouvel_utilisateur.getAddrIP().equals(ChatSystem.self.getAddrIP())) {
+						System.out.println("reception du \"self\"");
+					} 
+					else {
+						if(nouvel_utilisateur.getOnline()) {
+							System.out.println("Reception UDP : "+nouvel_utilisateur.toString() + " is Online");
+							ChatSystem.popup("new_user.png","Utilisateur en ligne", nouvel_utilisateur.getPseudo());
+							HistoriqueDAO.getInstance().updateUser(nouvel_utilisateur);
 						}
-						packet2.setLength(buffer2.length);
+						else {
+							System.out.println("Reception UDP : "+nouvel_utilisateur.toString() + " is Offline");
+						}
+						ChatSystem.addUtilisateur(nouvel_utilisateur);
+						packet.setLength(buffer.length);
+						if (nouvel_utilisateur.getOnline()==false && nouvel_utilisateur.getPseudo().equals("TBD")) {
+							ByteArrayOutputStream BAOS = new ByteArrayOutputStream();
+							ObjectOutputStream OOS = null;
+							try {
+								OOS = new ObjectOutputStream(BAOS);
+							} catch (IOException e1) {
+								e1.printStackTrace();
+							}
+							try {
+								OOS.writeObject(ChatSystem.self);
+							} catch (IOException e1) {
+								e1.printStackTrace();
+							}
+							byte[] buffer2 = BAOS.toByteArray();
+							DatagramPacket packet2 = new DatagramPacket(buffer2, // Les données
+									buffer2.length, // La taille des données
+									packet.getAddress(), // L'adresse de l'émetteur
+									port // Le port de l'émetteur
+									);
+
+							// Et on envoie vers l'émetteur du datagramme reçu précédemment
+							try {
+								serveur.send(packet2);
+							} catch (IOException e) {
+								e.printStackTrace();
+							}
+							packet2.setLength(buffer2.length);
+						}
+					}
+				}
+				else {
+					if(datagram.type.equals("Fin User")) {
+						Utilisateur UserDisconnecting = datagram.payload;
+						for(Utilisateur u : ChatSystem.tableUtilisateur) {
+							if (u.getAddrMAC() == UserDisconnecting.getAddrMAC()) {
+								ChatSystem.getConv(u).fin();
+								ChatSystem.tableUtilisateur.remove(u);
+								break;
+							}
+						}
+						HistoriqueDAO.getInstance().updateUser(UserDisconnecting);
+						//a voirs ici si il y a pas des truc en plus a faire a ce moment 
 					}
 				}
 			} catch (IOException e) {

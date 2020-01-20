@@ -20,6 +20,7 @@ import java.util.Date;
 import java.util.Enumeration;
 import java.util.concurrent.TimeUnit;
 
+import src.model.DatagramUDP;
 import src.model.Utilisateur;
 import src.resources.Properties;
 
@@ -89,6 +90,56 @@ public class Initialiseur {
 
 	}
 
+	public static void deconextion() {
+		//diffusion du message de fin de session en UDP broadcast
+		try {
+			UDPsocket = new DatagramSocket(portBRServer);
+		} catch (SocketException e) {
+			System.out.println("Impossible de creer le socket UDP");
+			e.printStackTrace();
+		}
+		InetAddress brAddr = null;
+		try {
+			brAddr = InetAddress.getByName("255.255.255.255");
+		} catch (UnknownHostException e) {
+			System.out.println("Impossible recuperer l'adresse de Broadcast UDP");
+			e.printStackTrace();
+		}
+		ByteArrayOutputStream BAOS = new ByteArrayOutputStream();
+		ObjectOutputStream OOS = null;
+		try {
+			OOS = new ObjectOutputStream(BAOS);
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+		try {
+			OOS.writeObject(new DatagramUDP("Fin User",ChatSystem.self));
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+		byte[] buffer = BAOS.toByteArray();
+		DatagramPacket UDPpacket = new DatagramPacket(buffer, buffer.length, brAddr, portBRClient);
+		try {
+			UDPsocket.setBroadcast(true);
+		} catch (SocketException e) {
+			System.out.println("Impossible configurer le socket UDP en broadcast");
+			e.printStackTrace();
+		}
+		try {
+			UDPsocket.send(UDPpacket);
+		} catch (IOException e) {
+			System.out.println("Impossible d'envoyer le paquer UDP en broadcast");
+			e.printStackTrace();
+		}
+		UDPsocket.close();
+		//fermeture des convesations en cours 
+		for(Conversation c:ChatSystem.convs) {
+			c.fin();
+		}
+		
+	}
+	
+	
 	private static void notifyNewPseudo(/*self*/) {
 		try {
 			UDPsocket = new DatagramSocket(portBRServer);
@@ -111,7 +162,7 @@ public class Initialiseur {
 			e1.printStackTrace();
 		}
 		try {
-			OOS.writeObject(ChatSystem.self);
+			OOS.writeObject(new DatagramUDP("User",ChatSystem.self));
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
@@ -127,12 +178,6 @@ public class Initialiseur {
 			UDPsocket.send(UDPpacket);
 		} catch (IOException e) {
 			System.out.println("Impossible d'envoyer le paquer UDP en broadcast");
-			e.printStackTrace();
-		}
-		try {
-			TimeUnit.SECONDS.sleep(2);
-		} catch (InterruptedException e) {
-			System.out.println("Impossible de sleep (dans Initialiseur.NotifyNewPseudo)");
 			e.printStackTrace();
 		}
 		UDPsocket.close();
@@ -185,7 +230,7 @@ public class Initialiseur {
 			e1.printStackTrace();
 		}
 		try {
-			OOS.writeObject(new Utilisateur("TBD", Ip, mac,"Status", false, new Date()));
+			OOS.writeObject(new DatagramUDP("User",new Utilisateur("TBD", Ip, mac,"Status", false, new Date())));
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
@@ -204,13 +249,6 @@ public class Initialiseur {
 			e.printStackTrace();
 		}
 		UDPsocket.close();
-		try {
-			TimeUnit.SECONDS.sleep(2);
-		} catch (InterruptedException e) {
-			System.out.println("Impossible de sleep (dans Initialiseur.demandeTableUtilisateur)");
-			e.printStackTrace();
-		}
-		
 		return listenerBR;
 	}
 
