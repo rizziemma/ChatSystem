@@ -120,10 +120,10 @@ public class ListenerBroadcast extends Thread {
 							if (u.getAddrMAC() == UserDisconnecting.getAddrMAC()) {
 								ChatSystem.getConv(u).fin();
 								ChatSystem.tableUtilisateur.remove(u);
+								HistoriqueDAO.getInstance().updateUser(UserDisconnecting);
 								break;
 							}
 						}
-						HistoriqueDAO.getInstance().updateUser(UserDisconnecting);
 						//a voirs ici si il y a pas des truc en plus a faire a ce moment 
 					}
 				}
