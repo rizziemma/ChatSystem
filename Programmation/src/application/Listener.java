@@ -5,10 +5,10 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
 
-import src.resources.Properties;
+import src.resources.Property;
 
 public class Listener extends Thread {
-	private int port = Properties.TCPServerSocketPort;
+	private int port = Property.TCPServerSocketPort;
 	private ServerSocket server = null;
 	private boolean isRunning = true;
 

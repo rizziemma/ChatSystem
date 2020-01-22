@@ -2,8 +2,10 @@ package src.application;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.io.OutputStream;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.Inet4Address;
@@ -18,11 +20,12 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Enumeration;
+import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
 import src.model.DatagramUDP;
 import src.model.Utilisateur;
-import src.resources.Properties;
+import src.resources.Property;
 
 public class Initialiseur {
 
@@ -271,9 +274,9 @@ public class Initialiseur {
 
 	private static void initBaseLocale() {
 		//Si bdd pas initialisée
-		if (!(new File(Properties.PathToAppFiles+Properties.BaseLocale)).exists()) {
+		if (!(new File(Property.PathToAppFiles+Property.BaseLocale)).exists()) {
 			try {          
-				Connection conn = DriverManager.getConnection(Properties.SQLiteDriver+Properties.PathToAppFiles+Properties.BaseLocale);
+				Connection conn = DriverManager.getConnection(Property.SQLiteDriver+Property.PathToAppFiles+Property.BaseLocale);
 				String utilisateurs = "CREATE TABLE UTILISATEUR (MAC text PRIMARY KEY, PSEUDO text, ONLINE integer)";
 				//String messages = "CREATE TABLE MESSAGE (ID integer PRIMARY KEY, DATE text, TYPE integer, DATA blob, STATUS integer, SENT integer, CONTACT text, FOREIGN KEY (CONTACT) REFERENCES UTILISATEUR(MAC))";
 				String messages = "CREATE TABLE MESSAGE (ID integer PRIMARY KEY, DATE text, TYPE integer, DATA blob, STATUS integer, SENT integer, CONTACT text)";
@@ -292,17 +295,34 @@ public class Initialiseur {
 	}
 
 	private static void initFolders() {
-		File dir = new File(Properties.PathToAppFiles);
+		File dir = new File(Property.PathToAppFiles);
 		if (!dir.exists()) {
 			dir.mkdir();
 		}
-		File bdd = new File(Properties.PathToAppFiles+"data");
+		File bdd = new File(Property.PathToAppFiles+"data");
 		if(!bdd.exists()) {
 			bdd.mkdir();
 		}
-		File dl = new File(Properties.PathToAppFiles+Properties.Downloads);
+		File dl = new File(Property.PathToAppFiles+Property.Downloads);
 		if(!dl.exists()) {
 			dl.mkdir();
+		}
+		File propfile = new File(Property.PathToAppFiles+"config.properties");
+		if(!propfile.exists()) {
+			try {
+				propfile.createNewFile();
+				Properties prop = new Properties();
+				OutputStream output = new FileOutputStream(Property.PathToAppFiles+"config.properties");
+				prop.setProperty("TCPServerSocketPort", "12345");
+				prop.setProperty("portBRServer", "42069");
+				prop.setProperty("portBRClient", "42070");
+
+				prop.store(output, null);
+
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 }

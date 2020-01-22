@@ -4,7 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.Socket;
 
-import src.resources.Properties;
+import src.resources.Property;
 import src.model.Historique;
 import src.model.Utilisateur;
 
@@ -38,7 +38,7 @@ public class Conversation {
 	public void envoyerMessage(String m) {
 		if(this.gestionnaire == null) {
 			try {
-				Socket sock = new Socket (this.historique.getContact().getAddrIP(),Properties.TCPServerSocketPort);
+				Socket sock = new Socket (this.historique.getContact().getAddrIP(),Property.TCPServerSocketPort);
 				gestionnaire= new GestionnaireConversation(sock,historique);
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -62,7 +62,7 @@ public class Conversation {
 	public void envoyerFicher(File f) {
 		if(this.gestionnaire == null) {
 			try {
-				Socket sock = new Socket (this.historique.getContact().getAddrIP(),Properties.TCPServerSocketPort);
+				Socket sock = new Socket (this.historique.getContact().getAddrIP(),Property.TCPServerSocketPort);
 				gestionnaire= new GestionnaireConversation(sock,historique);
 			} catch (IOException e) {
 				e.printStackTrace();

@@ -17,7 +17,7 @@ import src.model.Datatype;
 import src.model.FichierEnTransit;
 import src.model.Historique;
 import src.model.Utilisateur;
-import src.resources.Properties;
+import src.resources.Property;
 
 public class GestionnaireConversation extends Thread {
 	private Socket sock;
@@ -77,10 +77,10 @@ public class GestionnaireConversation extends Thread {
 	private void traiterFichier(Datagram data) {
 		FileOutputStream fos = null;
 		FichierEnTransit fet = (FichierEnTransit)data.getData();
-		File f = new File(Properties.PathToAppFiles+Properties.Downloads + fet.nom);
+		File f = new File(Property.PathToAppFiles+Property.Downloads + fet.nom);
 		int i = 0;
 		while(f.exists()) {
-			f= new File(Properties.PathToAppFiles+Properties.Downloads + fet.nom + "(" + i + ")");
+			f= new File(Property.PathToAppFiles+Property.Downloads + fet.nom + "(" + i + ")");
 		}
 		try {
 			fos = new FileOutputStream(f);
