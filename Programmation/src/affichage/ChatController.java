@@ -1,6 +1,9 @@
 package src.affichage;
 
 
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -28,6 +31,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Region;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import src.application.ChatSystem;
 import src.application.HistoriqueDAO;
@@ -142,7 +146,6 @@ public class ChatController implements Initializable, Observer {
     @FXML
     public void logOut (MouseEvent event) throws IOException {
         ChatSystem.logout();
-        //call controller method Delete all data
         Parent chat_parent = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/login.fxml")));
         Scene chat_scene = new Scene(chat_parent);
         Stage app_stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
@@ -259,18 +262,14 @@ public class ChatController implements Initializable, Observer {
 
     @FXML
     public void sendFile(MouseEvent event){
-    	/*
-        System.out.println("hi");
+    	
         FileChooser choice = new FileChooser();
         Stage app_stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         File selectedFile = choice.showOpenDialog(app_stage);
         if(selectedFile != null){
-            chat.models.File toSend = new chat.models.File(controller.getSelf(),
-                    activeUser, null, selectedFile.getName());
-            byte [] byte_file  = new byte [(int)selectedFile.length()];
-
             FileInputStream fis;
-            try {
+            byte[] byte_file = new byte[0];
+			try {
                 fis = new FileInputStream(selectedFile);
                 BufferedInputStream bis = new BufferedInputStream(fis);
                 if(bis.read(byte_file,0,byte_file.length) == 1){
@@ -280,12 +279,11 @@ public class ChatController implements Initializable, Observer {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+            src.model.FichierEnTransit toSend = new src.model.FichierEnTransit(byte_file,selectedFile.getName());
+//            ChatSystem.getConv(activeUser).envoyerFicher(toSend);
 
-            toSend.setContent(byte_file);
-            controller.sendPacket(toSend);
             System.out.println("File sent");
         }
-	*/
     }
 
 
