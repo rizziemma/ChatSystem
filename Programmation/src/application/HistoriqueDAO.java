@@ -1,7 +1,5 @@
 package src.application;
 
-import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeSupport;
 import java.nio.charset.StandardCharsets;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -12,6 +10,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Observable;
 
 import src.model.Datagram;
 import src.model.Datatype;
@@ -21,15 +20,13 @@ import src.resources.Properties;
 
 //https://www.sqlitetutorial.net/sqlite-java/
 
-public class HistoriqueDAO{
+public class HistoriqueDAO extends Observable{
 	
 	public enum Actions{
 		UpdateFeed,
 		UpdateUsers
 	}
-	
-	private PropertyChangeSupport property_support = new PropertyChangeSupport(this);
-	
+		
 	private static HistoriqueDAO instance;
 	Connection conn;
 	
@@ -39,10 +36,6 @@ public class HistoriqueDAO{
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
-	}
-	
-	public void addObserver(PropertyChangeListener listener) {
-		this.property_support.addPropertyChangeListener(Actions.UpdateFeed.name(), listener);
 	}
 	
 	
@@ -88,7 +81,8 @@ public class HistoriqueDAO{
             System.out.println(e.getMessage());
         }
 		d.setStatus(Datagram.status_type.ARCHIVED);
-		this.property_support.firePropertyChange(Actions.UpdateFeed.name(), false, true);
+		this.setChanged();
+		this.notifyObservers(Actions.UpdateFeed.name());
 	}
 	
 	
@@ -131,7 +125,8 @@ public class HistoriqueDAO{
 		 } catch (SQLException e) {
 			 System.out.println(e.getMessage());
 		 }
-		 this.property_support.firePropertyChange(Actions.UpdateUsers.name(), false, true);
+			this.setChanged();
+			this.notifyObservers(Actions.UpdateUsers.name());
 
 	}
 	

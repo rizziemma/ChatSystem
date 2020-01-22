@@ -1,12 +1,12 @@
 package src.affichage;
 
 
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Objects;
+import java.util.Observable;
+import java.util.Observer;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
@@ -34,7 +34,7 @@ import src.application.Initialiseur;
 import src.model.Datagram;
 import src.model.Utilisateur;
 
-public class ChatController implements Initializable, PropertyChangeListener {
+public class ChatController implements Initializable, Observer {
 
 
     private Utilisateur activeUser = null;
@@ -263,10 +263,10 @@ public class ChatController implements Initializable, PropertyChangeListener {
     }
 
 	@Override
-	public void propertyChange(PropertyChangeEvent e) {
-		if(e.getPropertyName().equals(HistoriqueDAO.Actions.UpdateFeed.name())){
+	public void update(Observable o, Object arg) {
+		if(arg.equals(HistoriqueDAO.Actions.UpdateFeed.name())){
 			this.updateFeed();
-		}else if(e.getPropertyName().equals(HistoriqueDAO.Actions.UpdateUsers.name())) {
+		}else if(arg.equals(HistoriqueDAO.Actions.UpdateUsers.name())) {
 			this.updateView();
 		}
 	}
@@ -303,5 +303,6 @@ public class ChatController implements Initializable, PropertyChangeListener {
         }
 	*/
     }
-    
+
+
 }
