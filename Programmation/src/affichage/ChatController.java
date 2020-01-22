@@ -27,6 +27,7 @@ import javafx.scene.control.TextInputDialog;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Region;
 import javafx.stage.Stage;
 import src.application.ChatSystem;
 import src.application.HistoriqueDAO;
@@ -85,33 +86,14 @@ public class ChatController implements Initializable, Observer {
         Platform.runLater(() -> {
             userListView.getItems().clear();
             ArrayList<Utilisateur> online = ChatSystem.tableUtilisateur;
+            online.removeIf(u -> !u.getOnline());
             ArrayList<Utilisateur> offline = dao.getOffline();
- /*           ArrayList<Utilisateur> offline = new ArrayList<Utilisateur>() ;
-           for (Utilisateur current : dao.getContacts()){
-        	   Boolean off = true;
-        	   for(Utilisateur u : online) {
-        		   if(u.getAddrMAC().equals(current.getAddrMAC())) {
-        			   off = false;
-        			   break;
-        		   }
-        	   }
-        	   if(off) {
-        		   offline.add(current);
-        	   }
-            }
-*/         
+      
             userListView.getItems().addAll(online);
             userListView.getItems().addAll(offline);
 
             if(activeUser != null) {
-                boolean tmp = false ;
-                for (Utilisateur u : ChatSystem.tableUtilisateur) {
-                    if (u.getAddrIP() == activeUser.getAddrIP()) {
-                        tmp = true;
-                    }
-                }
-
-                if (!tmp) {
+                if (!activeUser.getOnline()) {
                     closeDiscussion();
                 }
             }
@@ -175,6 +157,7 @@ public class ChatController implements Initializable, Observer {
         alert.setTitle("À-propos");
         alert.setHeaderText(null);
         alert.setContentText("Cette application a été développée par Emma Rizzi et Patrick Rousseau dans le cadre du projet de Chat System de 4ème année, INSA Toulouse.");
+        alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
         alert.showAndWait();
     }
 
@@ -240,6 +223,7 @@ public class ChatController implements Initializable, Observer {
         hideDistant();
         messageFeed.getItems().clear();
         textArea.setDisable(true);
+        activeUser = null;
 
     }    
 
