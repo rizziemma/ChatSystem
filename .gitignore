@@ -1,5 +1,5 @@
-/bin/
+bin/
 *.class
-/.metadata/
-/data/storage.bd
-/.classpath
+.metadata/
+data/storage.bd
+.classpath
