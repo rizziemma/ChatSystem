@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry excluding="lib/" kind="src" path="Programmation"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="Programmation/lib/controlsfx-8.40.15.jar"/>
+	<classpathentry kind="lib" path="Programmation/lib/controlsfx-11.0.1.jar"/>
+	<classpathentry kind="lib" path="Programmation/lib/javafx.base.jar"/>
+	<classpathentry kind="lib" path="Programmation/lib/javafx.controls.jar"/>
+	<classpathentry kind="lib" path="Programmation/lib/javafx.fxml.jar"/>
+	<classpathentry kind="lib" path="Programmation/lib/javafx.graphics.jar"/>
+	<classpathentry kind="lib" path="Programmation/lib/javafx.media.jar"/>
+	<classpathentry kind="lib" path="Programmation/lib/javafx.swing.jar"/>
+	<classpathentry kind="lib" path="Programmation/lib/javafx.web.jar"/>
+	<classpathentry kind="lib" path="Programmation/lib/javafx-swt.jar"/>
+	<classpathentry kind="lib" path="Programmation/lib/jfxrt.jar"/>
+	<classpathentry kind="lib" path="Programmation/lib/sqlite-jdbc-3.27.2.1.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

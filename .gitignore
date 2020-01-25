@@ -2,4 +2,3 @@ bin/
 *.class
 .metadata/
 data/storage.bd
-.classpath
