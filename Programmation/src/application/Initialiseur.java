@@ -136,6 +136,7 @@ public class Initialiseur {
 			e.printStackTrace();
 		}
 		UDPsocket.close();
+		System.out.println("Deconection en local");
 		//fermeture des convesations en cours 
 		for(Conversation c:ChatSystem.convs) {
 			c.fin();
