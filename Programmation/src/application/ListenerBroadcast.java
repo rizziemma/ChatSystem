@@ -117,6 +117,7 @@ public class ListenerBroadcast extends Thread {
 						System.out.println("PASS");
 						Utilisateur UserDisconnecting = datagram.payload;
 						for(Utilisateur u : ChatSystem.tableUtilisateur) {
+							System.out.println(u.getAddrMAC() + " and " + UserDisconnecting.getAddrMAC());
 							if (u.getAddrMAC().equals(UserDisconnecting.getAddrMAC())) {
 								ChatSystem.getConv(u).fin();
 								ChatSystem.tableUtilisateur.remove(u);
