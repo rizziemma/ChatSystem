@@ -93,7 +93,7 @@ public class Initialiseur {
 
 	}
 
-	public static void deconextion() {
+	public static void deconnexion() {
 		//diffusion du message de fin de session en UDP broadcast
 		try {
 			UDPsocket = new DatagramSocket(portBRServer);
