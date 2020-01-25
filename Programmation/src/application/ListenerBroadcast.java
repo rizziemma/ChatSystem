@@ -121,6 +121,7 @@ public class ListenerBroadcast extends Thread {
 								ChatSystem.getConv(u).fin();
 								ChatSystem.tableUtilisateur.remove(u);
 								HistoriqueDAO.getInstance().updateUser(UserDisconnecting);
+								System.out.println(u.getPseudo() + " Disconected");
 								break;
 							}
 						}
