@@ -29,7 +29,7 @@ public class Utilisateur implements Serializable {
 		super();
 		this.pseudo = pseudo;
 		this.addrIP = addrIP;
-		this.addrMAC = addrMAC;
+		this.addrMAC = addrMAC.clone();
 		this.status = status;
 		this.online = online;
 		this.derniereConnexion = derniereConnexion;
@@ -56,12 +56,7 @@ public class Utilisateur implements Serializable {
 	}
 
 	public void setAddrMAC(byte[] mac) {
-		this.addrMAC[0] = mac[0];
-		this.addrMAC[1] = mac[1];
-		this.addrMAC[2] = mac[2];
-		this.addrMAC[3] = mac[3];
-		this.addrMAC[4] = mac[4];
-		this.addrMAC[5] = mac[5];
+		this.addrMAC = mac.clone();
 	}
 
 	public String getStatus() {

@@ -78,11 +78,7 @@ public class Initialiseur {
 			e.printStackTrace();
 		}
 		System.out.println(mac);
-		ChatSystem.self.setAddrIP(lanIp);
-		ChatSystem.self.setAddrMAC(mac);
-		ChatSystem.self.setPseudo("not chosen yet");   
-		ChatSystem.self.setOnline(false);
-		ChatSystem.self.setDerniereConnexion(new Date());
+		ChatSystem.self= new Utilisateur("not chosen yet",lanIp,mac,"",false,new Date());
 		ChatSystem.ListBR=demandeTableUtilisateur(mac, lanIp);
 		ChatSystem.convs = new ArrayList<Conversation>();
 
