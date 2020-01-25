@@ -78,6 +78,9 @@ public class ChatSystem extends Application {
 				result = c;
 			}
 		}
+		if (result == null) {
+			result = new Conversation(u);
+		}
 		return result;
 	}
 
