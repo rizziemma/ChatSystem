@@ -74,7 +74,7 @@ public class ChatSystem extends Application {
 	public static Conversation getConv(Utilisateur u) {
 		Conversation result = null;
 		for (Conversation c : ChatSystem.convs) {
-			if (c.getHistorique().getContact().equals(u)) {
+			if (c.getHistorique().getContact().getAddrMAC().equals(u.getAddrMAC())) {
 				result = c;
 			}
 		}
