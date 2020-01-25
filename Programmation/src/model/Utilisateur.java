@@ -91,7 +91,11 @@ public class Utilisateur implements Serializable {
 				+ String.format("%2x", addrMAC[5]) + ", status=" + status + ", derniereConnexion=" + derniereConnexion
 				+ "]";
 				*/
-		return this.pseudo;
+		if (this.online){
+			return this.pseudo;
+		}else {
+			return this.pseudo + " - hors ligne";
+		}
 		
 	}
 
