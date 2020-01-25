@@ -115,6 +115,7 @@ public class Initialiseur {
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
+		ChatSystem.self.setOnline(false);
 		try {
 			OOS.writeObject(new DatagramUDP("Fin User",ChatSystem.self));
 		} catch (IOException e1) {

@@ -39,8 +39,8 @@ public class ChatSystem extends Application {
 				user.setPseudo(nouvel_utilisateur.getPseudo());
 				user.setStatus(nouvel_utilisateur.getStatus());
 				user.setAddrIP(nouvel_utilisateur.getAddrIP());
-				user.setAddrMAC(nouvel_utilisateur.getAddrMAC());
 				user.setDerniereConnexion(nouvel_utilisateur.getDerniereConnexion());
+				user.setOnline(nouvel_utilisateur.getOnline());
 				break;
 			}
 		}
