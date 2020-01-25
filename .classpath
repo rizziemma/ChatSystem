@@ -3,7 +3,7 @@
 	<classpathentry excluding="lib/|resources/" kind="src" path="Programmation"/>
 	<classpathentry kind="src" path="Programmation/resources"/>
 	<classpathentry kind="src" path="Programmation/lib"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/jdk1.8.0_241"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/jdk1.8.0_212"/>
 	<classpathentry kind="lib" path="Programmation/lib/sqlite-jdbc-3.27.2.1.jar">
 		<attributes>
 			<attribute name="module" value="true"/>
