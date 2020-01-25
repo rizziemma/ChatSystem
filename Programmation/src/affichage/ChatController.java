@@ -99,7 +99,6 @@ public class ChatController implements Initializable, Observer {
             if(activeUser != null) {
                 if (!activeUser.getOnline()) {
                     closeDiscussion();
-                    System.out.print("fermeture conv");
                 }
             }
 
@@ -269,20 +268,7 @@ public class ChatController implements Initializable, Observer {
         Stage app_stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         File selectedFile = choice.showOpenDialog(app_stage);
         if(selectedFile != null){
-            FileInputStream fis;
-            byte[] byte_file = new byte[0];
-			try {
-                fis = new FileInputStream(selectedFile);
-                BufferedInputStream bis = new BufferedInputStream(fis);
-                if(bis.read(byte_file,0,byte_file.length) == 1){
-                    System.out.println("Couldn't write into byte_file");
-                }
-                bis.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            src.model.FichierEnTransit toSend = new src.model.FichierEnTransit(byte_file,selectedFile.getName());
-            //ChatSystem.getConv(activeUser).envoyerFicher(toSend);
+            ChatSystem.getConv(activeUser).envoyerFicher(selectedFile);
 
             System.out.println("File sent");
         }
