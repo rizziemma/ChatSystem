@@ -181,17 +181,18 @@ public class GestionnaireConversation extends Thread {
 
 	public void fin() { // arrete le thread proprement (fin du thread dans le Run())
 		
-		this.isRunning = false;
-		try {
-			sock.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		
 		try {
 			in.close();
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
+		try {
+			sock.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		this.isRunning = false;
 		//in = null;		
 	}
 }

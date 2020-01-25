@@ -48,7 +48,7 @@ public class ListenerBroadcast extends Thread {
 			// Elle bloque le thread jusqu'à ce que celui-ci ait reçu quelque chose.
 			try {
 				serveur.receive(packet);
-
+				System.out.println("toto");
 				Utilisateur nouvel_utilisateur = null;
 				ObjectInputStream OIS = null;
 				DatagramUDP datagram = null;

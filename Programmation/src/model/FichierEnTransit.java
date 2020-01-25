@@ -1,6 +1,12 @@
 package src.model;
 
-public class FichierEnTransit {
+import java.io.Serializable;
+
+public class FichierEnTransit implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	public String nom;
 	public byte [] barray;
 	
