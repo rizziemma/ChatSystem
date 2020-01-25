@@ -48,6 +48,7 @@ public class GestionnaireConversation extends Thread {
 		while(this.isRunning) {
 			try {
 				Datagram Data = (Datagram) in.readObject(); //NOUVEAU MESSAGE RECU
+				Data.setSent(false);
 				switch(Data.getType()) {
 				case MESSAGE:
 					traiterMessage(Data);
@@ -126,11 +127,13 @@ public class GestionnaireConversation extends Thread {
 
 	private void traiterMessage(Datagram data) {
 		System.out.println("message reçu : " + (String)data.getData());
+		data.setSent(false);
 		h.addMessage(data);
 		HistoriqueDAO.getInstance().nouveauDatagramme(h,data);
 	}
 
 	private void sendDatagram(Datagram data) {
+		data.setSent(true);
 		try {
 			out.writeObject(data);
 		} catch (IOException e) {
