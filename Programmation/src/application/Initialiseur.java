@@ -77,9 +77,7 @@ public class Initialiseur {
 		} catch (SocketException e) {
 			e.printStackTrace();
 		}
-		System.out.println(String.format("%2x", mac[0]) + ":" + String.format("%2x", mac[1]) + ":"
-				+ String.format("%2x", mac[2]) + ":" + String.format("%2x", mac[3]) + ":" + String.format("%2x", mac[4])
-				+ ":" + String.format("%2x", mac[5]));
+		System.out.println(mac);
 		ChatSystem.self.setAddrIP(lanIp);
 		ChatSystem.self.setAddrMAC(mac);
 		ChatSystem.self.setPseudo("not chosen yet");   
