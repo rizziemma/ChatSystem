@@ -48,7 +48,6 @@ public class ListenerBroadcast extends Thread {
 			// Elle bloque le thread jusqu'à ce que celui-ci ait reçu quelque chose.
 			try {
 				serveur.receive(packet);
-				System.out.println("toto");
 				Utilisateur nouvel_utilisateur = null;
 				ObjectInputStream OIS = null;
 				DatagramUDP datagram = null;
@@ -115,6 +114,7 @@ public class ListenerBroadcast extends Thread {
 				}
 				else {
 					if(datagram.type.equals("Fin User")) {
+						System.out.println("PASS");
 						Utilisateur UserDisconnecting = datagram.payload;
 						for(Utilisateur u : ChatSystem.tableUtilisateur) {
 							if (u.getAddrMAC().equals(UserDisconnecting.getAddrMAC())) {
