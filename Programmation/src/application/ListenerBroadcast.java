@@ -92,7 +92,7 @@ public class ListenerBroadcast extends Thread {
 								e1.printStackTrace();
 							}
 							try {
-								OOS.writeObject(ChatSystem.self);
+								OOS.writeObject(new DatagramUDP("User",ChatSystem.self));
 							} catch (IOException e1) {
 								e1.printStackTrace();
 							}
