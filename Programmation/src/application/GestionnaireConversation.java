@@ -127,8 +127,7 @@ public class GestionnaireConversation extends Thread {
 	private void traiterMessage(Datagram data) {
 		System.out.println("message reçu : " + (String)data.getData());
 		h.addMessage(data);
-		HistoriqueDAO DAO = HistoriqueDAO.getInstance();
-		DAO.nouveauDatagramme(h,data);
+		HistoriqueDAO.getInstance().nouveauDatagramme(h,data);
 	}
 
 	private void sendDatagram(Datagram data) {
@@ -148,6 +147,8 @@ public class GestionnaireConversation extends Thread {
 		System.out.println("envoie du message : " +  m);
 		Datagram data = new Datagram(Datatype.MESSAGE, (Object)m);
 		sendDatagram(data);
+		h.addMessage(data);
+		HistoriqueDAO.getInstance().nouveauDatagramme(h,data);
 	}
 
 	public void envoyerUtilisateur(Utilisateur u) {
