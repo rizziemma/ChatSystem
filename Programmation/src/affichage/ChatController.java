@@ -64,9 +64,9 @@ public class ChatController implements Initializable, Observer {
                 } else {
                     setText(d.toString());
                     if (d.getSent()) {
-                        setStyle("-fx-background-color: #33CEFF");
+                        setStyle("-fx-background-color: #fff5cc");
                     } else {
-                        setStyle("");
+                        setStyle("-fx-background-color: #ffffff");
                     }
                 }
             }
@@ -99,6 +99,7 @@ public class ChatController implements Initializable, Observer {
             if(activeUser != null) {
                 if (!activeUser.getOnline()) {
                     closeDiscussion();
+                    System.out.print("fermeture conv");
                 }
             }
 
@@ -227,6 +228,7 @@ public class ChatController implements Initializable, Observer {
         messageFeed.getItems().clear();
         textArea.setDisable(true);
         activeUser = null;
+        System.out.print("fermture conv");
 
     }    
 
@@ -280,7 +282,7 @@ public class ChatController implements Initializable, Observer {
                 e.printStackTrace();
             }
             src.model.FichierEnTransit toSend = new src.model.FichierEnTransit(byte_file,selectedFile.getName());
-//            ChatSystem.getConv(activeUser).envoyerFicher(toSend);
+            //ChatSystem.getConv(activeUser).envoyerFicher(toSend);
 
             System.out.println("File sent");
         }

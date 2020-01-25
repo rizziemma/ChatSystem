@@ -72,7 +72,7 @@ public class Datagram implements Serializable{
 		}else if(this.type.equals(Datatype.FICHIER)){
 			return "file";
 		}else {
-			return this.date.toString();
+			return /*this.date.toString()*/ "OTHER";
 		}
 	}
 }
