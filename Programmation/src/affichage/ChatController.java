@@ -146,6 +146,7 @@ public class ChatController implements Initializable, Observer {
     @FXML
     public void logOut (MouseEvent event) throws IOException {
         ChatSystem.logout();
+        Initialiseur.deconnexion();
         Parent chat_parent = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/resources/login.fxml")));
         Scene chat_scene = new Scene(chat_parent);
         Stage app_stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
