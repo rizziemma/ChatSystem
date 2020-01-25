@@ -145,7 +145,7 @@ public class HistoriqueDAO extends Observable{
 	        	d.setData(rs.getObject("DATA"));
 	        	d.setSent(rs.getInt("SENT")==1);
 	        	d.setStatus(Datagram.status_type.values()[rs.getInt("STATUS")]);
-	        	d.setType(Datatype.values()[rs.getInt("STATUS")]);
+	        	d.setType(Datatype.values()[rs.getInt("TYPE")]);
 	        	l.add(d);
 	        }
 		} catch (SQLException e) {
