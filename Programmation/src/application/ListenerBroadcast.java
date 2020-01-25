@@ -117,7 +117,7 @@ public class ListenerBroadcast extends Thread {
 					if(datagram.type.equals("Fin User")) {
 						Utilisateur UserDisconnecting = datagram.payload;
 						for(Utilisateur u : ChatSystem.tableUtilisateur) {
-							if (u.getAddrMAC() == UserDisconnecting.getAddrMAC()) {
+							if (u.getAddrMAC().equals(UserDisconnecting.getAddrMAC())) {
 								ChatSystem.getConv(u).fin();
 								ChatSystem.tableUtilisateur.remove(u);
 								HistoriqueDAO.getInstance().updateUser(UserDisconnecting);
