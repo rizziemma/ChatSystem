@@ -1,6 +1,7 @@
 package src.model;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Datagram implements Serializable{
@@ -68,7 +69,8 @@ public class Datagram implements Serializable{
 	@Override
 	public String toString() {
 		if (this.type.equals(Datatype.MESSAGE)) {
-			return this.date.toString()+ " : " + (String)this.data;
+			SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy - HH:mm");  
+			return formatter.format(date)+ " : " + (String)this.data;
 		}else if(this.type.equals(Datatype.FICHIER)){
 			return "file";
 		}else {

@@ -244,9 +244,11 @@ public class ChatController implements Initializable, Observer {
     }
 
     private void send(){
-        ChatSystem.getConv(activeUser).envoyerMessage(textArea.getText());
-        textArea.clear();
-        updateFeed();
+    	if(!textArea.getText().contentEquals("")) {
+    		ChatSystem.getConv(activeUser).envoyerMessage(textArea.getText());
+    		textArea.clear();
+    		updateFeed();
+    	}
     }
 
 	@Override
