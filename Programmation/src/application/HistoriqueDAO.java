@@ -58,7 +58,7 @@ public class HistoriqueDAO extends Observable{
 	
 	
 	
-	public void nouveauDatagramme(Utilisateur user, Datagram d) {
+	public void nouveauDatagramme(Utilisateur u, Datagram d) {
 		String sql = "INSERT INTO MESSAGE(DATE,TYPE,DATA,STATUS,SENT,CONTACT) VALUES(?,?,?,?,?,?);";
 		DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss"); 
 		try {
@@ -72,7 +72,7 @@ public class HistoriqueDAO extends Observable{
             }else {
             	pstmt.setInt(5, 0);
             }
-            pstmt.setString(6, new String(user.getAddrMAC(), StandardCharsets.UTF_8));       
+            pstmt.setString(6, new String(u.getAddrMAC(), StandardCharsets.UTF_8));       
             
             pstmt.executeUpdate();
             
@@ -85,12 +85,12 @@ public class HistoriqueDAO extends Observable{
 	}
 	
 	
-	public void vuConversation(Utilisateur user, boolean vuSent) {
+	public void vuConversation(Utilisateur u, boolean vuSent) {
 		String sql = "UPDATE MESSAGE SET STATUS = ? WHERE (CONTACT = ? AND STATUS = ? AND SENT = ?)";
 		 try {
            PreparedStatement pstmt = conn.prepareStatement(sql);
            pstmt.setInt(1, Datagram.status_type.READ.ordinal());
-           pstmt.setString(2, new String(h.getContact().getAddrMAC(), StandardCharsets.UTF_8));
+           pstmt.setString(2, new String(u.getAddrMAC(), StandardCharsets.UTF_8));
            pstmt.setInt(3, Datagram.status_type.ARCHIVED.ordinal());
            if(vuSent) {
         	   pstmt.setInt(4, 0);
