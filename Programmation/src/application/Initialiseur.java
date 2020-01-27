@@ -76,7 +76,7 @@ public class Initialiseur {
 			e.printStackTrace();
 		}
 		ChatSystem.self= new Utilisateur("not chosen yet",lanIp,mac,"",false);
-		System.out.println("Self Initialised: \n" + ChatSystem.self.toString());
+		System.out.println("Self Initialised: \n" + ChatSystem.self.toExtendedString());
 		ChatSystem.ListBR=demandeTableUtilisateur(mac, lanIp);
 		ChatSystem.convs = new ArrayList<Conversation>();
 

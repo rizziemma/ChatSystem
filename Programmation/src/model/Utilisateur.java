@@ -82,15 +82,17 @@ public class Utilisateur implements Serializable {
 		this.online = online;
 	}
 
-	@Override
-	public String toString() {
+	
+	public String toExtendedString() {
 		return "Utilisateur [pseudo=" + pseudo + ", addrIP=" + addrIP.toString() + ", addrMAC=" + String.format("%2x", addrMAC[0])
 				+ ":" + String.format("%2x", addrMAC[1]) + ":" + String.format("%2x", addrMAC[2]) + ":"
 				+ String.format("%2x", addrMAC[3]) + ":" + String.format("%2x", addrMAC[4]) + ":"
 				+ String.format("%2x", addrMAC[5]) + ", status=" + status +", online= "+ this.online + "]";
 		
 	}
-	public String simpletoString() {
+	
+	@Override
+	public String toString() {
 		if (this.online){
 			return this.pseudo;
 		}else {

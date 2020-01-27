@@ -40,13 +40,13 @@ public class ChatSystem extends Application {
 				user.setStatus(nouvel_utilisateur.getStatus());
 				user.setAddrIP(nouvel_utilisateur.getAddrIP());
 				user.setOnline(nouvel_utilisateur.getOnline());
-				System.out.println("Update utilisateur : [dans la table utilisateur] \n" + nouvel_utilisateur.toString());
+				System.out.println("Update utilisateur : [dans la table utilisateur] \n" + nouvel_utilisateur.toExtendedString());
 				break;
 			}
 		}
 		if(!found) {
 			tableUtilisateur.add(nouvel_utilisateur);
-			System.out.println("Nouvel utilisateur : [dans la table utilisateur] \n" + nouvel_utilisateur.toString());
+			System.out.println("Nouvel utilisateur : [dans la table utilisateur] \n" + nouvel_utilisateur.toExtendedString());
 		}
 		
 	}
@@ -122,7 +122,7 @@ public class ChatSystem extends Application {
 			.graphic(new ImageView(img)).position(Pos.BOTTOM_LEFT).show();
 		});
 	}
-
+	
 	public static void logout () {
 		/* Notifications notifications=Notifications.createLogOutPacket(this.self,null);
         this.sendPacket(notifications);
