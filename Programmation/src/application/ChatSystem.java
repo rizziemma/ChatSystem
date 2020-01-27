@@ -102,7 +102,7 @@ public class ChatSystem extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		try {
-			javafx.scene.Parent root = FXMLLoader.load(getClass().getResource("/resources/login.fxml"));
+			javafx.scene.Parent root = FXMLLoader.load(getClass().getResource("login.fxml"));
 			Scene scene = new Scene (root);
 			primaryStage.setTitle("PaChat System");
 			primaryStage.setScene(scene);
