@@ -15,7 +15,6 @@ import java.net.Socket;
 import src.model.Datagram;
 import src.model.Datatype;
 import src.model.FichierEnTransit;
-import src.model.Historique;
 import src.model.Utilisateur;
 import src.resources.Property;
 
@@ -24,11 +23,11 @@ public class GestionnaireConversation extends Thread {
 	private boolean isRunning = true;
 	private ObjectOutputStream out = null;
 	private ObjectInputStream in = null;
-	private Historique h;
+	private Utilisateur user;
 
-	public GestionnaireConversation(Socket sock,Historique hist) {
+	public GestionnaireConversation(Socket sock,Utilisateur u) {
 		this.sock = sock;
-		this.h = hist;
+		this.user = u;
 		try {
 			this.out = new ObjectOutputStream(sock.getOutputStream());
 			InputStream IS = sock.getInputStream();
@@ -128,8 +127,8 @@ public class GestionnaireConversation extends Thread {
 	private void traiterMessage(Datagram data) {
 		System.out.println("message reçu : " + (String)data.getData());
 		data.setSent(false);
-		h.addMessage(data);
-		HistoriqueDAO.getInstance().nouveauDatagramme(h,data);
+		//h.addMessage(data);
+		HistoriqueDAO.getInstance().nouveauDatagramme(user,data);
 	}
 
 	private void sendDatagram(Datagram data) {
@@ -150,8 +149,8 @@ public class GestionnaireConversation extends Thread {
 		System.out.println("envoie du message : " +  m);
 		Datagram data = new Datagram(Datatype.MESSAGE, (Object)m);
 		sendDatagram(data);
-		h.addMessage(data);
-		HistoriqueDAO.getInstance().nouveauDatagramme(h,data);
+		
+		HistoriqueDAO.getInstance().nouveauDatagramme(user,data);
 	}
 
 	public void envoyerUtilisateur(Utilisateur u) {
@@ -194,5 +193,15 @@ public class GestionnaireConversation extends Thread {
 		}
 		this.isRunning = false;
 		//in = null;		
+	}
+
+
+	public Utilisateur getUser() {
+		return user;
+	}
+
+
+	public void setUser(Utilisateur user) {
+		this.user = user;
 	}
 }

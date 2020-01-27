@@ -18,10 +18,8 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Enumeration;
 import java.util.Properties;
-import java.util.concurrent.TimeUnit;
 
 import src.model.DatagramUDP;
 import src.model.Utilisateur;
@@ -77,8 +75,8 @@ public class Initialiseur {
 		} catch (SocketException e) {
 			e.printStackTrace();
 		}
-		System.out.println(mac);
-		ChatSystem.self= new Utilisateur("not chosen yet",lanIp,mac,"",false,new Date());
+		ChatSystem.self= new Utilisateur("not chosen yet",lanIp,mac,"",false);
+		System.out.println("Self Initialised: \n" + ChatSystem.self.toString());
 		ChatSystem.ListBR=demandeTableUtilisateur(mac, lanIp);
 		ChatSystem.convs = new ArrayList<Conversation>();
 
@@ -229,7 +227,7 @@ public class Initialiseur {
 			e1.printStackTrace();
 		}
 		try {
-			OOS.writeObject(new DatagramUDP("User",new Utilisateur("TBD", Ip, mac,"Status", false, new Date())));
+			OOS.writeObject(new DatagramUDP("User",new Utilisateur("TBD", Ip, mac,"Status", false)));
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
@@ -262,7 +260,6 @@ public class Initialiseur {
 		if(libre) { 
 			ChatSystem.self.setPseudo(pseudo);   
 			ChatSystem.self.setOnline(true);
-			ChatSystem.self.setDerniereConnexion(new Date());
 			notifyNewPseudo();
 		}
 		return libre;

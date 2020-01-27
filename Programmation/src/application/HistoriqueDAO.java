@@ -14,7 +14,6 @@ import java.util.Observable;
 
 import src.model.Datagram;
 import src.model.Datatype;
-import src.model.Historique;
 import src.model.Utilisateur;
 import src.resources.Property;
 
@@ -59,7 +58,7 @@ public class HistoriqueDAO extends Observable{
 	
 	
 	
-	public void nouveauDatagramme(Historique h, Datagram d) {
+	public void nouveauDatagramme(Utilisateur user, Datagram d) {
 		String sql = "INSERT INTO MESSAGE(DATE,TYPE,DATA,STATUS,SENT,CONTACT) VALUES(?,?,?,?,?,?);";
 		DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss"); 
 		try {
@@ -73,7 +72,7 @@ public class HistoriqueDAO extends Observable{
             }else {
             	pstmt.setInt(5, 0);
             }
-            pstmt.setString(6, new String(h.getContact().getAddrMAC(), StandardCharsets.UTF_8));       
+            pstmt.setString(6, new String(user.getAddrMAC(), StandardCharsets.UTF_8));       
             
             pstmt.executeUpdate();
             
@@ -86,7 +85,7 @@ public class HistoriqueDAO extends Observable{
 	}
 	
 	
-	public void vuConversation(Historique h, boolean vuSent) {
+	public void vuConversation(Utilisateur user, boolean vuSent) {
 		String sql = "UPDATE MESSAGE SET STATUS = ? WHERE (CONTACT = ? AND STATUS = ? AND SENT = ?)";
 		 try {
            PreparedStatement pstmt = conn.prepareStatement(sql);

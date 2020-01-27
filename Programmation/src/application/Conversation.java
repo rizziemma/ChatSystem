@@ -5,24 +5,23 @@ import java.io.IOException;
 import java.net.Socket;
 
 import src.resources.Property;
-import src.model.Historique;
 import src.model.Utilisateur;
 
 public class Conversation {
-	private Historique historique;
+	private Utilisateur user;
 	private GestionnaireConversation gestionnaire;
 	
 	public Conversation(Utilisateur u) {
-		this.historique = new Historique(u);
+		this.user = u;
 	}
 	
 	
 	public void nouveauSYN(Socket sock) { //instentie le gestionnaire conversation du SYN reçus pour commencer la conversation avec la session distante ou resyncronyse si la connexion a été perdu
 		Boolean done =false ;
 		for (Conversation conv : ChatSystem.convs) {
-			if (conv.getHistorique().getContact().getAddrIP().equals(sock.getInetAddress())) {
+			if (conv.getUser().getAddrIP().equals(sock.getInetAddress())) {
 				if(conv.getGestionnaire() == null) { 
-					conv.setGestionnaire(new GestionnaireConversation(sock,historique));	
+					conv.setGestionnaire(new GestionnaireConversation(sock,user));	
 				
 				}
 				done = true;
@@ -38,21 +37,13 @@ public class Conversation {
 	public void envoyerMessage(String m) {
 		if(this.gestionnaire == null) {
 			try {
-				Socket sock = new Socket (this.historique.getContact().getAddrIP(),Property.TCPServerSocketPort);
-				gestionnaire= new GestionnaireConversation(sock,historique);
+				Socket sock = new Socket (this.user.getAddrIP(),Property.TCPServerSocketPort);
+				gestionnaire= new GestionnaireConversation(sock,user);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 		}
 		gestionnaire.envoyerMessage(m);
-	}
-
-	public Historique getHistorique() {
-		return historique;
-	}
-
-	public void setHistorique(Historique historique) {
-		this.historique = historique;
 	}
 
 	public GestionnaireConversation getGestionnaire() {
@@ -62,8 +53,8 @@ public class Conversation {
 	public void envoyerFicher(File f) {
 		if(this.gestionnaire == null) {
 			try {
-				Socket sock = new Socket (this.historique.getContact().getAddrIP(),Property.TCPServerSocketPort);
-				gestionnaire= new GestionnaireConversation(sock,historique);
+				Socket sock = new Socket (this.user.getAddrIP(),Property.TCPServerSocketPort);
+				gestionnaire= new GestionnaireConversation(sock,user);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -78,6 +69,16 @@ public class Conversation {
 	public void fin() {
 		this.gestionnaire.fin();
 		
+	}
+
+
+	public Utilisateur getUser() {
+		return user;
+	}
+
+
+	public void setUser(Utilisateur user) {
+		this.user = user;
 	}
 
 }

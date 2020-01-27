@@ -39,13 +39,14 @@ public class ChatSystem extends Application {
 				user.setPseudo(nouvel_utilisateur.getPseudo());
 				user.setStatus(nouvel_utilisateur.getStatus());
 				user.setAddrIP(nouvel_utilisateur.getAddrIP());
-				user.setDerniereConnexion(nouvel_utilisateur.getDerniereConnexion());
 				user.setOnline(nouvel_utilisateur.getOnline());
+				System.out.println("Update utilisateur : [dans la table utilisateur] \n" + nouvel_utilisateur.toString());
 				break;
 			}
 		}
 		if(!found) {
 			tableUtilisateur.add(nouvel_utilisateur);
+			System.out.println("Nouvel utilisateur : [dans la table utilisateur] \n" + nouvel_utilisateur.toString());
 		}
 		
 	}
@@ -74,7 +75,7 @@ public class ChatSystem extends Application {
 	public static Conversation getConv(Utilisateur u) {
 		Conversation result = null;
 		for (Conversation c : ChatSystem.convs) {
-			if (c.getHistorique().getContact().getAddrMAC().equals(u.getAddrMAC())) {
+			if (c.getUser().getAddrMAC().equals(u.getAddrMAC())) {
 				result = c;
 			}
 		}

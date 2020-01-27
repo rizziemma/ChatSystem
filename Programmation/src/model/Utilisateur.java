@@ -2,7 +2,6 @@ package src.model;
 
 import java.io.Serializable;
 import java.net.InetAddress;
-import java.util.Date;
 
 
 public class Utilisateur implements Serializable {
@@ -19,20 +18,23 @@ public class Utilisateur implements Serializable {
 	
 	private Boolean online;
 
-	private Date derniereConnexion;
-
 	public Utilisateur() {
 		super();
 	}
 
-	public Utilisateur(String pseudo, InetAddress addrIP, byte[] addrMAC, String status, Boolean online, Date derniereConnexion) {
+	public Utilisateur(String pseudo, InetAddress addrIP, byte[] addrMAC, String status, Boolean online) {
 		super();
 		this.pseudo = pseudo;
 		this.addrIP = addrIP;
-		this.addrMAC = addrMAC.clone();
+		this.addrMAC = new byte[6];
+		this.addrMAC[0] = addrMAC[0];
+		this.addrMAC[1] = addrMAC[1];
+		this.addrMAC[2] = addrMAC[2];
+		this.addrMAC[3] = addrMAC[3];
+		this.addrMAC[4] = addrMAC[4];
+		this.addrMAC[5] = addrMAC[5];
 		this.status = status;
 		this.online = online;
-		this.derniereConnexion = derniereConnexion;
 	}
 
 	public String getPseudo() {
@@ -56,7 +58,12 @@ public class Utilisateur implements Serializable {
 	}
 
 	public void setAddrMAC(byte[] mac) {
-		this.addrMAC = mac.clone();
+		this.addrMAC[0] = mac[0];
+		this.addrMAC[1] = mac[1];
+		this.addrMAC[2] = mac[2];
+		this.addrMAC[3] = mac[3];
+		this.addrMAC[4] = mac[4];
+		this.addrMAC[5] = mac[5];
 	}
 
 	public String getStatus() {
@@ -75,28 +82,20 @@ public class Utilisateur implements Serializable {
 		this.online = online;
 	}
 
-	public Date getDerniereConnexion() {
-		return derniereConnexion;
-	}
-
-	public void setDerniereConnexion(Date derniereConnexion) {
-		this.derniereConnexion = derniereConnexion;
-	}
-
 	@Override
 	public String toString() {
-		/*return "Utilisateur [pseudo=" + pseudo + ", addrIP=" + addrIP.toString() + ", addrMAC=" + String.format("%2x", addrMAC[0])
+		return "Utilisateur [pseudo=" + pseudo + ", addrIP=" + addrIP.toString() + ", addrMAC=" + String.format("%2x", addrMAC[0])
 				+ ":" + String.format("%2x", addrMAC[1]) + ":" + String.format("%2x", addrMAC[2]) + ":"
 				+ String.format("%2x", addrMAC[3]) + ":" + String.format("%2x", addrMAC[4]) + ":"
-				+ String.format("%2x", addrMAC[5]) + ", status=" + status + ", derniereConnexion=" + derniereConnexion
-				+ "]";
-				*/
+				+ String.format("%2x", addrMAC[5]) + ", status=" + status +", online= "+ this.online + "]";
+		
+	}
+	public String simpletoString() {
 		if (this.online){
 			return this.pseudo;
 		}else {
 			return this.pseudo + " - hors ligne";
 		}
-		
 	}
 
 }
