@@ -35,7 +35,7 @@ public class ChatSystem extends Application {
 	public static void addUtilisateur(Utilisateur nouvel_utilisateur) {
 		boolean found = false;
 		for (Utilisateur user : tableUtilisateur) {
-			if (/*user.getAddrMAC().equals(nouvel_utilisateur.getAddrMAC())*/Arrays.equals(user.getAddrMAC(), nouvel_utilisateur.getAddrMAC())) {
+			if (Arrays.equals(user.getAddrMAC(), nouvel_utilisateur.getAddrMAC())) {
 				found = true;
 				user.setPseudo(nouvel_utilisateur.getPseudo());
 				user.setStatus(nouvel_utilisateur.getStatus());

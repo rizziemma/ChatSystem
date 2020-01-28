@@ -67,8 +67,7 @@ public class ListenerBroadcast extends Thread {
 				if(datagram.type.equals("User")) {
 					nouvel_utilisateur = datagram.payload;
 
-					if (Arrays.equals(nouvel_utilisateur.getAddrMAC(), ChatSystem.self.getAddrMAC())
-							&& nouvel_utilisateur.getAddrIP().equals(ChatSystem.self.getAddrIP())) {
+					if (Arrays.equals(nouvel_utilisateur.getAddrMAC(), ChatSystem.self.getAddrMAC())) {
 						System.out.println("reception du \"self\"");
 					} 
 					else {
@@ -113,12 +112,10 @@ public class ListenerBroadcast extends Thread {
 					}
 				}
 				else {
-					if(datagram.type.equals("Fin User")) {
-						System.out.println("PASS");
-						Utilisateur UserDisconnecting = datagram.payload;
+					Utilisateur UserDisconnecting = datagram.payload;
+					if(datagram.type.equals("Fin User") && ! Arrays.equals(ChatSystem.self.getAddrMAC(), UserDisconnecting.getAddrMAC())) {
 						for(Utilisateur u : ChatSystem.tableUtilisateur) {
-							System.out.println(u.getAddrMAC() + " and " + UserDisconnecting.getAddrMAC());
-							if (u.getAddrMAC().equals(UserDisconnecting.getAddrMAC())) {
+							if (Arrays.equals(u.getAddrMAC(), UserDisconnecting.getAddrMAC())) {
 								ChatSystem.getConv(u).fin();
 								ChatSystem.tableUtilisateur.remove(u);
 								HistoriqueDAO.getInstance().updateUser(UserDisconnecting);
