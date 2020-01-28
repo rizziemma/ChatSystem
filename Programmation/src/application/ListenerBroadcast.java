@@ -117,7 +117,7 @@ public class ListenerBroadcast extends Thread {
 						for(Utilisateur u : ChatSystem.tableUtilisateur) {
 							if (Arrays.equals(u.getAddrMAC(), UserDisconnecting.getAddrMAC())) {
 								ChatSystem.getConv(u).fin();
-								ChatSystem.addUtilisateur(u);
+								//ChatSystem.addUtilisateur(u);
 								ChatSystem.tableUtilisateur.remove(u);
 								HistoriqueDAO.getInstance().updateUser(UserDisconnecting);
 								System.out.println(u.getPseudo() + " Disconected");
