@@ -31,7 +31,6 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import src.application.ChatSystem;
 import src.application.HistoriqueDAO;
-import src.application.Initialiseur;
 import src.model.Datagram;
 import src.model.Utilisateur;
 
@@ -195,7 +194,6 @@ public class ChatController implements Initializable, Observer {
         messageFeed.getItems().clear();
         textArea.setDisable(true);
         activeUser = null;
-        System.out.print("fermture conv");
 
     }    
 
@@ -239,8 +237,6 @@ public class ChatController implements Initializable, Observer {
         File selectedFile = choice.showOpenDialog(app_stage);
         if(selectedFile != null){
             ChatSystem.getConv(activeUser).envoyerFicher(selectedFile);
-
-            System.out.println("File sent");
         }
     }
 

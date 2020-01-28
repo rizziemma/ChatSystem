@@ -253,7 +253,7 @@ public class Initialiseur {
 	public static boolean changerPseudo(String pseudo) {
 		boolean libre = true;
 		for (Utilisateur user : ChatSystem.tableUtilisateur) {
-			if (pseudo == user.getPseudo()) {
+			if (pseudo.compareTo(user.getPseudo()) == 0) {
 				libre = false;
 			}
 		}
