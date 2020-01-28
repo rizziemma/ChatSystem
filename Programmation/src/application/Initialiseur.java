@@ -130,9 +130,9 @@ public class Initialiseur {
 		UDPsocket.close();
 		System.out.println("Deconnexion en local");
 		//fermeture des convesations en cours 
-		for(Conversation c:ChatSystem.convs) {
+		/*for(Conversation c:ChatSystem.convs) {
 			c.fin();
-		}
+		}*/
 		
 	}
 	
