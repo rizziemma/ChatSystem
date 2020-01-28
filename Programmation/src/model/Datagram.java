@@ -68,11 +68,11 @@ public class Datagram implements Serializable{
 	
 	@Override
 	public String toString() {
+		SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy - HH:mm");  
 		if (this.type.equals(Datatype.MESSAGE)) {
-			SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy - HH:mm");  
 			return formatter.format(date)+ " : " + (String)this.data;
 		}else if(this.type.equals(Datatype.FICHIER)){
-			return "file";
+			return "FICHIER - " + formatter.format(date) + ((FichierEnTransit)this.data).nom;
 		}else {
 			return /*this.date.toString()*/ "OTHER";
 		}

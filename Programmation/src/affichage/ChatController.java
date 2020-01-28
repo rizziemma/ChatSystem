@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Observable;
 import java.util.Observer;
-import java.util.Optional;
 import java.util.ResourceBundle;
 
 import javafx.application.Platform;
@@ -24,7 +23,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
-import javafx.scene.control.TextInputDialog;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
@@ -62,9 +60,9 @@ public class ChatController implements Initializable, Observer {
                 } else {
                     setText(d.toString());
                     if (d.getSent()) {
-                        setStyle("-fx-background-color: #fff5cc");
+                        setStyle("-fx-background-color: #fff5cc; -fx-text-alignment : right");
                     } else {
-                        setStyle("-fx-background-color: #ffffff");
+                        setStyle("-fx-background-color: #ffffff; ; -fx-text-alignment : left");
                     }
                 }
             }
@@ -141,6 +139,7 @@ public class ChatController implements Initializable, Observer {
     private ListView<Datagram> messageFeed;
 
 
+    
     @FXML
     public void logOut (MouseEvent event) throws IOException {
         ChatSystem.logout();
@@ -164,36 +163,7 @@ public class ChatController implements Initializable, Observer {
     }
 
 
-    @FXML
-    public void changeUsername () {
-        TextInputDialog dialog = new TextInputDialog(username.getText());
-        dialog.setTitle("Changer de pseudo");
-        dialog.setHeaderText("Moification de votre pseudo");
-        dialog.setContentText("Entrez un nouveau pseudo : ");
-        Optional<String> result = dialog.showAndWait();
-
-        if (result.isPresent()){
-            if(result.get().equals("")){
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("Erreur");
-                alert.setHeaderText(null);
-                alert.setContentText("Le pseudo ne peut pas être vide");
-                alert.showAndWait();
-            }
-            
-            else if (Initialiseur.changerPseudo(result.get())) {
-            	//changement pseudo ok
-            	username.setText(ChatSystem.self.getPseudo());
-            } else {
-            	Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("Erreur");
-                alert.setHeaderText(null);
-                alert.setContentText("Ce pseudo n'est pas disponible");
-                alert.showAndWait();
-            }
-            
-        }
-    }
+    
 
     @FXML
     public void userClicked () {

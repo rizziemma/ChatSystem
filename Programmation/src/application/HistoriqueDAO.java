@@ -130,13 +130,15 @@ public class HistoriqueDAO extends Observable{
 	}
 	
 	public ArrayList<Datagram> getDatagrams(Utilisateur u) { 
-		String sql = "SELECT * FROM MESSAGE WHERE (CONTACT = ?) ORDER BY datetime(DATE) DESC";
+		String sql = "SELECT * FROM MESSAGE WHERE (CONTACT = ? AND (TYPE = ? OR TYPE = ?)) ORDER BY datetime(DATE) DESC";
 		PreparedStatement stmt;
         ArrayList<Datagram> l = new ArrayList<Datagram>();
         SimpleDateFormat formatter=new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");         
         try {
 			stmt = conn.prepareStatement(sql);
 			stmt.setString(1, new String(u.getAddrMAC(), StandardCharsets.UTF_8));
+			stmt.setInt(2, Datatype.FICHIER.ordinal());
+			stmt.setInt(3, Datatype.MESSAGE.ordinal());
 			ResultSet rs    = stmt.executeQuery();
 	        while (rs.next()) {
 	        	Datagram d = new Datagram();
