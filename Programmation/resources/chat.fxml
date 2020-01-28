@@ -59,7 +59,7 @@
                               </ListView>
                               <AnchorPane prefHeight="120.0" prefWidth="403.0">
                                  <children>
-                                    <ImageView fx:id="changeUsernameIcon" fitHeight="80.0" fitWidth="74.0" layoutX="14.0" layoutY="23.0" onMouseClicked="#changeUsername" pickOnBounds="true" preserveRatio="true">
+                                    <ImageView fx:id="icon" fitHeight="80.0" fitWidth="74.0" layoutX="14.0" layoutY="23.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
                                           <Image url="@logo.png" />
                                        </image>

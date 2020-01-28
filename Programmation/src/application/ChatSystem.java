@@ -125,21 +125,13 @@ public class ChatSystem extends Application {
 	}
 	
 	public static void logout () {
-		/* Notifications notifications=Notifications.createLogOutPacket(this.self,null);
-        this.sendPacket(notifications);
-        System.out.println("Logout send");
-        //Deletes all user data, resetting the app as if it was launched for the first time
-        INSTANCE = new Controller();
-		 */
+		Initialiseur.deconnexion();
 	}
 
 	public void stop() {
-		for(Conversation c:convs) {
-			c.fin();
-		}
+		Initialiseur.deconnexion();
 		ListBR.fin();
 		List.fin();
-		//stop threads
 	}
 
 	public static void main(String[] args) {
