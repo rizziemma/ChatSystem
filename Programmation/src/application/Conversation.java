@@ -67,8 +67,9 @@ public class Conversation {
 
 
 	public void fin() {
-		this.gestionnaire.fin();
-		
+		if (this.gestionnaire != null) {
+			this.gestionnaire.fin();
+		}
 	}
 
 
