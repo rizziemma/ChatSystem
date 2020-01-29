@@ -62,16 +62,7 @@ public class ChatSystem extends Application {
 		}
 		return ret;
 	}
-	public static Utilisateur getUserByPseudo(String s) {
-		Utilisateur ret=null;
-		for (Utilisateur u : tableUtilisateur) {
-			if(u.getPseudo().equals(s)) {
-				ret = u;
-				break;
-			}
-		}
-		return ret;
-	}
+
 
 	public static Conversation getConv(Utilisateur u) {
 		Conversation result = null;
@@ -86,19 +77,6 @@ public class ChatSystem extends Application {
 		return result;
 	}
 
-	public static void addAllUsers(ArrayList<Utilisateur> table) {
-		tableUtilisateur.addAll(table);
-
-	}
-
-	public static String printTableUtilisateur() {
-		String str = new String("Table Utilisateurs: \n");
-		for (Utilisateur user : tableUtilisateur) {
-			str = str + user.toString() + "\n";
-		}
-		return str;
-	}
-
 
 	@Override
 	public void start(Stage primaryStage) {
@@ -109,7 +87,7 @@ public class ChatSystem extends Application {
 			primaryStage.setScene(scene);
 			primaryStage.setOnCloseRequest(windowEvent -> this.stop());
 			primaryStage.show();
-			this.stage = primaryStage;
+			ChatSystem.stage = primaryStage;
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
@@ -143,22 +121,6 @@ public class ChatSystem extends Application {
 
 		//lancement affichage
 		launch(args);
-
-		//TEST
-		/*while(tableUtilisateur.isEmpty()) {}
-		Conversation conv = new Conversation(tableUtilisateur.get(0));
-		conv.nouveauMessage("Ceci est un test");
-		conv.nouveauMessage("TEST2");
-		conv.nouveauMessage("TEST3");
-		conv.nouveauMessage("TEST4");
-		conv.nouveauMessage("TEST5");
-		conv.nouveauMessage("TEST6");
-
-
-		ListBR.interrupt();
-		List.fin();
-		System.out.println(printTableUtilisateur());
-		 */
 
 	}
 

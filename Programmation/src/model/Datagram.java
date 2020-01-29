@@ -26,7 +26,6 @@ public class Datagram implements Serializable{
 	}
 	
 	public Datagram() {
-		// TODO Auto-generated constructor stub
 	}
 
 	public Datatype getType() {

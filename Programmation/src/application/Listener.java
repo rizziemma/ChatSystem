@@ -20,6 +20,7 @@ public class Listener extends Thread {
 		}
 	}
 
+	@Override
 	public void run() {
 		
 		while (isRunning == true) {
@@ -39,14 +40,6 @@ public class Listener extends Thread {
 		}
 	}
 	
-	public int getPort() {
-		return port;
-	}
-
-	public void setPort(int port) {
-		this.port = port;
-	}
-
 	public void traitement(Socket sock) {
 		Conversation conv = new Conversation(ChatSystem.getUserByIp(sock.getInetAddress()));
 		ChatSystem.convs.add(conv);

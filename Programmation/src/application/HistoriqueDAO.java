@@ -119,7 +119,7 @@ public class HistoriqueDAO extends Observable{
 		this.notifyObservers(new UpdateFeed(u, d));
 	}
 	
-	
+	/*
 	public void vuConversation(Utilisateur u, boolean vuSent) {
 		String sql = "UPDATE MESSAGE SET STATUS = ? WHERE (CONTACT = ? AND STATUS = ? AND SENT = ?)";
 		 try {
@@ -138,7 +138,7 @@ public class HistoriqueDAO extends Observable{
            System.out.println(e.getMessage());
        }
 	}
-
+*/
 	public void updateUser(Utilisateur u) {
 		String sql = "REPLACE INTO UTILISATEUR (MAC,PSEUDO,ONLINE) VALUES (?,?,?)";
 		 try {
@@ -200,27 +200,6 @@ public class HistoriqueDAO extends Observable{
 		return l;
 	}
 	
-	public ArrayList<Utilisateur> getContacts(){
-		String sql = "SELECT * FROM UTILISATEUR";
-		PreparedStatement stmt;
-        ArrayList<Utilisateur> l = new ArrayList<Utilisateur>();
-        try {
-			stmt = conn.prepareStatement(sql);
-			ResultSet rs    = stmt.executeQuery();
-	        while (rs.next()) {
-	        	Utilisateur u = new Utilisateur();
-	        	u.setAddrMAC(rs.getString("MAC").getBytes(StandardCharsets.UTF_8));
-	        	u.setPseudo(rs.getString("PSEUDO"));
-	        	u.setOnline(rs.getInt("ONLINE")==1);
-	        	l.add(u);
-	        }
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}	
-        return l;
-	
-	}
 	
 	public ArrayList<Utilisateur> getOffline(){
 		String sql = "SELECT * FROM UTILISATEUR WHERE (ONLINE=0)";

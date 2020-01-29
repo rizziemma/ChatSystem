@@ -78,8 +78,4 @@ public class Conversation {
 	}
 
 
-	public void setUser(Utilisateur user) {
-		this.user = user;
-	}
-
 }

@@ -44,6 +44,7 @@ public class GestionnaireConversation extends Thread {
 	}
 
 
+	@Override
 	public void run() {
 		while(this.isRunning) {
 			try {
@@ -56,9 +57,9 @@ public class GestionnaireConversation extends Thread {
 				case UTILISATEUR:
 					traiterUtilisateur(Data);
 					break;
-				case VU:
+				/*case VU:
 					traiterVu();
-					break;
+					break;*/
 				case FICHIER:
 					traiterFichier(Data);
 					break;
@@ -99,6 +100,7 @@ public class GestionnaireConversation extends Thread {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+			HistoriqueDAO.getInstance().nouveauDatagramme(this.user, data);
 			ChatSystem.popup("/resources/file_received.png","Fichier reçu",fet.nom);
 		} catch (FileNotFoundException e1) {
 			// TODO Auto-generated catch block
@@ -124,8 +126,9 @@ public class GestionnaireConversation extends Thread {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		Datagram data = new Datagram(Datatype.FICHIER,(Object) (new FichierEnTransit(barray,f.getName())));
+		Datagram data = new Datagram(Datatype.FICHIER,(new FichierEnTransit(barray,f.getName())));
 		sendDatagram(data);
+		HistoriqueDAO.getInstance().nouveauDatagramme(user,data);
 	}
 
 
@@ -159,20 +162,21 @@ public class GestionnaireConversation extends Thread {
 
 	public void envoyerMessage(String m) {
 		System.out.println("envoie du message : " +  m);
-		Datagram data = new Datagram(Datatype.MESSAGE, (Object)m);
+		Datagram data = new Datagram(Datatype.MESSAGE, m);
 		sendDatagram(data);
 
 		HistoriqueDAO.getInstance().nouveauDatagramme(user,data);
 	}
 
 	public void envoyerUtilisateur(Utilisateur u) {
-		Datagram data = new Datagram(Datatype.UTILISATEUR, (Object)u);
+		Datagram data = new Datagram(Datatype.UTILISATEUR, u);
 		try {
 			out.writeObject(data);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
+	/*
 
 	private void traiterVu() {
 		//TODO envoyer a observer +dao +local (ordre important)
@@ -189,7 +193,7 @@ public class GestionnaireConversation extends Thread {
 		}
 		//TODO notifier la BDD locale du VU envoyé
 	}
-
+*/
 	public void fin() { // arrete le thread proprement (fin du thread dans le Run())
 		
 		this.isRunning = false;
@@ -206,13 +210,4 @@ public class GestionnaireConversation extends Thread {
 		//in = null;	
 	}
 
-
-	public Utilisateur getUser() {
-		return user;
-	}
-
-
-	public void setUser(Utilisateur user) {
-		this.user = user;
-	}
 }
