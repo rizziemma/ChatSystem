@@ -20,6 +20,7 @@ public class Utilisateur implements Serializable {
 
 	public Utilisateur() {
 		super();
+		this.addrMAC = new byte[6];
 	}
 
 	public Utilisateur(String pseudo, InetAddress addrIP, byte[] addrMAC, String status, Boolean online) {

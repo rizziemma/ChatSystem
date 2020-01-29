@@ -132,9 +132,9 @@ public class Initialiseur {
 		UDPsocket.close();
 		System.out.println("Deconnexion en local");
 		//fermeture des convesations en cours 
-		for(Conversation c:ChatSystem.convs) {
+		/*for(Conversation c:ChatSystem.convs) {
 			c.fin();
-		}
+		}*/
 		
 	}
 	
@@ -255,7 +255,7 @@ public class Initialiseur {
 	public static boolean changerPseudo(String pseudo) {
 		boolean libre = true;
 		for (Utilisateur user : ChatSystem.tableUtilisateur) {
-			if (pseudo == user.getPseudo()) {
+			if (pseudo.compareTo(user.getPseudo()) == 0) {
 				libre = false;
 			}
 		}
