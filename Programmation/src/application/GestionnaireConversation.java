@@ -11,6 +11,7 @@ import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.Properties;
 
 import src.model.Datagram;
 import src.model.Datatype;
@@ -77,29 +78,40 @@ public class GestionnaireConversation extends Thread {
 	private void traiterFichier(Datagram data) {
 		FileOutputStream fos = null;
 		FichierEnTransit fet = (FichierEnTransit)data.getData();
-		File f = new File(Property.PathToAppFiles+Property.Downloads + fet.nom);
-		int i = 0;
-		while(f.exists()) {
-			f= new File(Property.PathToAppFiles+Property.Downloads + fet.nom + "(" + i + ")");
-		}
-		try {
-			fos = new FileOutputStream(f);
-		} catch (FileNotFoundException e) {
+		try (InputStream input = new FileInputStream(Property.PathToAppFiles+"config.properties")) {
+			Properties prop = new Properties();
+			prop.load(input);
+			File f = new File(prop.getProperty("pathToDowloads") + fet.nom);
+
+			int i = 0;
+			while(f.exists()) {
+				f= new File(prop.getProperty("pathToDowloads") + fet.nom + "(" + i + ")");
+			}
+			try {
+				fos = new FileOutputStream(f);
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			try {
+				fos.write(fet.barray);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			ChatSystem.popup("/resources/file_received.png","Fichier reçu",fet.nom);
+		} catch (FileNotFoundException e1) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		try {
-			fos.write(fet.barray);
-		} catch (IOException e) {
+			e1.printStackTrace();
+		} catch (IOException e1) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			e1.printStackTrace();
 		}
-		ChatSystem.popup("/resources/file_received.png","Fichier reçu",fet.nom);
 	}
 
 	public void envoyerFicher(File f) {
-		 FileInputStream fis = null;
-		 BufferedInputStream bis = null;
+		FileInputStream fis = null;
+		BufferedInputStream bis = null;
 		byte [] barray = new byte[(int)f.length()];
 		try {
 			fis = new FileInputStream(f);
@@ -115,8 +127,8 @@ public class GestionnaireConversation extends Thread {
 		Datagram data = new Datagram(Datatype.FICHIER,(Object) (new FichierEnTransit(barray,f.getName())));
 		sendDatagram(data);
 	}
-	
-	
+
+
 	private void traiterUtilisateur(Datagram data) {
 		Utilisateur u = (Utilisateur)data.getData();
 		ChatSystem.addUtilisateur(u);
@@ -149,7 +161,7 @@ public class GestionnaireConversation extends Thread {
 		System.out.println("envoie du message : " +  m);
 		Datagram data = new Datagram(Datatype.MESSAGE, (Object)m);
 		sendDatagram(data);
-		
+
 		HistoriqueDAO.getInstance().nouveauDatagramme(user,data);
 	}
 
@@ -179,8 +191,8 @@ public class GestionnaireConversation extends Thread {
 	}
 
 	public void fin() { // arrete le thread proprement (fin du thread dans le Run())
-		
-		
+
+
 		try {
 			in.close();
 		} catch (IOException e1) {

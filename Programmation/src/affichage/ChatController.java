@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Objects;
 import java.util.Observable;
 import java.util.Observer;
@@ -31,8 +32,11 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import src.application.ChatSystem;
 import src.application.HistoriqueDAO;
+import src.application.HistoriqueDAO.UpdateFeed;
+import src.application.HistoriqueDAO.UpdateUsers;
 import src.application.Initialiseur;
 import src.model.Datagram;
+import src.model.Datatype;
 import src.model.Utilisateur;
 
 public class ChatController implements Initializable, Observer {
@@ -101,9 +105,21 @@ public class ChatController implements Initializable, Observer {
         });
     }
 
+    
+    public void updateFeed(UpdateFeed up) {
+    	Platform.runLater(() -> {
+    		if (activeUser!=null && Arrays.equals(up.getUtilisateur().getAddrMAC(), activeUser.getAddrMAC())){
+    			messageFeed.getItems().add(up.getMessage());
+    			messageFeed.scrollTo(messageFeed.getItems().size() - 1);
+    		}else if(!Arrays.equals(up.getUtilisateur().getAddrMAC(), ChatSystem.self.getAddrMAC()) && up.getMessage().getType().equals(Datatype.MESSAGE)){
+    			ChatSystem.popup("resources/new.png", "Nouveau message", up.getUtilisateur().getPseudo()+" vous a envoyé un message");
+    		}
+    		
+    	});
+    }
    
     
-    private void updateFeed(){
+    private void initFeed(){
         Platform.runLater(() -> {
             if (activeUser != null) {
                 messageFeed.getItems().clear();
@@ -185,7 +201,7 @@ public class ChatController implements Initializable, Observer {
             textArea.setOpacity(1);
             closeDiscussionButton.setOpacity(1);
             distantUser.setText(activeUser.toString());
-            updateFeed();
+            initFeed();
         }
     }
 
@@ -216,15 +232,14 @@ public class ChatController implements Initializable, Observer {
     	if(!textArea.getText().contentEquals("")) {
     		ChatSystem.getConv(activeUser).envoyerMessage(textArea.getText());
     		textArea.clear();
-    		updateFeed();
     	}
     }
 
 	@Override
 	public void update(Observable o, Object arg) {
-		if(arg.equals(HistoriqueDAO.Actions.UpdateFeed.name())){
-			this.updateFeed();
-		}else if(arg.equals(HistoriqueDAO.Actions.UpdateUsers.name())) {
+		if(arg instanceof UpdateFeed){
+			this.updateFeed((UpdateFeed)arg);
+		}else if(arg instanceof UpdateUsers) {
 			this.updateView();
 		}
 	}
@@ -239,8 +254,6 @@ public class ChatController implements Initializable, Observer {
         File selectedFile = choice.showOpenDialog(app_stage);
         if(selectedFile != null){
             ChatSystem.getConv(activeUser).envoyerFicher(selectedFile);
-
-            System.out.println("File sent");
         }
     }
 

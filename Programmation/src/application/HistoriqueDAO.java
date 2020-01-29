@@ -1,5 +1,9 @@
 package src.application;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -11,30 +15,57 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Observable;
+import java.util.Properties;
 
 import src.model.Datagram;
 import src.model.Datatype;
+import src.model.FichierEnTransit;
 import src.model.Utilisateur;
 import src.resources.Property;
 
 //https://www.sqlitetutorial.net/sqlite-java/
 
 public class HistoriqueDAO extends Observable{
+
 	
-	public enum Actions{
-		UpdateFeed,
-		UpdateUsers
+	public class UpdateFeed{
+		private  Utilisateur utilisateur;
+		private  Datagram message;
+		public UpdateFeed(Utilisateur u, Datagram m) {
+			this.utilisateur = u;
+			this.message = m;
+		}
+		public Utilisateur getUtilisateur() {
+			return this.utilisateur;
+		}
+		public Datagram getMessage() {
+			return this.message;
+		}
+	}
+	
+	public class UpdateUsers{
+		public UpdateUsers() {
+		}
+		
 	}
 		
 	private static HistoriqueDAO instance;
 	Connection conn;
 	
 	private HistoriqueDAO() {
-        try {
-            conn = DriverManager.getConnection(Property.SQLiteDriver+Property.PathToAppFiles+Property.BaseLocale);
+        try (InputStream input = new FileInputStream(Property.PathToAppFiles+"config.properties")) {
+             Properties prop = new Properties();
+             prop.load(input);
+            conn = DriverManager.getConnection(Property.SQLiteDriver+prop.getProperty("pathToLocalBase"));
         } catch (SQLException e) {
             System.out.println(e.getMessage());
-        }
+        } catch (FileNotFoundException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 	}
 	
 	
@@ -65,7 +96,11 @@ public class HistoriqueDAO extends Observable{
             PreparedStatement pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, dateFormat.format(d.getDate()));
             pstmt.setInt(2, d.getType().ordinal());
-            pstmt.setObject(3, d.getData());
+            if(d.getType().equals(Datatype.FICHIER)) {
+            	pstmt.setObject(3, ((FichierEnTransit)d.getData()).nom);
+            }else {
+            	pstmt.setObject(3, d.getData());
+			}
             pstmt.setInt(4, Datagram.status_type.ARCHIVED.ordinal());
             if(d.getSent()) {
             	pstmt.setInt(5, 1);
@@ -81,7 +116,7 @@ public class HistoriqueDAO extends Observable{
         }
 		d.setStatus(Datagram.status_type.ARCHIVED);
 		this.setChanged();
-		this.notifyObservers(Actions.UpdateFeed.name());
+		this.notifyObservers(new UpdateFeed(u, d));
 	}
 	
 	
@@ -125,7 +160,7 @@ public class HistoriqueDAO extends Observable{
 			 System.out.println(e.getMessage());
 		 }
 			this.setChanged();
-			this.notifyObservers(Actions.UpdateUsers.name());
+			this.notifyObservers(new UpdateUsers());
 
 	}
 	
@@ -143,10 +178,15 @@ public class HistoriqueDAO extends Observable{
 	        while (rs.next()) {
 	        	Datagram d = new Datagram();
 	        	d.setDate(formatter.parse(rs.getString("DATE")));
-	        	d.setData(rs.getObject("DATA"));
+	        	
 	        	d.setSent(rs.getInt("SENT")==1);
 	        	d.setStatus(Datagram.status_type.values()[rs.getInt("STATUS")]);
 	        	d.setType(Datatype.values()[rs.getInt("TYPE")]);
+	        	if(d.getType().equals(Datatype.FICHIER)) {
+	            	d.setData(new FichierEnTransit(new byte[0], (String)rs.getObject("DATA")));
+	            }else {
+	            	d.setData(rs.getObject("DATA"));
+				}
 	        	l.add(d);
 	        }
 		} catch (SQLException e) {

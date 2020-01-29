@@ -2,8 +2,10 @@ package src.application;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.net.DatagramPacket;
@@ -266,24 +268,35 @@ public class Initialiseur {
 	}
 
 	private static void initBaseLocale() {
-		//Si bdd pas initialisée
-		if (!(new File(Property.PathToAppFiles+Property.BaseLocale)).exists()) {
-			try {          
-				Connection conn = DriverManager.getConnection(Property.SQLiteDriver+Property.PathToAppFiles+Property.BaseLocale);
-				String utilisateurs = "CREATE TABLE UTILISATEUR (MAC text PRIMARY KEY, PSEUDO text, ONLINE integer)";
-				//String messages = "CREATE TABLE MESSAGE (ID integer PRIMARY KEY, DATE text, TYPE integer, DATA blob, STATUS integer, SENT integer, CONTACT text, FOREIGN KEY (CONTACT) REFERENCES UTILISATEUR(MAC))";
-				String messages = "CREATE TABLE MESSAGE (ID integer PRIMARY KEY, DATE text, TYPE integer, DATA blob, STATUS integer, SENT integer, CONTACT text)";
-				String index = "CREATE UNIQUE INDEX idx_mac_addr ON UTILISATEUR(MAC)";
-				Statement stmt = conn.createStatement();
-				stmt.execute(utilisateurs);
-				stmt.execute(messages);
-				stmt.execute(index);
+		try (InputStream input = new FileInputStream(Property.PathToAppFiles+"config.properties")) {
 
-				conn.close();
-			} catch (SQLException e) {
-				System.out.println(e.getMessage());
-				//e.printStackTrace();
-			}
+            Properties prop = new Properties();
+
+            // load a properties file
+            prop.load(input);
+
+        
+            //Si bdd pas initialisée
+            if (!new File(prop.getProperty("pathToLocalBase")).exists()) {
+            	try {          
+            		Connection conn = DriverManager.getConnection(Property.SQLiteDriver+prop.getProperty("pathToLocalBase"));
+            		String utilisateurs = "CREATE TABLE UTILISATEUR (MAC text PRIMARY KEY, PSEUDO text, ONLINE integer)";
+            		//String messages = "CREATE TABLE MESSAGE (ID integer PRIMARY KEY, DATE text, TYPE integer, DATA blob, STATUS integer, SENT integer, CONTACT text, FOREIGN KEY (CONTACT) REFERENCES UTILISATEUR(MAC))";
+            		String messages = "CREATE TABLE MESSAGE (ID integer PRIMARY KEY, DATE text, TYPE integer, DATA blob, STATUS integer, SENT integer, CONTACT text)";
+            		String index = "CREATE UNIQUE INDEX idx_mac_addr ON UTILISATEUR(MAC)";
+            		Statement stmt = conn.createStatement();
+            		stmt.execute(utilisateurs);
+            		stmt.execute(messages);
+            		stmt.execute(index);
+
+            		conn.close();
+            	} catch (SQLException e) {
+            		System.out.println(e.getMessage());
+            		//e.printStackTrace();
+            	} 
+            }
+        }catch (IOException ex) {
+            ex.printStackTrace();
 		}
 	}
 
@@ -296,7 +309,7 @@ public class Initialiseur {
 		if(!bdd.exists()) {
 			bdd.mkdir();
 		}
-		File dl = new File(Property.PathToAppFiles+Property.Downloads);
+		File dl = new File(Property.PathToAppFiles+"downloads");
 		if(!dl.exists()) {
 			dl.mkdir();
 		}
@@ -306,10 +319,19 @@ public class Initialiseur {
 				propfile.createNewFile();
 				Properties prop = new Properties();
 				OutputStream output = new FileOutputStream(Property.PathToAppFiles+"config.properties");
+
 				prop.setProperty("TCPServerSocketPort", "12345");
 				prop.setProperty("portBRServer", "42069");
 				prop.setProperty("portBRClient", "42070");
 
+				//bdd
+				prop.setProperty("pathToLocalBase", System.getProperty("user.home")+"/ChatSystem/data/storage.db");
+				prop.setProperty("pathToDowloads", System.getProperty("user.home")+"/ChatSystem/dowloads/");
+				
+				prop.setProperty("urlServer", "jdbc:mysql://srv-bdens.insa-toulouse.fr"); //port 3306
+				prop.setProperty("login", "tpservlet_12");
+				prop.setProperty("pw", "Enee9een");
+				
 				prop.store(output, null);
 
 			} catch (IOException e) {
