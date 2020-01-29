@@ -323,8 +323,7 @@ public class Initialiseur {
 				prop.setProperty("TCPServerSocketPort", "12345");
 				prop.setProperty("portBRServer", "42069");
 				prop.setProperty("portBRClient", "42070");
-
-				//bdd
+				
 				prop.setProperty("pathToLocalBase", System.getProperty("user.home")+"/ChatSystem/data/storage.db");
 				prop.setProperty("pathToDowloads", System.getProperty("user.home")+"/ChatSystem/dowloads/");
 				
