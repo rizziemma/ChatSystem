@@ -73,6 +73,7 @@ public class ChatSystem extends Application {
 		}
 		if (result == null) {
 			result = new Conversation(u);
+			ChatSystem.addUtilisateur(u);
 		}
 		return result;
 	}
