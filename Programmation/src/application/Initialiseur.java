@@ -31,8 +31,8 @@ import src.resources.Property;
 public class Initialiseur {
 
 	static DatagramSocket UDPsocket = null;
-	static int portBRServer; //TODO a mettre dans le fichier properties et pas le .java 
-	static int portBRClient; //TODO a mettre dans le fichier properties et pas le .java 
+	static int portBRServer; 
+	static int portBRClient; 
 	public static void initApp() {
 		initFolders();
 		initBaseLocale();
