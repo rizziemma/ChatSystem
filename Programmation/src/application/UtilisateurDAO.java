@@ -58,7 +58,7 @@ public class UtilisateurDAO {
         return instance;
     }
 	
-	public void checkIn() {
+	public void putIn() {
 		String sql = "INSERT INTO UTILISATEUR (PSEUDO, MAC, IP) VALUES (?,?,?)";
 		 try {
 			 PreparedStatement pstmt = conn.prepareStatement(sql);
@@ -74,7 +74,7 @@ public class UtilisateurDAO {
 		 }
 	}
 	
-	public void checkOut() {
+	public void putOut() {
 		String sql = "DELETE FROM UTILISATEUR WHERE MAC=?";
 		 try {
 			 PreparedStatement pstmt = conn.prepareStatement(sql);
