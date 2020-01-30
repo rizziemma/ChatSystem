@@ -26,7 +26,7 @@ public class UtilisateurDAO {
 		try (InputStream input = new FileInputStream(Property.PathToAppFiles+"config.properties")) {
             Properties prop = new Properties();
             prop.load(input);
-           conn = DriverManager.getConnection(Property.SQLiteDriver+prop.getProperty("urlServer")+"?user="+prop.getProperty("login")+"&password="+prop.getProperty("pw"));
+           conn = DriverManager.getConnection(Property.SQLiteDriver+prop.getProperty("urlServer"),prop.getProperty("login"),prop.getProperty("pw"));
        } catch (SQLException e) {
            System.out.println(e.getMessage());
        } catch (FileNotFoundException e1) {
