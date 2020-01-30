@@ -71,7 +71,7 @@ public class Datagram implements Serializable{
 		if (this.type.equals(Datatype.MESSAGE)) {
 			return formatter.format(date)+ " : " + (String)this.data;
 		}else if(this.type.equals(Datatype.FICHIER)){
-			return "FICHIER - " + formatter.format(date) + ((FichierEnTransit)this.data).nom;
+			return "FICHIER - " + formatter.format(date) + " : " +((FichierEnTransit)this.data).nom;
 		}else {
 			return /*this.date.toString()*/ "OTHER";
 		}
