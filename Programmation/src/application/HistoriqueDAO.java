@@ -140,22 +140,11 @@ public class HistoriqueDAO extends Observable{
 	}
 */
 	public void updateUser(Utilisateur u) {
-		String sql = "REPLACE INTO UTILISATEUR (MAC,PSEUDO,ONLINE) VALUES (?,?,?)";
+		String sql = "UPDATE UTILISATEUR SET (ONLINE = 0)";
 		 try {
           PreparedStatement pstmt = conn.prepareStatement(sql);
-          
-          pstmt.setObject(1, u.getAddrMAC()); 
-          pstmt.setString(2, u.getPseudo());
-          if(u.getOnline()) {
-        	  pstmt.setInt(3, 1);
-          }else {
-        	  pstmt.setInt(3, 0);
-          }
-          
-            
           pstmt.executeUpdate();
           
-
 		 } catch (SQLException e) {
 			 System.out.println(e.getMessage());
 		 }
@@ -223,6 +212,25 @@ public class HistoriqueDAO extends Observable{
 	
 	}
 
+	public void setOffline() {
+		String sql = "UPDATE * FROM UTILISATEUR WHERE (ONLINE=0)";
+		PreparedStatement stmt;
+        ArrayList<Utilisateur> l = new ArrayList<Utilisateur>();
+        try {
+			stmt = conn.prepareStatement(sql);
+			ResultSet rs    = stmt.executeQuery();
+	        while (rs.next()) {
+	        	Utilisateur u = new Utilisateur();
+	        	u.setAddrMAC((byte[]) rs.getObject("MAC"));
+	        	u.setPseudo(rs.getString("PSEUDO"));
+	        	u.setOnline(rs.getInt("ONLINE")==1);
+	        	l.add(u);
+	        }
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 	
 	
 }

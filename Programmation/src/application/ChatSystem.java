@@ -108,6 +108,7 @@ public class ChatSystem extends Application {
 
 	public void stop() {
 		Initialiseur.deconnexion();
+		HistoriqueDAO.getInstance().setOffline();
 		ListBR.fin();
 		List.fin();
 	}
