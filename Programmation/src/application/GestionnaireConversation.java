@@ -212,12 +212,12 @@ public class GestionnaireConversation extends Thread {
 		try {
 			in.close();
 		} catch (IOException e1) {
-			//e1.printStackTrace();
+			e1.printStackTrace();
 		}
 		try {
 			sock.close();
 		} catch (IOException e) {
-			//e.printStackTrace();
+			e.printStackTrace();
 		}
 		//in = null;	
 	}
