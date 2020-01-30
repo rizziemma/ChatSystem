@@ -33,6 +33,7 @@ public class Initialiseur {
 	static DatagramSocket UDPsocket = null;
 	static int portBRServer; 
 	static int portBRClient; 
+	static int TCPServerSocketPort;
 	public static void initApp() {
 		initFolders();
 		initBaseLocale();
@@ -43,6 +44,7 @@ public class Initialiseur {
             prop.load(input);
             portBRServer = Integer.parseInt(prop.getProperty("portBRServer"));
             portBRClient = Integer.parseInt(prop.getProperty("portBRClient"));
+            TCPServerSocketPort = Integer.parseInt(prop.getProperty("TCPServerSocketPort"));
 		} catch (FileNotFoundException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
