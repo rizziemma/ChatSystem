@@ -27,7 +27,7 @@ public class GestionnaireConversation extends Thread {
 	private Utilisateur user;
 
 	public GestionnaireConversation(Socket sock,Utilisateur u) {
-		this.setName("Conv " + this.user.getPseudo());
+		this.setName("Conv " + u.getPseudo());
 		this.sock = sock;
 		this.user = u;
 		try {
