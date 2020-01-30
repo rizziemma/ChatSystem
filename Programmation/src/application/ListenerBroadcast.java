@@ -19,6 +19,7 @@ public class ListenerBroadcast extends Thread {
 	private int port;
 	private boolean isRunning = true;
 	public ListenerBroadcast(int port) {
+		this.setName("Listener Broadcast UDP");
 		try {
 			this.serveur = new DatagramSocket(port);
 		} catch (SocketException e) {
