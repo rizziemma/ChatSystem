@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.net.Socket;
 
-import src.resources.Property;
 import src.model.Utilisateur;
 
 public class Conversation {
@@ -37,7 +36,7 @@ public class Conversation {
 	public void envoyerMessage(String m) {
 		if(this.gestionnaire == null) {
 			try {
-				Socket sock = new Socket (this.user.getAddrIP(),Property.TCPServerSocketPort);
+				Socket sock = new Socket (this.user.getAddrIP(),Initialiseur.TCPServerSocketPort);
 				gestionnaire= new GestionnaireConversation(sock,user);
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -53,7 +52,7 @@ public class Conversation {
 	public void envoyerFicher(File f) {
 		if(this.gestionnaire == null) {
 			try {
-				Socket sock = new Socket (this.user.getAddrIP(),Property.TCPServerSocketPort);
+				Socket sock = new Socket (this.user.getAddrIP(),Initialiseur.TCPServerSocketPort);
 				gestionnaire= new GestionnaireConversation(sock,user);
 			} catch (IOException e) {
 				e.printStackTrace();
