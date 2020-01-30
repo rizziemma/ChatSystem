@@ -3,6 +3,7 @@ package src.application;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -30,11 +31,26 @@ import src.resources.Property;
 public class Initialiseur {
 
 	static DatagramSocket UDPsocket = null;
-	static int portBRServer = 42069; //TODO a mettre dans le fichier properties et pas le .java 
-	static int portBRClient = 42070; //TODO a mettre dans le fichier properties et pas le .java 
+	static int portBRServer; //TODO a mettre dans le fichier properties et pas le .java 
+	static int portBRClient; //TODO a mettre dans le fichier properties et pas le .java 
 	public static void initApp() {
 		initFolders();
 		initBaseLocale();
+		
+		
+		try (InputStream input = new FileInputStream(Property.PathToAppFiles+"config.properties")) {
+            Properties prop = new Properties();
+            prop.load(input);
+            portBRServer = Integer.parseInt(prop.getProperty("portBRServer"));
+            portBRClient = Integer.parseInt(prop.getProperty("portBRClient"));
+		} catch (FileNotFoundException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+
 		ChatSystem.List = initListener();
 		InetAddress lanIp = null;
 		try {
