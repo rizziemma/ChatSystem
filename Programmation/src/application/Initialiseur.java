@@ -282,7 +282,7 @@ public class Initialiseur {
             		Connection conn = DriverManager.getConnection(Property.SQLiteDriver+prop.getProperty("pathToLocalBase"));
             		String utilisateurs = "CREATE TABLE UTILISATEUR (MAC blob PRIMARY KEY, PSEUDO text, ONLINE integer)";
             		//String messages = "CREATE TABLE MESSAGE (ID integer PRIMARY KEY, DATE text, TYPE integer, DATA blob, STATUS integer, SENT integer, CONTACT text, FOREIGN KEY (CONTACT) REFERENCES UTILISATEUR(MAC))";
-            		String messages = "CREATE TABLE MESSAGE (ID integer PRIMARY KEY, DATE text, TYPE integer, DATA blob, STATUS integer, SENT integer, CONTACT text)";
+            		String messages = "CREATE TABLE MESSAGE (ID integer PRIMARY KEY, DATE text, TYPE integer, DATA blob, STATUS integer, SENT integer, CONTACT blob)";
             		String index = "CREATE UNIQUE INDEX idx_mac_addr ON UTILISATEUR(MAC)";
             		Statement stmt = conn.createStatement();
             		stmt.execute(utilisateurs);
