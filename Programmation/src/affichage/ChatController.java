@@ -209,8 +209,6 @@ public class ChatController implements Initializable, Observer {
         messageFeed.getItems().clear();
         textArea.setDisable(true);
         activeUser = null;
-        System.out.print("fermture conv");
-
     }    
 
     @FXML
