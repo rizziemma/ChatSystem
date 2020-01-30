@@ -107,7 +107,7 @@ public class HistoriqueDAO extends Observable{
             }else {
             	pstmt.setInt(5, 0);
             }
-            pstmt.setString(6, new String(u.getAddrMAC(), StandardCharsets.UTF_8));       
+            pstmt.setObject(6, u.getAddrMAC());       
             
             pstmt.executeUpdate();
             
