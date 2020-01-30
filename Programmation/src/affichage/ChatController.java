@@ -97,7 +97,7 @@ public class ChatController implements Initializable, Observer {
 
             
             if(activeUser == null) {
-            	if(!online.contains(activeUser)){
+            	if(online.contains(activeUser)){
                     textArea.setDisable(false);
                     fileButton.setDisable(false);
                     sendButton.setDisable(false);
