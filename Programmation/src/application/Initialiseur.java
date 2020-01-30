@@ -343,7 +343,7 @@ public class Initialiseur {
 				prop.setProperty("portBRClient", "42070");
 				
 				prop.setProperty("pathToLocalBase", System.getProperty("user.home")+"/ChatSystem/data/storage.db");
-				prop.setProperty("pathToDowloads", System.getProperty("user.home")+"/ChatSystem/dowloads/");
+				prop.setProperty("pathToDowloads", System.getProperty("user.home")+"/ChatSystem/downloads/");
 				
 				prop.setProperty("urlServer", "jdbc:mysql://srv-bdens.insa-toulouse.fr/db_chat_system"); //port 3306
 				prop.setProperty("login", "tpservlet_12");

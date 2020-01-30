@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Reader;
 import java.net.Socket;
 import java.util.Properties;
 
@@ -58,7 +59,7 @@ public class GestionnaireConversation extends Thread {
 				case UTILISATEUR:
 					traiterUtilisateur(Data);
 					break;
-				/*case VU:
+					/*case VU:
 					traiterVu();
 					break;*/
 				case FICHIER:
@@ -80,36 +81,46 @@ public class GestionnaireConversation extends Thread {
 	private void traiterFichier(Datagram data) {
 		FileOutputStream fos = null;
 		FichierEnTransit fet = (FichierEnTransit)data.getData();
-		try (InputStream input = new FileInputStream(Property.PathToAppFiles+"config.properties")) {
-			Properties prop = new Properties();
-			prop.load(input);
-			File f = new File(prop.getProperty("pathToDowloads") + fet.nom);
-
-			int i = 0;
-			while(f.exists()) {
-				f= new File(prop.getProperty("pathToDowloads") + fet.nom + "(" + i + ")");
-			}
-			try {
-				fos = new FileOutputStream(f);
-			} catch (FileNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			try {
-				fos.write(fet.barray);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			HistoriqueDAO.getInstance().nouveauDatagramme(this.user, data);
-			ChatSystem.popup("/resources/file_received.png","Fichier reçu",fet.nom);
-		} catch (FileNotFoundException e1) {
+		InputStream input = null;
+		try {
+			input = new FileInputStream(Property.PathToAppFiles+"config.properties");
+		} 
+		catch (FileNotFoundException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
+		} 
+		Properties prop = new Properties();
+		try {
+			prop.load(input);
 		} catch (IOException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
+		File f = new File(prop.getProperty("pathToDowloads") + fet.nom);
+		int i = 0;
+		while(f.exists()) {
+			f= new File(prop.getProperty("pathToDowloads") + fet.nom + "(" + i + ")");
+		}
+		/*try {
+			f.createNewFile();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}*/
+		try {
+			fos = new FileOutputStream(f);
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		try {
+			fos.write(fet.barray);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		HistoriqueDAO.getInstance().nouveauDatagramme(this.user, data);
+		ChatSystem.popup("/resources/file_received.png","Fichier reçu",fet.nom);
 	}
 
 	public void envoyerFicher(File f) {
@@ -194,9 +205,9 @@ public class GestionnaireConversation extends Thread {
 		}
 		//TODO notifier la BDD locale du VU envoyé
 	}
-*/
+	 */
 	public void fin() { // arrete le thread proprement (fin du thread dans le Run())
-		
+
 		this.isRunning = false;
 		try {
 			in.close();
