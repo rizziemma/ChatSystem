@@ -9,6 +9,7 @@ import java.util.Arrays;
 import java.util.Objects;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 import javafx.application.Platform;
@@ -24,6 +25,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
@@ -34,6 +36,7 @@ import src.application.ChatSystem;
 import src.application.HistoriqueDAO;
 import src.application.HistoriqueDAO.UpdateFeed;
 import src.application.HistoriqueDAO.UpdateUsers;
+import src.application.Initialiseur;
 import src.model.Datagram;
 import src.model.Datatype;
 import src.model.Utilisateur;
@@ -252,6 +255,38 @@ public class ChatController implements Initializable, Observer {
         File selectedFile = choice.showOpenDialog(app_stage);
         if(selectedFile != null){
             ChatSystem.getConv(activeUser).envoyerFicher(selectedFile);
+        }
+    }
+    
+    
+    @FXML
+    public void changerPseudo () {
+        TextInputDialog dialog = new TextInputDialog(username.getText());
+        dialog.setTitle("Changer de pseudo");
+        dialog.setHeaderText("Moification de votre pseudo");
+        dialog.setContentText("Entrez un nouveau pseudo : ");
+        Optional<String> result = dialog.showAndWait();
+
+        if (result.isPresent()){
+            if(result.get().equals("")){
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Erreur");
+                alert.setHeaderText(null);
+                alert.setContentText("Le pseudo ne peut pas être vide");
+                alert.showAndWait();
+            }
+            
+            else if (Initialiseur.changerPseudo(result.get())) {
+            	//changement pseudo ok
+            	username.setText(ChatSystem.self.getPseudo());
+            } else {
+            	Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Erreur");
+                alert.setHeaderText(null);
+                alert.setContentText("Ce pseudo n'est pas disponible");
+                alert.showAndWait();
+            }
+            
         }
     }
 

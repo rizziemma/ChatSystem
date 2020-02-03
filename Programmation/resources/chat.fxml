@@ -64,10 +64,13 @@
                                           <Image url="@logo.png" />
                                        </image>
                                     </ImageView>
-                                    <Label fx:id="username" layoutX="99.0" layoutY="35.0" maxWidth="500.0" prefHeight="50.0" prefWidth="245.0" text="Username" textFill="WHITE">
+                                    <Label fx:id="username" layoutX="99.0" layoutY="35.0" maxWidth="500.0" onMouseClicked="#changerPseudo" prefHeight="50.0" prefWidth="245.0" text="Username" textFill="WHITE">
                                        <font>
                                           <Font size="25.0" />
                                        </font>
+                                       <cursor>
+                                          <Cursor fx:constant="TEXT" />
+                                       </cursor>
                                     </Label>
                                     <Button fx:id="logout" layoutX="354.0" layoutY="6.0" mnemonicParsing="false" onMouseClicked="#logOut" prefHeight="50.0" prefWidth="50.0" AnchorPane.leftAnchor="354.0" AnchorPane.rightAnchor="180.0" AnchorPane.topAnchor="6.0">
                                        <font>
