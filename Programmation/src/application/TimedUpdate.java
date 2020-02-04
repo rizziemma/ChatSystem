@@ -9,6 +9,7 @@ public class TimedUpdate extends Thread{
 
 	public TimedUpdate(){
 		isRunning = true;
+		this.run();
 	}
 
 	public void run() {
