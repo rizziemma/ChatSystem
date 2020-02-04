@@ -3,6 +3,7 @@ package src.application;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -30,11 +31,28 @@ import src.resources.Property;
 public class Initialiseur {
 
 	static DatagramSocket UDPsocket = null;
-	static int portBRServer = 42069;
-	static int portBRClient = 42070;
+	static int portBRServer; 
+	static int portBRClient; 
+	static int TCPServerSocketPort;
 	public static void initApp() {
 		initFolders();
 		initBaseLocale();
+		
+		
+		try (InputStream input = new FileInputStream(Property.PathToAppFiles+"config.properties")) {
+            Properties prop = new Properties();
+            prop.load(input);
+            portBRServer = Integer.parseInt(prop.getProperty("portBRServer"));
+            portBRClient = Integer.parseInt(prop.getProperty("portBRClient"));
+            TCPServerSocketPort = Integer.parseInt(prop.getProperty("TCPServerSocketPort"));
+		} catch (FileNotFoundException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+
 		ChatSystem.List = initListener();
 		InetAddress lanIp = null;
 		try {
@@ -132,9 +150,9 @@ public class Initialiseur {
 		UDPsocket.close();
 		System.out.println("Deconnexion en local");
 		//fermeture des convesations en cours 
-		/*for(Conversation c:ChatSystem.convs) {
+		for(Conversation c:ChatSystem.convs) {
 			c.fin();
-		}*/
+		}
 		
 	}
 	
@@ -280,9 +298,9 @@ public class Initialiseur {
             if (!new File(prop.getProperty("pathToLocalBase")).exists()) {
             	try {          
             		Connection conn = DriverManager.getConnection(Property.SQLiteDriver+prop.getProperty("pathToLocalBase"));
-            		String utilisateurs = "CREATE TABLE UTILISATEUR (MAC text PRIMARY KEY, PSEUDO text, ONLINE integer)";
+            		String utilisateurs = "CREATE TABLE UTILISATEUR (MAC blob PRIMARY KEY, PSEUDO text, ONLINE integer)";
             		//String messages = "CREATE TABLE MESSAGE (ID integer PRIMARY KEY, DATE text, TYPE integer, DATA blob, STATUS integer, SENT integer, CONTACT text, FOREIGN KEY (CONTACT) REFERENCES UTILISATEUR(MAC))";
-            		String messages = "CREATE TABLE MESSAGE (ID integer PRIMARY KEY, DATE text, TYPE integer, DATA blob, STATUS integer, SENT integer, CONTACT text)";
+            		String messages = "CREATE TABLE MESSAGE (ID integer PRIMARY KEY, DATE text, TYPE integer, DATA blob, STATUS integer, SENT integer, CONTACT blob)";
             		String index = "CREATE UNIQUE INDEX idx_mac_addr ON UTILISATEUR(MAC)";
             		Statement stmt = conn.createStatement();
             		stmt.execute(utilisateurs);
@@ -325,9 +343,9 @@ public class Initialiseur {
 				prop.setProperty("portBRClient", "42070");
 				
 				prop.setProperty("pathToLocalBase", System.getProperty("user.home")+"/ChatSystem/data/storage.db");
-				prop.setProperty("pathToDowloads", System.getProperty("user.home")+"/ChatSystem/dowloads/");
+				prop.setProperty("pathToDowloads", System.getProperty("user.home")+"/ChatSystem/downloads/");
 				
-				prop.setProperty("urlServer", "jdbc:mysql://srv-bdens.insa-toulouse.fr"); //port 3306
+				prop.setProperty("urlServer", "jdbc:mysql://srv-bdens.insa-toulouse.fr/db_chat_system"); //port 3306
 				prop.setProperty("login", "tpservlet_12");
 				prop.setProperty("pw", "Enee9een");
 				

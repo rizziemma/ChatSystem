@@ -5,14 +5,15 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
 
-import src.resources.Property;
 
 public class Listener extends Thread {
-	private int port = Property.TCPServerSocketPort;
+	
+	private int port = Initialiseur.TCPServerSocketPort; //TODO a mettre dans le fichier properties et pas le .java 
 	private ServerSocket server = null;
 	private boolean isRunning = true;
 
 	public Listener() {
+		this.setName("Listener TCP");
 		try {
 			server = new ServerSocket(port,100,ChatSystem.self.getAddrIP());
 		} catch (IOException e) {

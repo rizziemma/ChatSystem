@@ -73,6 +73,7 @@ public class ChatSystem extends Application {
 		}
 		if (result == null) {
 			result = new Conversation(u);
+			ChatSystem.convs.add(result);
 		}
 		return result;
 	}
@@ -108,6 +109,7 @@ public class ChatSystem extends Application {
 
 	public void stop() {
 		Initialiseur.deconnexion();
+		HistoriqueDAO.getInstance().setOffline();
 		ListBR.fin();
 		List.fin();
 	}

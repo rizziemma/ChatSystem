@@ -107,7 +107,7 @@ public class HistoriqueDAO extends Observable{
             }else {
             	pstmt.setInt(5, 0);
             }
-            pstmt.setString(6, new String(u.getAddrMAC(), StandardCharsets.UTF_8));       
+            pstmt.setObject(6, u.getAddrMAC());       
             
             pstmt.executeUpdate();
             
@@ -144,7 +144,7 @@ public class HistoriqueDAO extends Observable{
 		 try {
           PreparedStatement pstmt = conn.prepareStatement(sql);
           
-          pstmt.setString(1, new String(u.getAddrMAC(), StandardCharsets.UTF_8)); 
+          pstmt.setObject(1, u.getAddrMAC()); 
           pstmt.setString(2, u.getPseudo());
           if(u.getOnline()) {
         	  pstmt.setInt(3, 1);
@@ -171,7 +171,7 @@ public class HistoriqueDAO extends Observable{
         SimpleDateFormat formatter=new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");         
         try {
 			stmt = conn.prepareStatement(sql);
-			stmt.setString(1, new String(u.getAddrMAC(), StandardCharsets.UTF_8));
+			stmt.setObject(1, u.getAddrMAC());
 			stmt.setInt(2, Datatype.FICHIER.ordinal());
 			stmt.setInt(3, Datatype.MESSAGE.ordinal());
 			ResultSet rs    = stmt.executeQuery();
@@ -210,7 +210,7 @@ public class HistoriqueDAO extends Observable{
 			ResultSet rs    = stmt.executeQuery();
 	        while (rs.next()) {
 	        	Utilisateur u = new Utilisateur();
-	        	u.setAddrMAC(rs.getString("MAC").getBytes(StandardCharsets.UTF_8));
+	        	u.setAddrMAC((byte[]) rs.getObject("MAC"));
 	        	u.setPseudo(rs.getString("PSEUDO"));
 	        	u.setOnline(rs.getInt("ONLINE")==1);
 	        	l.add(u);
@@ -223,6 +223,19 @@ public class HistoriqueDAO extends Observable{
 	
 	}
 
+	public void setOffline() {
+		String sql = "UPDATE UTILISATEUR SET ONLINE = 0";
+		PreparedStatement stmt;
+		try {
+			stmt = conn.prepareStatement(sql);
+			stmt.executeUpdate();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+	}
 	
 	
 }

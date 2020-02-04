@@ -19,6 +19,7 @@ public class ListenerBroadcast extends Thread {
 	private int port;
 	private boolean isRunning = true;
 	public ListenerBroadcast(int port) {
+		this.setName("Listener Broadcast UDP");
 		try {
 			this.serveur = new DatagramSocket(port);
 		} catch (SocketException e) {
@@ -121,6 +122,7 @@ public class ListenerBroadcast extends Thread {
 								//ChatSystem.addUtilisateur(u);
 								ChatSystem.tableUtilisateur.remove(u);
 								HistoriqueDAO.getInstance().updateUser(UserDisconnecting);
+								ChatSystem.popup("resources/logout.png","Utilisateur déconnecté", UserDisconnecting.getPseudo() + " s'est déconnecté");
 								System.out.println(u.getPseudo() + " Disconected");
 								break;
 							}
