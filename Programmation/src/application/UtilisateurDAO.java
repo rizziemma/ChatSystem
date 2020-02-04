@@ -19,6 +19,10 @@ import src.resources.Property;
 
 public class UtilisateurDAO {
 
+	
+	//create table UTILISATEUR (ID int NOT NULL AUTO_INCREMENT PRIMARY KEY, MAC blob, PSEUDO varchar(32),IP blob);
+
+	
 	private static UtilisateurDAO instance;
 	Connection conn;
 	
