@@ -90,7 +90,7 @@ public class LoginController implements Initializable {
     	
         if (serverButton.getText().equals("Connexion serveur")){
             //eteint
-            ChatSystem.setWithServer(false);
+            ChatSystem.setRemote(false);
             serverButton.setText("Connexion locale");
         }else {
             //allumé
@@ -104,7 +104,7 @@ public class LoginController implements Initializable {
                         "Redémarrez pour que les changements prennent effet");
                 alert.showAndWait();
             } else {*/
-            ChatSystem.setWithServer(true);
+            ChatSystem.setRemote(true);
             serverButton.setText("Connexion serveur");
             
         }
