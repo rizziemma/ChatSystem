@@ -106,7 +106,6 @@ public class ChatSystem extends Application {
 	
 	public static void logout () {
 		Initialiseur.deconnexion();
-		
 	}
 
 	public void stop() {
