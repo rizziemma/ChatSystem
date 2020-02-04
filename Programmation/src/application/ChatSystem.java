@@ -15,22 +15,21 @@ import javafx.stage.Stage;
 import src.model.Utilisateur;
 public class ChatSystem extends Application {
 
-	public static TimedUpdate ServUpdater;
 	public static ArrayList<Utilisateur> tableUtilisateur;
 	public static Utilisateur self;
 	public static Listener List;
 	public static ListenerBroadcast ListBR;
 	public static ArrayList<Conversation> convs;
 	private static Stage stage;
-	private static boolean Remote;
+	private static boolean withServer;
 
 
-	public static boolean isRemote() {
-		return Remote;
+	public static boolean isWithServer() {
+		return withServer;
 	}
 
-	public static void setRemote(boolean s) {
-		Remote = s;
+	public static void setWithServer(boolean s) {
+		withServer = s;
 	}
 
 	public static void addUtilisateur(Utilisateur nouvel_utilisateur) {
@@ -113,8 +112,6 @@ public class ChatSystem extends Application {
 		HistoriqueDAO.getInstance().setOffline();
 		ListBR.fin();
 		List.fin();
-		//ServUpdater.
-		ChatSystem.ServUpdater.fin();
 	}
 
 	public static void main(String[] args) {

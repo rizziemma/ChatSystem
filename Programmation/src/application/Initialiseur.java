@@ -32,7 +32,6 @@ public class Initialiseur {
 
 	//TODO
 	////////////fonction qui recup la table utilisateurs distante toutes les 20S + putin putout
-
 	static DatagramSocket UDPsocket = null;
 	static int portBRServer; 
 	static int portBRClient; 
@@ -40,14 +39,14 @@ public class Initialiseur {
 	public static void initApp() {
 		initFolders();
 		initBaseLocale();
-
-
+		
+		
 		try (InputStream input = new FileInputStream(Property.PathToAppFiles+"config.properties")) {
-			Properties prop = new Properties();
-			prop.load(input);
-			portBRServer = Integer.parseInt(prop.getProperty("portBRServer"));
-			portBRClient = Integer.parseInt(prop.getProperty("portBRClient"));
-			TCPServerSocketPort = Integer.parseInt(prop.getProperty("TCPServerSocketPort"));
+            Properties prop = new Properties();
+            prop.load(input);
+            portBRServer = Integer.parseInt(prop.getProperty("portBRServer"));
+            portBRClient = Integer.parseInt(prop.getProperty("portBRClient"));
+            TCPServerSocketPort = Integer.parseInt(prop.getProperty("TCPServerSocketPort"));
 		} catch (FileNotFoundException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -55,7 +54,7 @@ public class Initialiseur {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		ChatSystem.ServUpdater = new TimedUpdate();
+
 		ChatSystem.List = initListener();
 		InetAddress lanIp = null;
 		try {
@@ -110,101 +109,97 @@ public class Initialiseur {
 
 	public static void deconnexion() {
 		//diffusion du message de fin de session en UDP broadcast
-		UtilisateurDAO.getInstance().putOut();
-		if(!ChatSystem.isRemote()) {
-			try {
-				UDPsocket = new DatagramSocket(portBRServer);
-			} catch (SocketException e) {
-				System.out.println("Impossible de creer le socket UDP");
-				e.printStackTrace();
-			}
-			InetAddress brAddr = null;
-			try {
-				brAddr = InetAddress.getByName("255.255.255.255");
-			} catch (UnknownHostException e) {
-				System.out.println("Impossible recuperer l'adresse de Broadcast UDP");
-				e.printStackTrace();
-			}
-			ByteArrayOutputStream BAOS = new ByteArrayOutputStream();
-			ObjectOutputStream OOS = null;
-			try {
-				OOS = new ObjectOutputStream(BAOS);
-			} catch (IOException e1) {
-				e1.printStackTrace();
-			}
-			ChatSystem.self.setOnline(false);
-			try {
-				OOS.writeObject(new DatagramUDP("Fin User",ChatSystem.self));
-			} catch (IOException e1) {
-				e1.printStackTrace();
-			}
-			byte[] buffer = BAOS.toByteArray();
-			DatagramPacket UDPpacket = new DatagramPacket(buffer, buffer.length, brAddr, portBRClient);
-			try {
-				UDPsocket.setBroadcast(true);
-			} catch (SocketException e) {
-				System.out.println("Impossible configurer le socket UDP en broadcast");
-				e.printStackTrace();
-			}
-			try {
-				UDPsocket.send(UDPpacket);
-			} catch (IOException e) {
-				System.out.println("Impossible d'envoyer le paquer UDP en broadcast");
-				e.printStackTrace();
-			}
-			UDPsocket.close();
-			System.out.println("Deconnexion en local");
-			}
-		for(Conversation c:ChatSystem.convs) {//fermeture des convesations en cours 
+		try {
+			UDPsocket = new DatagramSocket(portBRServer);
+		} catch (SocketException e) {
+			System.out.println("Impossible de creer le socket UDP");
+			e.printStackTrace();
+		}
+		InetAddress brAddr = null;
+		try {
+			brAddr = InetAddress.getByName("255.255.255.255");
+		} catch (UnknownHostException e) {
+			System.out.println("Impossible recuperer l'adresse de Broadcast UDP");
+			e.printStackTrace();
+		}
+		ByteArrayOutputStream BAOS = new ByteArrayOutputStream();
+		ObjectOutputStream OOS = null;
+		try {
+			OOS = new ObjectOutputStream(BAOS);
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+		ChatSystem.self.setOnline(false);
+		try {
+			OOS.writeObject(new DatagramUDP("Fin User",ChatSystem.self));
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+		byte[] buffer = BAOS.toByteArray();
+		DatagramPacket UDPpacket = new DatagramPacket(buffer, buffer.length, brAddr, portBRClient);
+		try {
+			UDPsocket.setBroadcast(true);
+		} catch (SocketException e) {
+			System.out.println("Impossible configurer le socket UDP en broadcast");
+			e.printStackTrace();
+		}
+		try {
+			UDPsocket.send(UDPpacket);
+		} catch (IOException e) {
+			System.out.println("Impossible d'envoyer le paquer UDP en broadcast");
+			e.printStackTrace();
+		}
+		UDPsocket.close();
+		System.out.println("Deconnexion en local");
+		//fermeture des convesations en cours 
+		for(Conversation c:ChatSystem.convs) {
 			c.fin();
 		}
+		
 	}
-
-
+	
+	
 	private static void notifyNewPseudo(/*self*/) {
-		UtilisateurDAO.getInstance().putIn();
-		if(!ChatSystem.isRemote()) {
-			try {
-				UDPsocket = new DatagramSocket(portBRServer);
-			} catch (SocketException e) {
-				System.out.println("Impossible de creer le socket UDP");
-				e.printStackTrace();
-			}
-			InetAddress brAddr = null;
-			try {
-				brAddr = InetAddress.getByName("255.255.255.255");
-			} catch (UnknownHostException e) {
-				System.out.println("Impossible recuperer l'adresse de Broadcast UDP");
-				e.printStackTrace();
-			}
-			ByteArrayOutputStream BAOS = new ByteArrayOutputStream();
-			ObjectOutputStream OOS = null;
-			try {
-				OOS = new ObjectOutputStream(BAOS);
-			} catch (IOException e1) {
-				e1.printStackTrace();
-			}
-			try {
-				OOS.writeObject(new DatagramUDP("User",ChatSystem.self));
-			} catch (IOException e1) {
-				e1.printStackTrace();
-			}
-			byte[] buffer = BAOS.toByteArray();
-			DatagramPacket UDPpacket = new DatagramPacket(buffer, buffer.length, brAddr, portBRClient);
-			try {
-				UDPsocket.setBroadcast(true);
-			} catch (SocketException e) {
-				System.out.println("Impossible configurer le socket UDP en broadcast");
-				e.printStackTrace();
-			}
-			try {
-				UDPsocket.send(UDPpacket);
-			} catch (IOException e) {
-				System.out.println("Impossible d'envoyer le paquer UDP en broadcast");
-				e.printStackTrace();
-			}
-			UDPsocket.close();
+		try {
+			UDPsocket = new DatagramSocket(portBRServer);
+		} catch (SocketException e) {
+			System.out.println("Impossible de creer le socket UDP");
+			e.printStackTrace();
 		}
+		InetAddress brAddr = null;
+		try {
+			brAddr = InetAddress.getByName("255.255.255.255");
+		} catch (UnknownHostException e) {
+			System.out.println("Impossible recuperer l'adresse de Broadcast UDP");
+			e.printStackTrace();
+		}
+		ByteArrayOutputStream BAOS = new ByteArrayOutputStream();
+		ObjectOutputStream OOS = null;
+		try {
+			OOS = new ObjectOutputStream(BAOS);
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+		try {
+			OOS.writeObject(new DatagramUDP("User",ChatSystem.self));
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+		byte[] buffer = BAOS.toByteArray();
+		DatagramPacket UDPpacket = new DatagramPacket(buffer, buffer.length, brAddr, portBRClient);
+		try {
+			UDPsocket.setBroadcast(true);
+		} catch (SocketException e) {
+			System.out.println("Impossible configurer le socket UDP en broadcast");
+			e.printStackTrace();
+		}
+		try {
+			UDPsocket.send(UDPpacket);
+		} catch (IOException e) {
+			System.out.println("Impossible d'envoyer le paquer UDP en broadcast");
+			e.printStackTrace();
+		}
+		UDPsocket.close();
 	}
 
 
@@ -289,50 +284,39 @@ public class Initialiseur {
 			ChatSystem.self.setOnline(true);
 			notifyNewPseudo();
 		}
-		if(ChatSystem.isRemote()) {
-			if(ChatSystem.ListBR != null) {
-				ChatSystem.ListBR.fin();
-				ChatSystem.ListBR = null;
-			}
-		}
-		else {
-			if(ChatSystem.ListBR == null){
-				ChatSystem.ListBR=demandeTableUtilisateur(ChatSystem.self.getAddrMAC(), ChatSystem.self.getAddrIP());;
-			}
-		}
 		return libre;
 	}
 
 	private static void initBaseLocale() {
 		try (InputStream input = new FileInputStream(Property.PathToAppFiles+"config.properties")) {
 
-			Properties prop = new Properties();
+            Properties prop = new Properties();
 
-			// load a properties file
-			prop.load(input);
+            // load a properties file
+            prop.load(input);
 
+        
+            //Si bdd pas initialisée
+            if (!new File(prop.getProperty("pathToLocalBase")).exists()) {
+            	try {          
+            		Connection conn = DriverManager.getConnection(Property.SQLiteDriver+prop.getProperty("pathToLocalBase"));
+            		String utilisateurs = "CREATE TABLE UTILISATEUR (MAC blob PRIMARY KEY, PSEUDO text, ONLINE integer)";
+            		//String messages = "CREATE TABLE MESSAGE (ID integer PRIMARY KEY, DATE text, TYPE integer, DATA blob, STATUS integer, SENT integer, CONTACT text, FOREIGN KEY (CONTACT) REFERENCES UTILISATEUR(MAC))";
+            		String messages = "CREATE TABLE MESSAGE (ID integer PRIMARY KEY, DATE text, TYPE integer, DATA blob, STATUS integer, SENT integer, CONTACT blob)";
+            		String index = "CREATE UNIQUE INDEX idx_mac_addr ON UTILISATEUR(MAC)";
+            		Statement stmt = conn.createStatement();
+            		stmt.execute(utilisateurs);
+            		stmt.execute(messages);
+            		stmt.execute(index);
 
-			//Si bdd pas initialisée
-			if (!new File(prop.getProperty("pathToLocalBase")).exists()) {
-				try {          
-					Connection conn = DriverManager.getConnection(Property.SQLiteDriver+prop.getProperty("pathToLocalBase"));
-					String utilisateurs = "CREATE TABLE UTILISATEUR (MAC blob PRIMARY KEY, PSEUDO text, ONLINE integer)";
-					//String messages = "CREATE TABLE MESSAGE (ID integer PRIMARY KEY, DATE text, TYPE integer, DATA blob, STATUS integer, SENT integer, CONTACT text, FOREIGN KEY (CONTACT) REFERENCES UTILISATEUR(MAC))";
-					String messages = "CREATE TABLE MESSAGE (ID integer PRIMARY KEY, DATE text, TYPE integer, DATA blob, STATUS integer, SENT integer, CONTACT blob)";
-					String index = "CREATE UNIQUE INDEX idx_mac_addr ON UTILISATEUR(MAC)";
-					Statement stmt = conn.createStatement();
-					stmt.execute(utilisateurs);
-					stmt.execute(messages);
-					stmt.execute(index);
-
-					conn.close();
-				} catch (SQLException e) {
-					System.out.println(e.getMessage());
-					//e.printStackTrace();
-				} 
-			}
-		}catch (IOException ex) {
-			ex.printStackTrace();
+            		conn.close();
+            	} catch (SQLException e) {
+            		System.out.println(e.getMessage());
+            		//e.printStackTrace();
+            	} 
+            }
+        }catch (IOException ex) {
+            ex.printStackTrace();
 		}
 	}
 
@@ -359,14 +343,14 @@ public class Initialiseur {
 				prop.setProperty("TCPServerSocketPort", "12345");
 				prop.setProperty("portBRServer", "42069");
 				prop.setProperty("portBRClient", "42070");
-
+				
 				prop.setProperty("pathToLocalBase", System.getProperty("user.home")+"/ChatSystem/data/storage.db");
 				prop.setProperty("pathToDowloads", System.getProperty("user.home")+"/ChatSystem/downloads/");
-
-				prop.setProperty("urlServer", "jdbc:mysql://srv-bdens.insa-toulouse.fr:3306/tpservlet_12"); //port 3306
+				
+				prop.setProperty("urlServer", "jdbc:mysql://srv-bdens.insa-toulouse.fr/db_chat_system"); //port 3306
 				prop.setProperty("login", "tpservlet_12");
 				prop.setProperty("pw", "Enee9een");
-
+				
 				prop.store(output, null);
 
 			} catch (IOException e) {

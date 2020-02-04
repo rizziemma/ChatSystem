@@ -83,7 +83,7 @@
                   </StackPane>
                   <StackPane GridPane.rowIndex="4">
                      <children>
-                        <Button fx:id="serverButton" mnemonicParsing="false" onMouseClicked="#servon" text="Connexion réseau local" />
+                        <Button fx:id="serverButton" mnemonicParsing="false" onMouseClicked="#servon" text="Connexion serveur" />
                      </children>
                   </StackPane>
                   <StackPane GridPane.rowIndex="3">

@@ -14,6 +14,5 @@
 	<classpathentry kind="lib" path="Programmation/lib/javafx-swt.jar"/>
 	<classpathentry kind="lib" path="Programmation/lib/jfxrt.jar"/>
 	<classpathentry kind="lib" path="Programmation/lib/sqlite-jdbc-3.27.2.1.jar"/>
-	<classpathentry kind="lib" path="Programmation/lib/mysql-connector-java-8.0.19.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

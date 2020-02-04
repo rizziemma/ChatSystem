@@ -20,8 +20,8 @@ import src.resources.Property;
 public class UtilisateurDAO {
 
 	
-	//create table UTILISATEUR (ID int NOT NULL AUTO_INCREMENT PRIMARY KEY, MAC varchar(20), PSEUDO varchar(32),IP blob);
-	//ALTER TABLE UTILISATEUR ADD UNIQUE (MAC)
+	//create table UTILISATEUR (ID int NOT NULL AUTO_INCREMENT PRIMARY KEY, MAC blob, PSEUDO varchar(32),IP blob);
+
 	
 	private static UtilisateurDAO instance;
 	Connection conn;
@@ -63,7 +63,7 @@ public class UtilisateurDAO {
     }
 	
 	public void putIn() {
-		String sql = "INSERT INTO UTILISATEUR (PSEUDO, MAC, IP) VALUES (?,?,?) ON DUPLICATE KEY UPDATE PSEUDO = VALUES(PSEUDO), IP = VALUES(IP)";
+		String sql = "INSERT INTO UTILISATEUR (PSEUDO, MAC, IP) VALUES (?,?,?)";
 		 try {
 			 PreparedStatement pstmt = conn.prepareStatement(sql);
           

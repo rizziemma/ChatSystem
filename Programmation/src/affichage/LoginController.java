@@ -88,12 +88,24 @@ public class LoginController implements Initializable {
     public void servon (){
     	//switch avec ou sans serveur -> pas nécessaire ?
     	
-        if (serverButton.getText().equals("Connexion extérieure")){
-            ChatSystem.setRemote(false);
-            serverButton.setText("Connexion réseau local");
+        if (serverButton.getText().equals("Connexion serveur")){
+            //eteint
+            ChatSystem.setWithServer(false);
+            serverButton.setText("Connexion locale");
         }else {
-            ChatSystem.setRemote(true);
-            serverButton.setText("Connexion extérieure");
+            //allumé
+        	/*
+            if(controller.getUrlServer().equals("")){
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Erreur");
+                alert.setHeaderText(null);
+                alert.setContentText("Vous devez configurer le serveur de présence en entrant" +
+                        "son adresse IP dans le fichier ~/Clavardage/.configServer. " +
+                        "Redémarrez pour que les changements prennent effet");
+                alert.showAndWait();
+            } else {*/
+            ChatSystem.setWithServer(true);
+            serverButton.setText("Connexion serveur");
             
         }
     }
