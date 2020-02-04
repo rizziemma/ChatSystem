@@ -112,7 +112,7 @@ public class ChatController implements Initializable, Observer {
     		if (activeUser!=null && Arrays.equals(up.getUtilisateur().getAddrMAC(), activeUser.getAddrMAC())){
     			messageFeed.getItems().add(up.getMessage());
     			messageFeed.scrollTo(messageFeed.getItems().size() - 1);
-    		}else if(!Arrays.equals(up.getUtilisateur().getAddrMAC(), ChatSystem.self.getAddrMAC()) && up.getMessage().getType().equals(Datatype.MESSAGE)){
+    		}else if(!Arrays.equals(up.getUtilisateur().getAddrMAC(), ChatSystem.self.getAddrMAC()) && up.getMessage().getType().equals(Datatype.MESSAGE) && !up.getMessage().getSent()){
     			ChatSystem.popup("resources/new.png", "Nouveau message", up.getUtilisateur().getPseudo()+" vous a envoyé un message");
     		}
     		
