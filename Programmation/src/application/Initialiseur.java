@@ -30,8 +30,7 @@ import src.resources.Property;
 
 public class Initialiseur {
 
-	//TODO
-	////////////fonction qui recup la table utilisateurs distante toutes les 20S + putin putout
+	
 	static DatagramSocket UDPsocket = null;
 	static int portBRServer; 
 	static int portBRClient; 
