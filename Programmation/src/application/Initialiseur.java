@@ -30,8 +30,7 @@ import src.resources.Property;
 
 public class Initialiseur {
 
-	//TODO
-	////////////fonction qui recup la table utilisateurs distante toutes les 20S + putin putout
+	
 	static DatagramSocket UDPsocket = null;
 	static int portBRServer; 
 	static int portBRClient; 
@@ -347,7 +346,7 @@ public class Initialiseur {
 				prop.setProperty("pathToLocalBase", System.getProperty("user.home")+"/ChatSystem/data/storage.db");
 				prop.setProperty("pathToDowloads", System.getProperty("user.home")+"/ChatSystem/downloads/");
 				
-				prop.setProperty("urlServer", "jdbc:mysql://srv-bdens.insa-toulouse.fr/tpservlet_12"); //port 3306
+				prop.setProperty("urlServer", "jdbc:mysql://srv-bdens.insa-toulouse.fr/db_chat_system"); //port 3306
 				prop.setProperty("login", "tpservlet_12");
 				prop.setProperty("pw", "Enee9een");
 				
